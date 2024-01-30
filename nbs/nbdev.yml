@@ -1,0 +1,7 @@
+project:
+  output-dir: _docs
+
+website:
+  site-url: "https://Beforerr.github.io/space-analysis"
+  repo-branch: main
+  repo-url: "https://github.com/Beforerr/space-analysis"
