@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Python utils for data analysis in space physics">
 
-<title>space-analysis.py</title>
+<title>space-analysis.py - Common Data Format (CDF)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,59 +20,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -103,11 +68,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="space-analysis.py">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="space-analysis.py - Common Data Format (CDF)">
 <meta property="og:description" content="Python utils for data analysis in space physics">
 <meta property="og:site_name" content="space-analysis.py">
-<meta name="twitter:title" content="space-analysis.py">
+<meta name="twitter:title" content="space-analysis.py - Common Data Format (CDF)">
 <meta name="twitter:description" content="Python utils for data analysis in space physics">
 <meta name="twitter:card" content="summary">
 </head>
@@ -119,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">space-analysis.py</span>
     </a>
   </div>
@@ -134,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">space-analysis.py</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../io/30_cdf.html">Index</a></li><li class="breadcrumb-item"><a href="../io/30_cdf.html">Common Data Format (CDF)</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -148,13 +113,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./core.html" class="sidebar-item-text sidebar-link">
+  <a href="../core.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">core</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./missions/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../missions/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Missions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -163,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./missions/psp/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../missions/psp/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Parker Solar Probe (PSP)</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -172,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./missions/psp/mag.html" class="sidebar-item-text sidebar-link">
+  <a href="../missions/psp/mag.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Magnetic field</span></a>
   </div>
 </li>
@@ -191,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./io/30_cdf.html" class="sidebar-item-text sidebar-link">
+  <a href="../io/30_cdf.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Common Data Format (CDF)</span></a>
   </div>
 </li>
@@ -207,25 +172,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#references" id="toc-references" class="nav-link active" data-scroll-target="#references">References</a></li>
-  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
-  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a></li>
+  <li><a href="#cdf2pl" id="toc-cdf2pl" class="nav-link active" data-scroll-target="#cdf2pl">cdf2pl</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../io/30_cdf.html">Index</a></li><li class="breadcrumb-item"><a href="../io/30_cdf.html">Common Data Format (CDF)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">space-analysis.py</h1>
+<h1 class="title">Common Data Format (CDF)</h1>
 </div>
 
-<div>
-  <div class="description">
-    Python utils for data analysis in space physics
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -240,28 +198,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
-<p>Inspired from <a href="https://henry2004y.github.io/VisAnaJulia">SpaceAnalysis.jl</a>, created with <a href="https://nbdev.fast.ai/">nbdev</a>.</p>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
 <ul>
-<li><a href="https://fastcore.fast.ai/">fastcore</a> : Python supercharged for the fastai library</li>
+<li><p><a href="https://cdf.gsfc.nasa.gov/">CDF Home Page</a></p></li>
+<li><p><a href="https://github.com/SciQLop/CDFpp">CDFpp</a> : A modern C++ header only cdf library with Python bindings</p></li>
 </ul>
-<p>This file will become your README and also the index of your documentation.</p>
-</section>
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install space_analysis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="how-to-use" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
-<p>Fill me in please! Don’t forget code examples:</p>
-<div id="cell-7" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">+</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<pre><code>2</code></pre>
-</div>
-</div>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/io/cdf.py#L12" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="cdf2pl" class="level3">
+<h3 class="anchored" data-anchor-id="cdf2pl">cdf2pl</h3>
+<blockquote class="blockquote">
+<pre><code> cdf2pl (file_path:str, var_names:str|list[str])</code></pre>
+</blockquote>
+<p>Convert a CDF file to Polars Dataframe.</p>
+<table class="table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>file_path</td>
+<td>str</td>
+<td>The path to the CDF file.</td>
+</tr>
+<tr class="even">
+<td>var_names</td>
+<td>str | list[str]</td>
+<td>The name(s) of the variable(s) to retrieve from the CDF file.</td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>LazyFrame</strong></td>
+<td><strong>A lazy dataframe containing the requested data.</strong></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>

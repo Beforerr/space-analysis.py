@@ -4,7 +4,14 @@
     "href": "index.html",
     "title": "space-analysis.py",
     "section": "",
-    "text": "This file will become your README and also the index of your documentation."
+    "text": "Inspired from SpaceAnalysis.jl, created with nbdev."
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "space-analysis.py",
+    "section": "References",
+    "text": "References\n\nfastcore : Python supercharged for the fastai library\n\nThis file will become your README and also the index of your documentation."
   },
   {
     "objectID": "index.html#install",
@@ -21,10 +28,57 @@
     "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2"
   },
   {
+    "objectID": "io/30_cdf.html",
+    "href": "io/30_cdf.html",
+    "title": "Common Data Format (CDF)",
+    "section": "",
+    "text": "CDF Home Page\nCDFpp : A modern C++ header only cdf library with Python bindings\n\n\n\nsource\n\ncdf2pl\n\n cdf2pl (file_path:str, var_names:str|list[str])\n\nConvert a CDF file to Polars Dataframe.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nstr\nThe path to the CDF file.\n\n\nvar_names\nstr | list[str]\nThe name(s) of the variable(s) to retrieve from the CDF file.\n\n\nReturns\nLazyFrame\nA lazy dataframe containing the requested data.",
+    "crumbs": [
+      "Index",
+      "Common Data Format (CDF)"
+    ]
+  },
+  {
+    "objectID": "missions/psp/mag.html",
+    "href": "missions/psp/mag.html",
+    "title": "Magnetic field",
+    "section": "",
+    "text": "source\n\ndownload_data\n\n download_data (**kwargs)\n\n\nsource\n\n\nload_data\n\n load_data (var_names='psp_fld_l2_mag_RTN', **kwargs)",
+    "crumbs": [
+      "Missions",
+      "Parker Solar Probe (PSP)",
+      "Magnetic field"
+    ]
+  },
+  {
     "objectID": "core.html",
     "href": "core.html",
     "title": "core",
     "section": "",
-    "text": "source\n\nfoo\n\n foo ()"
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "missions/psp/index.html",
+    "href": "missions/psp/index.html",
+    "title": "Parker Solar Probe (PSP)",
+    "section": "",
+    "text": "See following notebooks for details:\n\nMagnetic field data",
+    "crumbs": [
+      "Missions",
+      "Parker Solar Probe (PSP)"
+    ]
+  },
+  {
+    "objectID": "missions/index.html",
+    "href": "missions/index.html",
+    "title": "Missions",
+    "section": "",
+    "text": "This module includes helpful functions for working with mission (magnetic field and plasma) data. We currently support the following missions:\n\nParker Solar Probe\nJuno\nWind\nTHEMIS/ARTEMIS\nSTEREO\n\n\nReferences\n\nPySPEDAS: Python-based Space Physics Environment Data Analysis Software\nspeasy: A simple Python package to deal with main Space Physics WebServices (CDA,SSC,AMDA,..)",
+    "crumbs": [
+      "Missions"
+    ]
   }
 ]
