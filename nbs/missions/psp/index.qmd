@@ -1,0 +1,8 @@
+---
+title: Parker Solar Probe (PSP)
+order: 1
+---
+
+See following notebooks for details:
+
+- [Magnetic field data](./mag.ipynb)

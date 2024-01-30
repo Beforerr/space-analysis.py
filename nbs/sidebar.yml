@@ -1,0 +1,19 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - section: io
+        contents:
+          - io/30_cdf.ipynb
+      - section: missions
+        contents:
+          - missions/index.qmd
+          - section: psp
+            contents:
+              - missions/psp/index.qmd
+      - section: missions
+        contents:
+          - section: psp
+            contents:
+              - missions/psp/mag.ipynb

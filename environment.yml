@@ -1,0 +1,20 @@
+name: space_analysis
+channels:
+  - conda-forge
+dependencies:  
+  - pandas
+  - polars
+
+  - jupyter
+  - fastai::nbdev
+
+  - pdr # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
+
+  - pytables # used in `pyspedas`
+  - pip
+  - pip:
+    - pyspedas@git+https://github.com/Beforerr/pyspedas
+    - pytplot-mpl-temp@git+https://github.com/Beforerr/PyTplot@matplotlib-backend
+    - pycdfpp # fast CDF reader
+    - speasy # Python client for Space Physics web services such as CDAWEB or AMDA.
+    - pooch # A friend to fetch your Python data files

@@ -2,6 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  site-url: "https://Beforerr.github.io/space-analysis"
+  title: "space-analysis.py"
+  site-url: "https://Beforerr.github.io/space-analysis.py"
+  description: "Python utils for data analysis in space physics"
   repo-branch: main
-  repo-url: "https://github.com/Beforerr/space-analysis"
+  repo-url: "https://github.com/Beforerr/space-analysis.py"
