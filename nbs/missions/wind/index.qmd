@@ -1,5 +1,5 @@
 ---
-title: Parker Solar Probe (PSP)
+title: Wind mission
 order: 1
 ---
 

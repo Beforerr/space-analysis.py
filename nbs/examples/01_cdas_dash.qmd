@@ -1,0 +1,181 @@
+---
+title: CDAS Dashboard
+format: 
+  dashboard: default
+---
+
+```{python}
+import xarray as xr
+import pandas as pd
+import polars as pl
+import yaml
+
+from cdasws import CdasWs
+from itables import show
+import speasy as spz
+
+```
+
+```{python}
+OBS_GROUPS_AND_INSTRS_FNAME =  "obs_groups_and_instrs.yaml"
+DATASETS_FNAME = "datasets.yaml"
+
+cdas = CdasWs()
+```
+
+# CDAS Observatories and Instruments
+
+## Get observatory groups with observatory ids (identifiers)
+
+```{python}
+#| code-summary: The following code demonstrates how to get the list of observatory groups with their respective observatory ids.
+obs_groups = cdas.get_observatory_groups()
+```
+
+```{python}
+#| title: CDAS Observatory Groups
+obs_groups_df = pl.DataFrame(obs_groups)
+title = "CDAS Observatory Groups"
+
+show(obs_groups_df.with_columns(pl.col("ObservatoryId").list.join(", ")))
+```
+
+```{python}
+#| title: CDAS Observatories
+observatories = cdas.get_observatories() # Gets an array of descriptions of the observatories
+observatories_df = pd.DataFrame(observatories)
+show(observatories_df)
+```
+
+
+## Gets descriptions of the observatory groups (and associated instruments) from the server
+
+```{python}
+#| output: false
+def save_obs_groups_and_instrs(fname=OBS_GROUPS_AND_INSTRS_FNAME, **kwargs):
+    obs_groups_and_instrs = cdas.get_observatory_groups_and_instruments(**kwargs)
+
+    # save to a file
+    with open(fname, "w") as file:
+        yaml.dump(obs_groups_and_instrs, file)
+```
+
+```{python}
+#| title: CDAS Observatory groups and associated instruments
+
+#  see ` ObservatoryGroupInstrumentDescription` in <https://cdaweb.gsfc.nasa.gov/WebServices/REST/CDAS.xsd>.
+
+with open(OBS_GROUPS_AND_INSTRS_FNAME, "r") as file:
+    obs_groups_and_instrs: list[dict] = yaml.safe_load(file)
+
+rows = []
+for obs_group in obs_groups_and_instrs:
+    for observatory in obs_group['ObservatoryInstruments']: # type "ObservatoryInstrumentDescription": Description of observatory that includes its instruments.
+        for instrument in observatory['InstrumentDescription']:
+            rows.append({
+                'Observatory Group': obs_group['Name'],
+                'Observatory': observatory['Name'],
+                'Instrument': instrument['Name'],
+                'Short Description': instrument['ShortDescription'],
+                'Long Description': instrument['LongDescription']
+            })
+
+# Step 1: Convert to DataFrame
+df = pd.DataFrame(rows)
+
+# Step 2: Adjust Column Multi-Index Creation
+index_columns = ['Observatory Group', 'Observatory', 'Instrument']
+index = pd.MultiIndex.from_frame(df[index_columns])
+obs_groups_instrs_df = df.drop(columns=index_columns).set_index(index)
+
+show(obs_groups_instrs_df.drop(columns=['Long Description']))
+```
+
+# CDAS Datasets and Parameters
+
+```{python}
+# | title: CDAS Dataset
+
+datasets = spz.cda.flat_inventory.datasets
+
+datasets_df = pl.DataFrame([vars(ds) for ds in datasets.values()]).with_columns(
+    start_date=pl.col("start_date").str.to_datetime(),
+    stop_date=pl.col("stop_date").str.to_datetime(),
+)
+
+display_cols = ["ID", "serviceprovider_ID", "description", "start_date", "stop_date"]
+
+show(
+    datasets_df.select(display_cols),
+    paging=True,
+)
+```
+
+```{python}
+#| output: false
+ds = next(iter(datasets.values()))
+ds_keys = vars(ds).keys()
+print(f'Available columns for datasets: {ds_keys}')
+```
+
+
+```{python}
+# | title: CDAS Parameters
+
+parameters = spz.cda.flat_inventory.parameters
+
+parameter = next(iter(parameters.values()))
+# print(vars(parameter).keys())
+# ['FIELDNAM', 'LABLAXIS', 'LABL_PTR_1', 'UNITS', 'CATDESC', 'DISPLAY_TYPE', 'spz_shape', 'start_date', 'stop_date', 'dataset', '__spz_provider__', '__spz_name__', '__spz_uid__', '__spz_type__']
+
+parameters_df = pl.DataFrame(
+    [vars(parameter) for parameter in parameters.values()]
+).with_columns(
+    start_date=pl.col("start_date").str.to_datetime(),
+    stop_date=pl.col("stop_date").str.to_datetime(),
+)
+
+# drop_cols = ["__spz_provider__", "__spz_type__", 'LABL_PTR_1']
+display_cols = ["dataset", "__spz_name__", "CATDESC"]
+
+show(
+    parameters_df.select(display_cols).rename(
+        {
+            "__spz_name__": "parameter",
+        }
+    ),
+    maxBytes=0,
+    paging=True,
+)
+```
+
+```{python}
+def save_datasets(fname=DATASETS_FNAME, **kwargs):
+    """
+    Gets an array of descriptions of the datasets
+
+    Notes
+    -----
+    Without any parameters, this method returns all datasets, which could take quite a long time...
+    """
+    ds = cdas.get_datasets(**kwargs)
+
+    with open(fname, "w") as file:
+        yaml.dump(ds, file)
+```
+
+```{python}
+#| title: CDAS Datasets
+#| eval: false
+
+with open(DATASETS_FNAME, "r") as file:
+    ds: list[dict] = yaml.safe_load(file)
+
+ds_df = pd.DataFrame(ds)
+show(ds_df)
+```
+
+```{python}
+# Gets a description of the variables in the specified dataset.
+# cdas.get_variables 
+```

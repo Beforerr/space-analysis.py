@@ -12,11 +12,21 @@ format:
 website:
   twitter-card: true
   open-graph: true
-  repo-actions: [issue]
+  repo-actions: [source, issue]
   navbar:
     background: primary
     search: true
+    left:
+      - text: Home
+        href: index.ipynb
+    tools:
+      - icon: github
+        href: https://github.com/Beforerr/space-analysis.py
+    
   sidebar:
     contents: auto
 
 metadata-files: [nbdev.yml]
+
+execute: 
+  cache: true

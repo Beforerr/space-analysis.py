@@ -3,17 +3,38 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
+      - section: data_structure
+        contents:
+          - data_structure/01_tplot.ipynb
+      - section: examples
+        contents:
+          - examples/01_cdas.ipynb
+          - examples/01_cdas_dash.ipynb
+          - examples/01_cdas_dash.qmd
       - section: io
         contents:
           - io/30_cdf.ipynb
+        href: io/index.qmd
       - section: missions
         contents:
-          - missions/index.qmd
-          - section: psp
+          - missions/2015_dscovr.ipynb
+          - missions/2018_psp.ipynb
+          - section: wind
             contents:
-              - missions/psp/index.qmd
-      - section: missions
+              - missions/wind/mag.ipynb
+              - missions/wind/plasma.ipynb
+            href: missions/wind/index.qmd
+        href: missions/index.qmd
+      - section: plasma
         contents:
-          - section: psp
-            contents:
-              - missions/psp/mag.ipynb
+          - plasma/00_ formulary.ipynb
+          - plasma/helioweb.ipynb
+      - section: plot
+        contents:
+          - plot/01_matplotlib.ipynb
+      - section: utils
+        contents:
+          - utils/00_basic.ipynb
+          - utils/00_develop.ipynb
+          - utils/20_pds.ipynb
+          - utils/21_cdas.ipynb
