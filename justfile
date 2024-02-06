@@ -5,6 +5,7 @@ preview: export
   nbdev_preview
 
 publish: export
+  nbdev_readme
   nbdev_proc_nbs && cd _proc && quarto publish gh-pages --no-prompt
 
 env-create:

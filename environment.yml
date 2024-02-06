@@ -25,6 +25,7 @@ dependencies:
   - pip
   - pip:
     - great_tables
+    - humanize
     - pyspedas
     # - pyspedas@git+https://github.com/Beforerr/pyspedas
     # - pytplot-mpl-temp@git+https://github.com/Beforerr/PyTplot@matplotlib-backend

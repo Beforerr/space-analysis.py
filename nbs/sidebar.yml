@@ -3,14 +3,17 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
+      - nbdev.yml
+      - sidebar.yml
+      - styles.css
       - section: data_structure
         contents:
           - data_structure/01_tplot.ipynb
       - section: examples
         contents:
           - examples/01_cdas.ipynb
-          - examples/01_cdas_dash.ipynb
           - examples/01_cdas_dash.qmd
+          - examples/obs_groups_and_instrs.yaml
       - section: io
         contents:
           - io/30_cdf.ipynb
@@ -36,5 +39,7 @@ website:
         contents:
           - utils/00_basic.ipynb
           - utils/00_develop.ipynb
+          - utils/19_speasy.ipynb
           - utils/20_pds.ipynb
           - utils/21_cdas.ipynb
+          - utils/parameters_pds.yml
