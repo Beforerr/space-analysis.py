@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>space-analysis.py</title>
+<title>space-analysis.py - Theoretical formulas for space plasma physics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,11 +69,11 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="space-analysis.py">
-<meta property="og:description" content="Python utils for data analysis in space physics">
+<meta property="og:title" content="space-analysis.py - Theoretical formulas for space plasma physics">
+<meta property="og:description" content="helpful in dataframes">
 <meta property="og:site_name" content="space-analysis.py">
-<meta name="twitter:title" content="space-analysis.py">
-<meta name="twitter:description" content="Python utils for data analysis in space physics">
+<meta name="twitter:title" content="space-analysis.py - Theoretical formulas for space plasma physics">
+<meta name="twitter:description" content="helpful in dataframes">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -110,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data_structure/01_tplot.html">Data Structure</a></li><li class="breadcrumb-item"><a href="../data_structure/01_tplot.html">01 Tplot</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../plasma/00_ formulary.html">Plasma</a></li><li class="breadcrumb-item"><a href="../plasma/00_formulary.html">Theoretical formulas for space plasma physics</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -139,7 +139,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../data_structure/01_tplot.html" class="sidebar-item-text sidebar-link active">
+  <a href="../data_structure/01_tplot.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">01 Tplot</span></a>
   </div>
 </li>
@@ -248,7 +248,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../plasma/00_formulary.html" class="sidebar-item-text sidebar-link">
+  <a href="../plasma/00_formulary.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Theoretical formulas for space plasma physics</span></a>
   </div>
 </li>
@@ -328,342 +328,210 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#outputconfig" id="toc-outputconfig" class="nav-link active" data-scroll-target="#outputconfig">OutputConfig</a></li>
-  <li><a href="#figureextraoptions" id="toc-figureextraoptions" class="nav-link" data-scroll-target="#figureextraoptions">FigureExtraOptions</a></li>
-  <li><a href="#export2csv" id="toc-export2csv" class="nav-link" data-scroll-target="#export2csv">export2csv</a></li>
-  <li><a href="#processconfig" id="toc-processconfig" class="nav-link" data-scroll-target="#processconfig">ProcessConfig</a></li>
-  <li><a href="#transformop" id="toc-transformop" class="nav-link" data-scroll-target="#transformop">TransformOp</a></li>
-  <li><a href="#magnitude_join" id="toc-magnitude_join" class="nav-link" data-scroll-target="#magnitude_join">magnitude_join</a></li>
-  <li><a href="#mva" id="toc-mva" class="nav-link" data-scroll-target="#mva">mva</a></li>
-  <li><a href="#magnitude" id="toc-magnitude" class="nav-link" data-scroll-target="#magnitude">magnitude</a></li>
-  <li><a href="#graphicalconfig" id="toc-graphicalconfig" class="nav-link" data-scroll-target="#graphicalconfig">GraphicalConfig</a></li>
-  <li><a href="#config" id="toc-config" class="nav-link" data-scroll-target="#config">Config</a></li>
-  <li><a href="#panelconfig" id="toc-panelconfig" class="nav-link" data-scroll-target="#panelconfig">PanelConfig</a></li>
-  <li><a href="#tplotconfig" id="toc-tplotconfig" class="nav-link" data-scroll-target="#tplotconfig">TplotConfig</a></li>
-  <li><a href="#export" id="toc-export" class="nav-link" data-scroll-target="#export">export</a></li>
-  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot">plot</a></li>
-  <li><a href="#update_panel" id="toc-update_panel" class="nav-link" data-scroll-target="#update_panel">update_panel</a></li>
-  <li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process">process</a></li>
-  <li><a href="#process_panel" id="toc-process_panel" class="nav-link" data-scroll-target="#process_panel">process_panel</a></li>
-  <li><a href="#update_tvar" id="toc-update_tvar" class="nav-link" data-scroll-target="#update_tvar">update_tvar</a></li>
-  <li><a href="#load_data" id="toc-load_data" class="nav-link" data-scroll-target="#load_data">load_data</a></li>
+  <li><a href="#df_beta" id="toc-df_beta" class="nav-link active" data-scroll-target="#df_beta">df_beta</a></li>
+  <li><a href="#ldf_alfven_speed" id="toc-ldf_alfven_speed" class="nav-link" data-scroll-target="#ldf_alfven_speed">ldf_Alfven_speed</a></li>
+  <li><a href="#df_alfven_speed" id="toc-df_alfven_speed" class="nav-link" data-scroll-target="#df_alfven_speed">df_Alfven_speed</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/data_structure/01_tplot.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/plasma/00_formulary.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../plasma/00_ formulary.html">Plasma</a></li><li class="breadcrumb-item"><a href="../plasma/00_formulary.html">Theoretical formulas for space plasma physics</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Theoretical formulas for space plasma physics</h1>
+<p class="subtitle lead">helpful in dataframes</p>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>default units are SI units for space plasma physics</p>
+<ul>
+<li>B : magnetic field, nT</li>
+<li>n : number density, cm^-3</li>
+<li>T : temperature, eV</li>
+</ul>
+<p>Reference</p>
+<ul>
+<li><a href="https://docs.plasmapy.org/en/stable/formulary/index.html">plasmapy.formulary</a> provides theoretical formulas for calculation of physical quantities helpful for plasma physics.</li>
+</ul>
 <!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
 <hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L27" target="_blank" style="float:right; font-size:smaller">source</a></p>
-<section id="outputconfig" class="level3">
-<h3 class="anchored" data-anchor-id="outputconfig">OutputConfig</h3>
+<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/plasma/formulary.py#L15" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="df_beta" class="level3">
+<h3 class="anchored" data-anchor-id="df_beta">df_beta</h3>
 <blockquote class="blockquote">
-<pre><code> OutputConfig (path:str=None, filename:str=None, formats:list[str]=[],
-               display:bool=False, figure:dict={}, figure_extra:__main__.F
-               igureExtraOptions=FigureExtraOptions(hide_legends=False,
-               hide_ylabels=False, sync_legend_colors=False,
-               hide_legend_lines=False))</code></pre>
+<pre><code> df_beta (df:polars.dataframe.frame.DataFrame, T:str='T', n:str='n',
+          B:str='B', col_name:str='beta',
+          T_unit:astropy.units.core.Unit=Unit("eV"),
+          n_unit:astropy.units.core.Unit=Unit("1 / cm3"),
+          B_unit:astropy.units.core.Unit=Unit("nT"))</code></pre>
 </blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df</td>
+<td>DataFrame</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>str</td>
+<td>T</td>
+<td>temperature of the plasma</td>
+</tr>
+<tr class="odd">
+<td>n</td>
+<td>str</td>
+<td>n</td>
+<td>particle density of the plasma</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>str</td>
+<td>B</td>
+<td>magnetic field in the plasma,</td>
+</tr>
+<tr class="odd">
+<td>col_name</td>
+<td>str</td>
+<td>beta</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>T_unit</td>
+<td>Unit</td>
+<td>eV</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>n_unit</td>
+<td>Unit</td>
+<td>1 / cm3</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B_unit</td>
+<td>Unit</td>
+<td>nT</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>DataFrame</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="figureextraoptions" class="level3">
-<h3 class="anchored" data-anchor-id="figureextraoptions">FigureExtraOptions</h3>
+<section id="ldf_alfven_speed" class="level3">
+<h3 class="anchored" data-anchor-id="ldf_alfven_speed">ldf_Alfven_speed</h3>
 <blockquote class="blockquote">
-<pre><code> FigureExtraOptions (hide_legends:bool=False, hide_ylabels:bool=False,
-                     sync_legend_colors:bool=False,
-                     hide_legend_lines:bool=False)</code></pre>
-</blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L35" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="export2csv" class="level3">
-<h3 class="anchored" data-anchor-id="export2csv">export2csv</h3>
-<blockquote class="blockquote">
-<pre><code> export2csv (tvars:list, path)</code></pre>
+<pre><code> ldf_Alfven_speed (ldf:polars.lazyframe.frame.LazyFrame, **kwargs)</code></pre>
 </blockquote>
 <hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L62" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/plasma/formulary.py#L34" target="_blank" style="float:right; font-size:smaller">source</a></p>
 </section>
-<section id="processconfig" class="level3">
-<h3 class="anchored" data-anchor-id="processconfig">ProcessConfig</h3>
+<section id="df_alfven_speed" class="level3">
+<h3 class="anchored" data-anchor-id="df_alfven_speed">df_Alfven_speed</h3>
 <blockquote class="blockquote">
-<pre><code> ProcessConfig (tvar:str=None, trans:list[__main__.TransformOp]=[])</code></pre>
+<pre><code> df_Alfven_speed (df:polars.dataframe.frame.DataFrame, B:str='B',
+                  n:str='n', ion:Union[str,numbers.Integral,plasmapy.parti
+                  cles.particle_class.Particle,plasmapy.particles.particle
+                  _class.CustomParticle]='p+', col_name='Alfven_speed',
+                  B_unit:astropy.units.core.Unit=Unit("nT"),
+                  n_unit:astropy.units.core.Unit=Unit("1 / cm3"),
+                  speed_unit:astropy.units.core.Unit=Unit("km / s"))</code></pre>
 </blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-</section>
-<section id="transformop" class="level3">
-<h3 class="anchored" data-anchor-id="transformop">TransformOp</h3>
-<blockquote class="blockquote">
-<pre><code> TransformOp (name:str, transform_func:Callable[[str],str]=None,
-              **extra_data:Any)</code></pre>
-</blockquote>
-<p>Transformation operation</p>
-<hr>
-</section>
-<section id="magnitude_join" class="level3">
-<h3 class="anchored" data-anchor-id="magnitude_join">magnitude_join</h3>
-<blockquote class="blockquote">
-<pre><code> magnitude_join (tvar:str)</code></pre>
-</blockquote>
-<hr>
-</section>
-<section id="mva" class="level3">
-<h3 class="anchored" data-anchor-id="mva">mva</h3>
-<blockquote class="blockquote">
-<pre><code> mva (tvar:str, prefix='B')</code></pre>
-</blockquote>
-<hr>
-</section>
-<section id="magnitude" class="level3">
-<h3 class="anchored" data-anchor-id="magnitude">magnitude</h3>
-<blockquote class="blockquote">
-<pre><code> magnitude (tvar:str)</code></pre>
-</blockquote>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L101" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="graphicalconfig" class="level3">
-<h3 class="anchored" data-anchor-id="graphicalconfig">GraphicalConfig</h3>
-<blockquote class="blockquote">
-<pre><code> GraphicalConfig (ylabel:str=None)</code></pre>
-</blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L84" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="config" class="level3">
-<h3 class="anchored" data-anchor-id="config">Config</h3>
-<blockquote class="blockquote">
-<pre><code> Config (panels:list[__main__.PanelConfig],
-         timerange:list[datetime.datetime|datetime.date]=None,
-         output:__main__.OutputConfig=None, backend:str=None)</code></pre>
-</blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L67" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="panelconfig" class="level3">
-<h3 class="anchored" data-anchor-id="panelconfig">PanelConfig</h3>
-<blockquote class="blockquote">
-<pre><code> PanelConfig (timerange:list[datetime.date|datetime.datetime]=None,
-              ds:str=None, id:str=None, name:str=None, units:str=None,
-              labels:list[str]=[], satellite:Annotated[str,StringConstrain
-              ts(strip_whitespace=None,to_upper=None,to_lower=True,strict=
-              None,min_length=None,max_length=None,pattern=None)]=None, in
-              strument:Annotated[str,StringConstraints(strip_whitespace=No
-              ne,to_upper=None,to_lower=True,strict=None,min_length=None,m
-              ax_length=None,pattern=None)]=None, datatype:str=None,
-              probe:str=None,
-              process:__main__.ProcessConfig=ProcessConfig(tvar=None,
-              trans=[]), tplot:__main__.TplotConfig=TplotConfig(tvar=None,
-              trans=None))</code></pre>
-</blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L58" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="tplotconfig" class="level3">
-<h3 class="anchored" data-anchor-id="tplotconfig">TplotConfig</h3>
-<blockquote class="blockquote">
-<pre><code> TplotConfig (tvar:str=None, trans:list[str]=None)</code></pre>
-</blockquote>
-<p>Usage docs: https://docs.pydantic.dev/2.6/concepts/models/</p>
-<p>A base class for creating Pydantic models.</p>
-<p>Attributes: <strong>class_vars</strong>: The names of classvars defined on the model. <strong>private_attributes</strong>: Metadata about the private attributes of the model. <strong>signature</strong>: The signature for instantiating the model.</p>
-<pre><code>__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
-__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.
-__pydantic_custom_init__: Whether the model has a custom `__init__` function.
-__pydantic_decorators__: Metadata containing the decorators defined on the model.
-    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.
-__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to
-    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.
-__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.
-__pydantic_post_init__: The name of the post-init method for the model, if defined.
-__pydantic_root_model__: Whether the model is a `RootModel`.
-__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.
-__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.
-
-__pydantic_extra__: An instance attribute with the values of extra fields from validation when
-    `model_config['extra'] == 'allow'`.
-__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.
-__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.</code></pre>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L41" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="export" class="level3">
-<h3 class="anchored" data-anchor-id="export">export</h3>
-<blockquote class="blockquote">
-<pre><code> export (tvars2plot:list, config:__main__.Config, **kwargs)</code></pre>
-</blockquote>
-<hr>
-</section>
-<section id="plot" class="level3">
-<h3 class="anchored" data-anchor-id="plot">plot</h3>
-<blockquote class="blockquote">
-<pre><code> plot (tvars2plot:list, panel_configs:list[__main__.PanelConfig])</code></pre>
-</blockquote>
-<hr>
-</section>
-<section id="update_panel" class="level3">
-<h3 class="anchored" data-anchor-id="update_panel">update_panel</h3>
-<blockquote class="blockquote">
-<pre><code> update_panel (ax:matplotlib.axes._axes.Axes, config:__main__.PanelConfig)</code></pre>
-</blockquote>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L106" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="process" class="level3">
-<h3 class="anchored" data-anchor-id="process">process</h3>
-<blockquote class="blockquote">
-<pre><code> process (tvar:str|list[str], config:__main__.ProcessConfig)</code></pre>
-</blockquote>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L179" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="process_panel" class="level3">
-<h3 class="anchored" data-anchor-id="process_panel">process_panel</h3>
-<blockquote class="blockquote">
-<pre><code> process_panel (config:__main__.PanelConfig, process_func=&lt;function
-                process&gt;, load_func=&lt;function load_data&gt;,
-                update_func=&lt;function update_tvar&gt;)</code></pre>
-</blockquote>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/ds/tplot.py#L168" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="update_tvar" class="level3">
-<h3 class="anchored" data-anchor-id="update_tvar">update_tvar</h3>
-<blockquote class="blockquote">
-<pre><code> update_tvar (tvar, config:__main__.PanelConfig)</code></pre>
-</blockquote>
-<hr>
-<p><a href="https://github.com/Beforerr/space-analysis.py/blob/main/space_analysis/missions/wind/plasma.py#L30" target="_blank" style="float:right; font-size:smaller">source</a></p>
-</section>
-<section id="load_data" class="level3">
-<h3 class="anchored" data-anchor-id="load_data">load_data</h3>
-<blockquote class="blockquote">
-<pre><code> load_data (config:__main__.PanelConfig, load_func=None)</code></pre>
-</blockquote>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df</td>
+<td>DataFrame</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>str</td>
+<td>B</td>
+<td>magnetic field in the plasma, could be a component, as plasmapy will take <code>abs</code> of it</td>
+</tr>
+<tr class="odd">
+<td>n</td>
+<td>str</td>
+<td>n</td>
+<td>particle density of the plasma</td>
+</tr>
+<tr class="even">
+<td>ion</td>
+<td>Union</td>
+<td>p+</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>col_name</td>
+<td>str</td>
+<td>Alfven_speed</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>B_unit</td>
+<td>Unit</td>
+<td>nT</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>n_unit</td>
+<td>Unit</td>
+<td>1 / cm3</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>speed_unit</td>
+<td>Unit</td>
+<td>km / s</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
@@ -1061,4 +929,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/data_structure/01_tplot.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/plasma/00_formulary.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
