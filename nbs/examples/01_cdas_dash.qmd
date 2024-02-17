@@ -23,74 +23,6 @@ DATASETS_FNAME = "datasets.yaml"
 cdas = CdasWs()
 ```
 
-# CDAS Observatories and Instruments
-
-## Get observatory groups with observatory ids (identifiers)
-
-```{python}
-#| code-summary: The following code demonstrates how to get the list of observatory groups with their respective observatory ids.
-obs_groups = cdas.get_observatory_groups()
-```
-
-```{python}
-#| title: CDAS Observatory Groups
-obs_groups_df = pl.DataFrame(obs_groups)
-title = "CDAS Observatory Groups"
-
-show(obs_groups_df.with_columns(pl.col("ObservatoryId").list.join(", ")))
-```
-
-```{python}
-#| title: CDAS Observatories
-observatories = cdas.get_observatories() # Gets an array of descriptions of the observatories
-observatories_df = pd.DataFrame(observatories)
-show(observatories_df)
-```
-
-
-## Gets descriptions of the observatory groups (and associated instruments) from the server
-
-```{python}
-#| output: false
-def save_obs_groups_and_instrs(fname=OBS_GROUPS_AND_INSTRS_FNAME, **kwargs):
-    obs_groups_and_instrs = cdas.get_observatory_groups_and_instruments(**kwargs)
-
-    # save to a file
-    with open(fname, "w") as file:
-        yaml.dump(obs_groups_and_instrs, file)
-```
-
-```{python}
-#| title: CDAS Observatory groups and associated instruments
-
-#  see ` ObservatoryGroupInstrumentDescription` in <https://cdaweb.gsfc.nasa.gov/WebServices/REST/CDAS.xsd>.
-
-with open(OBS_GROUPS_AND_INSTRS_FNAME, "r") as file:
-    obs_groups_and_instrs: list[dict] = yaml.safe_load(file)
-
-rows = []
-for obs_group in obs_groups_and_instrs:
-    for observatory in obs_group['ObservatoryInstruments']: # type "ObservatoryInstrumentDescription": Description of observatory that includes its instruments.
-        for instrument in observatory['InstrumentDescription']:
-            rows.append({
-                'Observatory Group': obs_group['Name'],
-                'Observatory': observatory['Name'],
-                'Instrument': instrument['Name'],
-                'Short Description': instrument['ShortDescription'],
-                'Long Description': instrument['LongDescription']
-            })
-
-# Step 1: Convert to DataFrame
-df = pd.DataFrame(rows)
-
-# Step 2: Adjust Column Multi-Index Creation
-index_columns = ['Observatory Group', 'Observatory', 'Instrument']
-index = pd.MultiIndex.from_frame(df[index_columns])
-obs_groups_instrs_df = df.drop(columns=index_columns).set_index(index)
-
-show(obs_groups_instrs_df.drop(columns=['Long Description']))
-```
-
 # CDAS Datasets and Parameters
 
 ```{python}
@@ -178,4 +110,73 @@ show(ds_df)
 ```{python}
 # Gets a description of the variables in the specified dataset.
 # cdas.get_variables 
+```
+
+
+# CDAS Observatories and Instruments
+
+## Get observatory groups with observatory ids (identifiers)
+
+```{python}
+#| code-summary: The following code demonstrates how to get the list of observatory groups with their respective observatory ids.
+obs_groups = cdas.get_observatory_groups()
+```
+
+```{python}
+#| title: CDAS Observatory Groups
+obs_groups_df = pl.DataFrame(obs_groups)
+title = "CDAS Observatory Groups"
+
+show(obs_groups_df.with_columns(pl.col("ObservatoryId").list.join(", ")))
+```
+
+```{python}
+#| title: CDAS Observatories
+observatories = cdas.get_observatories() # Gets an array of descriptions of the observatories
+observatories_df = pd.DataFrame(observatories)
+show(observatories_df)
+```
+
+
+## Gets descriptions of the observatory groups (and associated instruments) from the server
+
+```{python}
+#| output: false
+def save_obs_groups_and_instrs(fname=OBS_GROUPS_AND_INSTRS_FNAME, **kwargs):
+    obs_groups_and_instrs = cdas.get_observatory_groups_and_instruments(**kwargs)
+
+    # save to a file
+    with open(fname, "w") as file:
+        yaml.dump(obs_groups_and_instrs, file)
+```
+
+```{python}
+#| title: CDAS Observatory groups and associated instruments
+
+#  see ` ObservatoryGroupInstrumentDescription` in <https://cdaweb.gsfc.nasa.gov/WebServices/REST/CDAS.xsd>.
+
+with open(OBS_GROUPS_AND_INSTRS_FNAME, "r") as file:
+    obs_groups_and_instrs: list[dict] = yaml.safe_load(file)
+
+rows = []
+for obs_group in obs_groups_and_instrs:
+    for observatory in obs_group['ObservatoryInstruments']: # type "ObservatoryInstrumentDescription": Description of observatory that includes its instruments.
+        for instrument in observatory['InstrumentDescription']:
+            rows.append({
+                'Observatory Group': obs_group['Name'],
+                'Observatory': observatory['Name'],
+                'Instrument': instrument['Name'],
+                'Short Description': instrument['ShortDescription'],
+                'Long Description': instrument['LongDescription']
+            })
+
+# Step 1: Convert to DataFrame
+df = pd.DataFrame(rows)
+
+# Step 2: Adjust Column Multi-Index Creation
+index_columns = ['Observatory Group', 'Observatory', 'Instrument']
+index = pd.MultiIndex.from_frame(df[index_columns])
+obs_groups_instrs_df = df.drop(columns=index_columns).set_index(index)
+
+show(obs_groups_instrs_df.drop(columns=['Long Description']))
 ```

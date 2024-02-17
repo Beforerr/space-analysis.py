@@ -51,7 +51,7 @@ def cdf2pl(
         
         # Handle FILLVAL
         if "FILLVAL" in var_attrs:
-            fillval = var_attrs["FILLVAL"][0]
+            fillval = var_attrs["FILLVAL"].value[0]
             var_values[var_values == fillval] = np.nan
 
         if len(var_values.shape) == 1:  # One-dimensional data

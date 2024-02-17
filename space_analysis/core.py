@@ -5,6 +5,7 @@ __all__ = ['Variable', 'Variables']
 
 # %% ../nbs/00_core.ipynb 3
 from pydantic import BaseModel
+import polars as pl
 
 # %% ../nbs/00_core.ipynb 4
 class Variable(BaseModel):
@@ -25,8 +26,16 @@ class Variables(BaseModel):
     parameters: list[str] = None
 
     data: list[Variable] = None
+    
+    def retrieve_data(self):
+        pass
 
-    def to_polars(self):
+    def get_data(self):
+        if self.data is None:
+            self.retrieve_data()
+        return self.data
+
+    def to_polars(self) -> pl.LazyFrame:
         pass
 
     def preview(self):

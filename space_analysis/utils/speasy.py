@@ -7,11 +7,14 @@ __all__ = ['spzvar2pldf', 'spzvars2pldf', 'get_provider', 'get_dataset_index', '
 import speasy as spz
 import polars as pl
 
-from pydantic import BaseModel, model_validator
+from pydantic import model_validator
+from ..core import Variables as Vs
 
 from speasy.core.dataprovider import DataProvider
 from speasy import SpeasyVariable
 from speasy.core.inventory import DatasetIndex, ParameterIndex
+
+from fastcore.all import patch
 
 # %% ../../nbs/utils/19_speasy.ipynb 1
 def spzvar2pldf(var: SpeasyVariable):
@@ -29,6 +32,12 @@ def spzvars2pldf(vars: list[SpeasyVariable]):
     return pl.concat([spzvar2pldf(var) for var in vars], how='align')
 
 # %% ../../nbs/utils/19_speasy.ipynb 2
+@patch
+def time_resolutions(self: SpeasyVariable):
+    return pl.Series(self.time).diff().describe()
+        
+
+# %% ../../nbs/utils/19_speasy.ipynb 3
 def get_provider(v: str) -> DataProvider:
     if v == "cda":
         return spz.cda
@@ -40,16 +49,8 @@ def get_dataset_index(v: str, provider: str) -> DatasetIndex:
     return get_provider(provider).flat_inventory.datasets[v]
 
 
-class Variables(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True  # RuntimeError: no validator found for <class 'speasy.products.variable.SpeasyVariable'>, see  `arbitrary_types_allowed` in Config
-
+class Variables(Vs):
     products: list[str | ParameterIndex] = None
-    timerange: list[str] = None
-
-    provider: str = "cda"
-    dataset: str = None
-    parameters: list[str] = None
 
     data: list[SpeasyVariable] = None
     
@@ -73,13 +74,21 @@ class Variables(BaseModel):
                 ]
                 self.parameters = [member.spz_name() for member in self.products]
 
-    def get_data(self):
+    def retrieve_data(self):
         # return Variables with data set
-        self.data = spz.get_data(self.products, self.timerange, disable_proxy=self._disable_proxy)
+        if 'local' in self.provider:
+            self.data = spz.get_data(
+                self.products, self.timerange
+            )
+        else:
+            self.data = spz.get_data(
+                self.products, self.timerange, disable_proxy=self._disable_proxy
+            )
         return self
 
-    def to_polars(self):
-        return spzvars2pldf(self.data)
+    @property
+    def time_resolutions(self) -> pl.DataFrame:
+        return self.get_data()[0].time_resolutions()
 
-    def preview(self):
-        return self.to_polars().head().collect()
+    def to_polars(self):
+        return spzvars2pldf(self.get_data())

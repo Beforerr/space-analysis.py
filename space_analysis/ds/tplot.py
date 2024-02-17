@@ -231,33 +231,39 @@ def update_panel(ax: Axes, config: PanelConfig):
 
 
 def plot(
-    tvars2plot: list, panel_configs: list[PanelConfig]
+    tvars2plot: list[str],
+    config: Config,
+    fig: Figure = None,
+    axes: list[Axes] = None,
+    **kwargs,
 ) -> tuple[Figure, list[Axes]]:
     if not isinstance(tvars2plot, list):
         tvars2plot = [tvars2plot]
+        
+    panel_configs = config.panels
+    output_config = config.output
 
-    nrows = len(tvars2plot)
-    fig, axes = plt.subplots(nrows=nrows, sharex=True)
-    
-    axes = [axes] if nrows == 1 else axes
+    if fig is None or axes is None:
+        nrows = len(tvars2plot)
+        fig, axes = plt.subplots(nrows=nrows, sharex=True, **kwargs)
+        axes = [axes] if isinstance(axes, Axes) else axes
 
     for ax, tvar, panel_config in zip(axes, tvars2plot, panel_configs):
         tplot(tvar, fig=fig, axis=ax, display=False)
         update_panel(ax, panel_config)
 
+    fig.set(**output_config.figure)
+    output_config.figure_extra.process(fig, axes)
+    
     return fig, axes
 
 
-def export(tvars2plot: list, config: Config, **kwargs):
+def export(tvars2plot: list, config: Config, plot_kwargs: dict = None, **kwargs):
+
+    fig, axes = plot(tvars2plot, config, **plot_kwargs)
 
     output_config = config.output
     path = output_config.path
-
-    fig, axes = plot(tvars2plot, config.panels)
-
-    fig.set(**output_config.figure)
-
-    output_config.figure_extra.process(fig, axes)
 
     for fmt in output_config.formats:
         match fmt:

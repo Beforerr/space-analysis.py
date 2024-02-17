@@ -19,6 +19,11 @@ website:
     left:
       - text: Home
         href: index.ipynb
+      - text: Features
+        menu: 
+          - href: examples/01_cdas_dash.qmd
+            text: CDAS Dashboards
+        
     tools:
       - icon: github
         href: https://github.com/Beforerr/space-analysis.py

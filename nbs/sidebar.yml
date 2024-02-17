@@ -3,9 +3,6 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
-      - nbdev.yml
-      - sidebar.yml
-      - styles.css
       - section: data_structure
         contents:
           - data_structure/01_tplot.ipynb
@@ -13,7 +10,6 @@ website:
         contents:
           - examples/01_cdas.ipynb
           - examples/01_cdas_dash.qmd
-          - examples/obs_groups_and_instrs.yaml
       - section: io
         contents:
           - io/30_cdf.ipynb
@@ -30,7 +26,7 @@ website:
         href: missions/index.qmd
       - section: plasma
         contents:
-          - plasma/00_ formulary.ipynb
+          - plasma/00_formulary.ipynb
           - plasma/helioweb.ipynb
       - section: plot
         contents:
@@ -42,4 +38,3 @@ website:
           - utils/19_speasy.ipynb
           - utils/20_pds.ipynb
           - utils/21_cdas.ipynb
-          - utils/parameters_pds.yml
