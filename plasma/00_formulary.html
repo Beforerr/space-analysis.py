@@ -98,6 +98,17 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-features" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Features</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-features">    
+        <li>
+    <a class="dropdown-item" href="../examples/01_cdas_dash.html">
+ <span class="dropdown-text">CDAS Dashboards</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -212,34 +223,57 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Parker Solar Probe (PSP)</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../missions/juno/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Juno</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../missions/juno/fgm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">JUNO Magnetic field data pipeline</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
  <span class="menu-text">IO</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../io/30_cdf.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Common Data Format (CDF)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../io/31_lbl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">lbl file format</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
  <span class="menu-text">Plasma</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../plasma/00_ formulary.html" class="sidebar-item-text sidebar-link">
@@ -262,13 +296,13 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
  <span class="menu-text">Plot</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../plot/01_matplotlib.html" class="sidebar-item-text sidebar-link">
@@ -279,13 +313,13 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">
  <span class="menu-text">Utils</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../utils/00_basic.html" class="sidebar-item-text sidebar-link">
@@ -331,6 +365,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#df_beta" id="toc-df_beta" class="nav-link active" data-scroll-target="#df_beta">df_beta</a></li>
   <li><a href="#ldf_alfven_speed" id="toc-ldf_alfven_speed" class="nav-link" data-scroll-target="#ldf_alfven_speed">ldf_Alfven_speed</a></li>
   <li><a href="#df_alfven_speed" id="toc-df_alfven_speed" class="nav-link" data-scroll-target="#df_alfven_speed">df_Alfven_speed</a></li>
+  <li><a href="#df_thermal_spd2temp" id="toc-df_thermal_spd2temp" class="nav-link" data-scroll-target="#df_thermal_spd2temp">df_thermal_spd2temp</a></li>
+  <li><a href="#thermal_spd2temp" id="toc-thermal_spd2temp" class="nav-link" data-scroll-target="#thermal_spd2temp">thermal_spd2temp</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/plasma/00_formulary.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -462,7 +498,7 @@ ul.task-list li input[type="checkbox"] {
                   n:str='n', ion:Union[str,numbers.Integral,plasmapy.parti
                   cles.particle_class.Particle,plasmapy.particles.particle
                   _class.CustomParticle]='p+', col_name='Alfven_speed',
-                  B_unit:astropy.units.core.Unit=Unit("nT"),
+                  sign=True, B_unit:astropy.units.core.Unit=Unit("nT"),
                   n_unit:astropy.units.core.Unit=Unit("1 / cm3"),
                   speed_unit:astropy.units.core.Unit=Unit("km / s"))</code></pre>
 </blockquote>
@@ -513,18 +549,24 @@ ul.task-list li input[type="checkbox"] {
 <td></td>
 </tr>
 <tr class="even">
+<td>sign</td>
+<td>bool</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
 <td>B_unit</td>
 <td>Unit</td>
 <td>nT</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>n_unit</td>
 <td>Unit</td>
 <td>1 / cm3</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>speed_unit</td>
 <td>Unit</td>
 <td>km / s</td>
@@ -532,6 +574,21 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
+<hr>
+</section>
+<section id="df_thermal_spd2temp" class="level3">
+<h3 class="anchored" data-anchor-id="df_thermal_spd2temp">df_thermal_spd2temp</h3>
+<blockquote class="blockquote">
+<pre><code> df_thermal_spd2temp (df:polars.lazyframe.frame.LazyFrame, speed_col,
+                      speed_unit=Unit("km / s"))</code></pre>
+</blockquote>
+<hr>
+</section>
+<section id="thermal_spd2temp" class="level3">
+<h3 class="anchored" data-anchor-id="thermal_spd2temp">thermal_spd2temp</h3>
+<blockquote class="blockquote">
+<pre><code> thermal_spd2temp (speed, speed_unit=Unit("km / s"))</code></pre>
+</blockquote>
 
 
 </section>
