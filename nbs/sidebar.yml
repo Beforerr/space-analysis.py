@@ -3,6 +3,9 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
+      - nbdev.yml
+      - sidebar.yml
+      - styles.css
       - section: data_structure
         contents:
           - data_structure/01_tplot.ipynb
@@ -10,14 +13,20 @@ website:
         contents:
           - examples/01_cdas.ipynb
           - examples/01_cdas_dash.qmd
+          - examples/obs_groups_and_instrs.yaml
       - section: io
         contents:
           - io/30_cdf.ipynb
+          - io/31_lbl.ipynb
         href: io/index.qmd
       - section: missions
         contents:
           - missions/2015_dscovr.ipynb
           - missions/2018_psp.ipynb
+          - section: juno
+            contents:
+              - missions/juno/fgm.ipynb
+            href: missions/juno/index.ipynb
           - section: wind
             contents:
               - missions/wind/mag.ipynb
@@ -38,3 +47,4 @@ website:
           - utils/19_speasy.ipynb
           - utils/20_pds.ipynb
           - utils/21_cdas.ipynb
+          - utils/parameters_pds.yml

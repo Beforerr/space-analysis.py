@@ -73,6 +73,7 @@ class Variables(Vs):
                     if isinstance(member, ParameterIndex)
                 ]
                 self.parameters = [member.spz_name() for member in self.products]
+        return self
 
     def retrieve_data(self):
         # return Variables with data set

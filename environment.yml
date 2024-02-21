@@ -2,6 +2,7 @@ name: space_analysis
 channels:
   - conda-forge
 dependencies:  
+  - python=3.10
   - loguru
 
   - pandas
@@ -24,6 +25,7 @@ dependencies:
   - pytables # used in `pyspedas`
   - pip
   - pip:
+    - pipe
     - great_tables
     - humanize
     - pyspedas
@@ -34,3 +36,4 @@ dependencies:
     - speasy # Python client for Space Physics web services such as CDAWEB or AMDA.
     - pooch # A friend to fetch your Python data files
     - . # current directory
+    - pdpipe
