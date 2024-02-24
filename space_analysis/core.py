@@ -25,15 +25,22 @@ class Variables(BaseModel):
     dataset: str = None
     parameters: list[str] = None
 
-    data: list[Variable] = None
+    _data: list[Variable] = None
     
     def retrieve_data(self):
         pass
-
-    def get_data(self):
-        if self.data is None:
+    
+    @property
+    def data(self):
+        """Retrieve the data if not already done."""
+        if self._data is None:
             self.retrieve_data()
-        return self.data
+        return self._data
+    
+    def get_data(self):
+        if self._data is None:
+            self.retrieve_data()
+        return self._data
 
     def to_polars(self) -> pl.LazyFrame:
         pass
