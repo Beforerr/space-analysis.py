@@ -145,9 +145,8 @@ class Variables(Vs):
     def plot(self, gridspec_kw: dict = {"hspace": 0}):
         vars = self.variables
 
-        fig, axes = plt.subplots(
-            ncols=1, nrows=len(vars), sharex=True, gridspec_kw=gridspec_kw
-        )
+        fig, axes = plt.subplots(nrows=len(vars), sharex=True, gridspec_kw=gridspec_kw)
+        axes: list[Axes] = axes if len(vars) > 1 else [axes]
 
         for var, ax in zip(vars, axes):
             var.plot(ax=ax)
