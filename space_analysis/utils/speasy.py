@@ -19,6 +19,7 @@ from speasy.core.inventory import DatasetIndex, ParameterIndex
 from fastcore.all import patch
 
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import Axes
 
 # %% ../../nbs/utils/19_speasy.ipynb 1
 def spzvar2pldf(var: SpeasyVariable):
@@ -68,7 +69,7 @@ def get_parameter_index(param: str, ds: str) -> ParameterIndex:
 class Variable(V):
 
     _cached_data: SpeasyVariable = None
-    _spz_kwargs: dict = dict(_disable_proxy=True)
+    _spz_kwargs: dict = dict(disable_proxy=True)
 
     def to_polars(self):
         return spzvar2pldf(self.data)
@@ -88,11 +89,14 @@ class Variable(V):
     def time_resolutions(self) -> pl.DataFrame:
         return self.data.time_resolutions()
 
-    def plot(self, fig=None, ax=None):
-        if fig is None or ax is None:
+    def plot(self, fig=None, ax: Axes = None):
+        if fig is None and ax is None:
             fig, ax = plt.subplots()
 
         self.data.replace_fillval_by_nan().plot(ax=ax)
+
+        if self.name:
+            ax.set_ylabel(self.name)
 
         return fig, ax
 
@@ -101,7 +105,6 @@ class Variables(Vs):
     variables: list[Variable] = None
     products: list[str | ParameterIndex] = None
     _cached_data: list[SpeasyVariable] = None
-    _disable_proxy: bool = True
 
     # initize products from provider and dataset if not provided
     @model_validator(mode="after")
@@ -115,6 +118,15 @@ class Variables(Vs):
             else:
                 self.products = get_dataset_parameters(self.dataset, self.provider)
                 self.parameters = [member.spz_name() for member in self.products]
+        return self
+
+    @model_validator(mode="after")
+    def check_variables(self):
+        if self.variables is None:
+            self.variables = [Variable(product=product) for product in self.products]
+        # set the same timerange for all variables
+        for var in self.variables:
+            var.timerange = self.timerange
         return self
 
     def retrieve_data(self):
