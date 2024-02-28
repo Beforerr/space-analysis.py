@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['spzvar2pldf', 'spzvars2pldf', 'get_provider', 'get_dataset_index', 'get_dataset_parameters', 'get_parameter_index',
-           'Variables']
+           'Variable', 'Variables']
 
 # %% ../../nbs/utils/19_speasy.ipynb 0
 import speasy as spz
@@ -17,6 +17,8 @@ from speasy import SpeasyVariable
 from speasy.core.inventory import DatasetIndex, ParameterIndex
 
 from fastcore.all import patch
+
+import matplotlib.pyplot as plt
 
 # %% ../../nbs/utils/19_speasy.ipynb 1
 def spzvar2pldf(var: SpeasyVariable):
@@ -62,11 +64,43 @@ def get_parameter_index(param: str, ds: str) -> ParameterIndex:
     ds_info = vars(get_dataset_index(ds))
     return ds_info[param]
 
+# %% ../../nbs/utils/19_speasy.ipynb 4
+class Variable(V):
+
+    _cached_data: SpeasyVariable = None
+    _spz_kwargs: dict = dict(_disable_proxy=True)
+
+    def to_polars(self):
+        return spzvar2pldf(self.data)
+
+    @property
+    def data(self) -> SpeasyVariable:
+        # return Variables with data set
+        if "local" in self.provider:
+            self._cached_data = spz.get_data(self.product, self.timerange)
+        else:
+            self._cached_data = spz.get_data(
+                self.product, self.timerange, **self._spz_kwargs
+            )
+        return self._cached_data
+
+    @property
+    def time_resolutions(self) -> pl.DataFrame:
+        return self.data.time_resolutions()
+
+    def plot(self, fig=None, ax=None):
+        if fig is None or ax is None:
+            fig, ax = plt.subplots()
+
+        self.data.replace_fillval_by_nan().plot(ax=ax)
+
+        return fig, ax
+
 # %% ../../nbs/utils/19_speasy.ipynb 5
 class Variables(Vs):
     variables: list[Variable] = None
     products: list[str | ParameterIndex] = None
-    _data: list[SpeasyVariable] = None
+    _cached_data: list[SpeasyVariable] = None
     _disable_proxy: bool = True
 
     # initize products from provider and dataset if not provided
@@ -86,9 +120,9 @@ class Variables(Vs):
     def retrieve_data(self):
         # return Variables with data set
         if "local" in self.provider:
-            self._data = spz.get_data(self.products, self.timerange)
+            self._cached_data = spz.get_data(self.products, self.timerange)
         else:
-            self._data = spz.get_data(
+            self._cached_data = spz.get_data(
                 self.products, self.timerange, disable_proxy=self._disable_proxy
             )
         return self
@@ -97,16 +131,14 @@ class Variables(Vs):
         return spzvars2pldf(self.get_data())
 
     def plot(self, gridspec_kw: dict = {"hspace": 0}):
-        import matplotlib.pyplot as plt
-
-        data: list[SpeasyVariable] = self.data
+        vars = self.variables
 
         fig, axes = plt.subplots(
-            ncols=1, nrows=len(data), sharex=True, gridspec_kw=gridspec_kw
+            ncols=1, nrows=len(vars), sharex=True, gridspec_kw=gridspec_kw
         )
 
-        for d, ax in zip(data, axes):
-            d.replace_fillval_by_nan().plot(ax=ax)
+        for var, ax in zip(vars, axes):
+            var.plot(ax=ax)
 
         return fig, axes
 
