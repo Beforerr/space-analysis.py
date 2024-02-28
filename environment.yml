@@ -4,6 +4,7 @@ channels:
 dependencies:  
   - python=3.10
   - loguru
+  - rich
 
   - pandas
   - polars
@@ -23,6 +24,9 @@ dependencies:
   - pdr # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
 
   - pytables # used in `pyspedas`
+
+  - gdal # used in `planetarypy`
+
   - pip
   - pip:
     - pipe
@@ -34,6 +38,7 @@ dependencies:
     - scienceplots
     - pycdfpp # fast CDF reader
     - speasy # Python client for Space Physics web services such as CDAWEB or AMDA.
+    - planetarypy
     - pooch # A friend to fetch your Python data files
     - . # current directory
     - pdpipe

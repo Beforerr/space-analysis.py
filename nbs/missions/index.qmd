@@ -14,3 +14,4 @@ This module includes helpful functions for working with mission (magnetic field 
 
 - [PySPEDAS](https://github.com/spedas/pyspedas): Python-based Space Physics Environment Data Analysis Software
 - [speasy](https://speasy.readthedocs.io): A simple Python package to deal with main Space Physics WebServices (CDA,SSC,AMDA,..)
+- [planetarypy]

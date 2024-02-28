@@ -28,6 +28,8 @@ from zipfile import ZipFile
 
 from pooch.processors import ExtractorProcessor
 
+import ray
+
 # %% ../../../nbs/missions/juno/fgm.ipynb 7
 def load_func(file: str):
     df: pl.DataFrame = pl.from_dataframe(load_lbl(file))
@@ -44,23 +46,27 @@ def load_func(file: str):
     )
 
 
-def process_member(member, zip_file, extract_dir, clean=True):
-    lbl_fp = zip_file.extract(member, path=extract_dir)
-    sts_fp = zip_file.extract(member.replace(".lbl", ".sts"), path=extract_dir)
+@ray.remote
+def process_member(
+    member: str, fname: str, extract_dir, clean=True, fmt="arrow"
+):
+    with ZipFile(fname, "r") as zip_file:
+        lbl_fp = zip_file.extract(member, path=extract_dir)
+        sts_fp = zip_file.extract(member.replace(".lbl", ".sts"), path=extract_dir)
 
-    # Convert the file to arrow format
-    arrow_fp = member.replace(".lbl", ".arrow")
-    load_func(lbl_fp).collect().write_ipc(arrow_fp)
+        # Convert the file to a different format
+        output_fp = lbl_fp.replace("lbl", fmt)
+        load_func(lbl_fp).collect().write_ipc(output_fp)
 
-    # Remove the lbl and sts files
-    if clean:
-        os.remove(lbl_fp)
-        os.remove(sts_fp)
+        # Remove the lbl and sts files
+        if clean:
+            os.remove(lbl_fp)
+            os.remove(sts_fp)
 
-    return arrow_fp
+        return output_fp
 
 
-def unpack_and_convert(fname, extract_dir):
+def unpack_and_convert(fname, extract_dir, process_func = process_member):
     """
     Post-processing hook to unzip a file and convert it to a different format in real-time. (Otherwise the files unzipped would take up too much space on the user's computer.)
 
@@ -73,9 +79,17 @@ def unpack_and_convert(fname, extract_dir):
 
     with ZipFile(fname, "r") as zip_file:
         # Extract the data file from within the archive
-        members = zip_file.namelist() | filter(lambda x: x.endswith(".lbl"))
-        func = partial(process_member, zip_file=zip_file, extract_dir=extract_dir)
-        return list(map(func, tqdm(list(members))))
+        members = list(zip_file.namelist() | filter(lambda x: x.endswith(".lbl")))
+
+    ray.init()
+    
+    func = partial(process_func.remote, fname=fname, extract_dir=extract_dir)
+    futures = list(map(func, members))
+    results = ray.get(futures)
+    
+    ray.shutdown()
+    
+    return results
 
 
 class Unpack(ExtractorProcessor):
@@ -91,11 +105,14 @@ def download_data(
     phase: JunoPhases = "CRUISE",
     coord: JunoFGMCoords = "SE",
     datatype: JunoFGMTimeResolutions = "1SEC",  # time resolution
-    processor: Callable = Unpack(),
-    format="arrow",
+    processor: Callable = None,
+    fmt="arrow",
 ) -> list[str]:
 
     url = f"https://pds-ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI/{dataset}/DATA/{phase}/{coord}/{datatype}"
+
+    if processor is None:
+        processor = Unpack() # default processor, needed to be created here!!!
 
     files = pooch.retrieve(
         url=url,
@@ -104,4 +121,4 @@ def download_data(
         processor=processor,
     )
 
-    return sorted(files | filter(lambda x: x.endswith(f".{format}")))
+    return sorted(files | filter(lambda x: x.endswith(f".{fmt}")))

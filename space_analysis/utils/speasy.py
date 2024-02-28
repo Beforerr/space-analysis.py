@@ -10,6 +10,7 @@ import polars as pl
 
 from pydantic import model_validator
 from ..core import Variables as Vs
+from ..core import Variable as V
 
 from speasy.core.dataprovider import DataProvider
 from speasy import SpeasyVariable
@@ -21,22 +22,23 @@ from fastcore.all import patch
 def spzvar2pldf(var: SpeasyVariable):
     # see SpeasyVariable.to_dataframe
     var = var.replace_fillval_by_nan()
-    return pl.DataFrame(var.values, schema=var.columns).with_columns(
-        time = pl.Series(var.time)
-    ).lazy() # Need to `lazy` last or ShapeError: unable to add a column of length xxxx to a DataFrame of height yyyy
-    
-    
+    return (
+        pl.DataFrame(var.values, schema=var.columns)
+        .with_columns(time=pl.Series(var.time))
+        .lazy()
+    )  # Need to `lazy` last or ShapeError: unable to add a column of length xxxx to a DataFrame of height yyyy
+
+
 def spzvars2pldf(vars: list[SpeasyVariable]):
     # join all dataframes into a single one on the time column
     if len(vars) == 1:
         return spzvar2pldf(vars[0])
-    return pl.concat([spzvar2pldf(var) for var in vars], how='align')
+    return pl.concat([spzvar2pldf(var) for var in vars], how="align")
 
 # %% ../../nbs/utils/19_speasy.ipynb 2
 @patch
 def time_resolutions(self: SpeasyVariable):
     return pl.Series(self.time).diff().describe()
-        
 
 # %% ../../nbs/utils/19_speasy.ipynb 3
 def get_provider(v: str) -> DataProvider:
@@ -55,15 +57,16 @@ def get_dataset_parameters(v: str, provider: str = "cda"):
     ds_info = vars(get_dataset_index(v, provider))
     return [member for member in ds_info.values() if isinstance(member, ParameterIndex)]
 
-def get_parameter_index(param:str, ds: str) -> ParameterIndex:
+
+def get_parameter_index(param: str, ds: str) -> ParameterIndex:
     ds_info = vars(get_dataset_index(ds))
     return ds_info[param]
 
+# %% ../../nbs/utils/19_speasy.ipynb 5
 class Variables(Vs):
+    variables: list[Variable] = None
     products: list[str | ParameterIndex] = None
-
     _data: list[SpeasyVariable] = None
-
     _disable_proxy: bool = True
 
     # initize products from provider and dataset if not provided
@@ -90,9 +93,23 @@ class Variables(Vs):
             )
         return self
 
+    def to_polars(self):
+        return spzvars2pldf(self.get_data())
+
+    def plot(self, gridspec_kw: dict = {"hspace": 0}):
+        import matplotlib.pyplot as plt
+
+        data: list[SpeasyVariable] = self.data
+
+        fig, axes = plt.subplots(
+            ncols=1, nrows=len(data), sharex=True, gridspec_kw=gridspec_kw
+        )
+
+        for d, ax in zip(data, axes):
+            d.replace_fillval_by_nan().plot(ax=ax)
+
+        return fig, axes
+
     @property
     def time_resolutions(self) -> pl.DataFrame:
         return self.get_data()[0].time_resolutions()
-
-    def to_polars(self):
-        return spzvars2pldf(self.get_data())

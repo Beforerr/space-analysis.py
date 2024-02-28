@@ -4,15 +4,21 @@
 __all__ = ['Meta', 'PlasmaMeta', 'TempMeta']
 
 # %% ../../nbs/data_structure/00_meta.ipynb 0
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # %% ../../nbs/data_structure/00_meta.ipynb 1
 class Meta(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     dataset: str = None
     parameters: list[str] = None
 
 
 class PlasmaMeta(Meta):
+    # density_param: str = None
+    # velocity_param: str = None
+    # temperature_param: str = None
+    
     density_col: str = None
     velocity_cols: list[str] = None
     speed_col: str = None

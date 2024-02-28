@@ -6,44 +6,47 @@ __all__ = ['Variable', 'Variables']
 # %% ../nbs/00_core.ipynb 3
 from pydantic import BaseModel
 import polars as pl
+from datetime import datetime
 
 # %% ../nbs/00_core.ipynb 4
 class Variable(BaseModel):
-    name: str
+    name: str = None
     description: str = None
     unit: str = None
-    data: list = None
-
-class Variables(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True  # RuntimeError: no validator found for <class 'speasy.products.variable.SpeasyVariable'>, see  `arbitrary_types_allowed` in Config
-
-    products: list[str] = None
-    timerange: list[str] = None
-
+    
+    timerange: list[datetime] = None
+    
+    # similar to `speasy`
     provider: str = "cda"
     dataset: str = None
-    parameters: list[str] = None
+    parameter: str = None
+    product: str = None
+    """product name should be unique"""
+    
+    _cached_data = None
+    """cached data"""
 
-    _data: list[Variable] = None
-    
-    def retrieve_data(self):
-        pass
-    
-    @property
-    def data(self):
-        """Retrieve the data if not already done."""
-        if self._data is None:
-            self.retrieve_data()
-        return self._data
-    
     def get_data(self):
-        if self._data is None:
+        if self._cached_data is None:
             self.retrieve_data()
-        return self._data
+        return self._cached_data
 
     def to_polars(self) -> pl.LazyFrame:
         pass
 
     def preview(self):
         return self.to_polars().head().collect()
+    
+    @property
+    def data(self):
+        """Retrieve the data if not already done."""
+        ...
+
+class Variables(Variable):
+    class Config:
+        arbitrary_types_allowed = True  # RuntimeError: no validator found for <class 'speasy.products.variable.SpeasyVariable'>, see  `arbitrary_types_allowed` in Config
+
+    products: list[str] = None
+    parameters: list[str] = None
+
+    _data: list[Variable] = None
