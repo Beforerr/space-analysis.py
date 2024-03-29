@@ -69,20 +69,14 @@ def get_parameter_index(param: str, ds: str) -> ParameterIndex:
 class Variable(V):
 
     _cached_data: SpeasyVariable = None
-    _spz_kwargs: dict = dict(disable_proxy=True)
 
     def to_polars(self):
         return spzvar2pldf(self.data)
 
     @property
     def data(self) -> SpeasyVariable:
-        # return Variables with data set
-        if "local" in self.provider:
+        if self._cached_data is None:
             self._cached_data = spz.get_data(self.product, self.timerange)
-        else:
-            self._cached_data = spz.get_data(
-                self.product, self.timerange, **self._spz_kwargs
-            )
         return self._cached_data
 
     @property
@@ -129,18 +123,12 @@ class Variables(Vs):
             var.timerange = self.timerange
         return self
 
-    def retrieve_data(self):
-        # return Variables with data set
-        if "local" in self.provider:
-            self._cached_data = spz.get_data(self.products, self.timerange)
-        else:
-            self._cached_data = spz.get_data(
-                self.products, self.timerange, disable_proxy=self._disable_proxy
-            )
-        return self
+    @property
+    def data(self) -> list[SpeasyVariable]:
+        return [var.data for var in self.variables]
 
     def to_polars(self):
-        return spzvars2pldf(self.get_data())
+        return spzvars2pldf(self.data)
 
     def plot(self, gridspec_kw: dict = {"hspace": 0}):
         vars = self.variables

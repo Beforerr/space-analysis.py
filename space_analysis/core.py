@@ -13,16 +13,16 @@ class Variable(BaseModel):
     name: str = None
     description: str = None
     unit: str = None
-    
+
     timerange: list[datetime] = None
-    
+
     # similar to `speasy`
     provider: str = "cda"
     dataset: str = None
     parameter: str = None
     product: str = None
     """product name should be unique"""
-    
+
     _cached_data = None
     """cached data"""
 
@@ -36,11 +36,31 @@ class Variable(BaseModel):
 
     def preview(self):
         return self.to_polars().head().collect()
-    
+
     @property
     def data(self):
         """Retrieve the data if not already done."""
         ...
+
+    def dump(self, path: str):
+        """Dump the configuration to a file."""
+        import yaml
+
+        with open(path, "w") as f:
+            yy = yaml.load(
+                self.model_dump_json(exclude_defaults=True), Loader=yaml.FullLoader
+            )
+            yaml.dump(yy, f)
+    
+    @classmethod
+    def load_from_file(cls, path: str):
+        """Load the configuration from a file."""
+        import yaml
+
+        with open(path, "r") as f:
+            yy = yaml.load(f, Loader=yaml.FullLoader)
+            return cls(**yy)
+
 
 class Variables(Variable):
     class Config:
