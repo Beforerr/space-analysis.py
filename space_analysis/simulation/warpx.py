@@ -63,6 +63,7 @@ class CustomSimulation(BaseModel):
         "h5"  #: OpenPMD backend for diagnostics
     )
     # NOTE: `yt` project currently does only support `h5` backend for openPMD
+    grid_kwargs: dict = dict()  #: Additional grid parameters
 
     _sim: Simulation = None
     _dist: picmi.AnalyticDistribution = None
@@ -112,6 +113,7 @@ class CustomSimulation(BaseModel):
             upper_bound=[self.Lx / 2.0, self.Lx / 2.0, self.Lz][-self.dim :],
             lower_boundary_conditions=boundary_conditions,
             upper_boundary_conditions=boundary_conditions,
+            **self.grid_kwargs,
         )
         return self
 
@@ -142,6 +144,19 @@ class CustomSimulation(BaseModel):
                 warpx_openpmd_backend=self.diag_openpmd_backend,
             )
             self._sim.add_diagnostic(part_diag)
+        
+        part_energy_diag = picmi.ReducedDiagnostic(
+            name = "part_energy",
+            diag_type = "ParticleEnergy", period=self.diag_steps
+        )
+        field_energy_diag = picmi.ReducedDiagnostic(
+            name = "field_energy",
+            diag_type = "FieldEnergy", period=self.diag_steps
+        )
+        
+        self._sim.add_diagnostic(part_energy_diag)
+        self._sim.add_diagnostic(field_energy_diag)
+        
         return self
 
     def setup_run(self):
