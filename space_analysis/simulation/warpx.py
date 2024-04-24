@@ -57,7 +57,7 @@ class CustomSimulation(BaseModel):
     diag_part: bool = False  #: Output particle diagnostic
     diag_field: bool = True  #: Output field diagnostic
     diag_format: Literal["plotfile", "openpmd"] = (
-        "openpmd"  #: Output format for diagnostics
+        "plotfile"  #: Output format for diagnostics
     )
     diag_openpmd_backend: Literal["h5", "bp", "json"] = (
         "h5"  #: OpenPMD backend for diagnostics
