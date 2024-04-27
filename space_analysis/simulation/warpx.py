@@ -64,7 +64,7 @@ class CustomSimulation(BaseModel):
     )
     # NOTE: `yt` project currently does only support `h5` backend for openPMD
     
-    warpx_amr_restart: str = None #: Enable AMR restart
+    restart: bool = False #: Enable AMR restart
     grid_kwargs: dict = dict()  #: Additional grid parameters
     warpx_kwargs: dict = dict()  #: Additional simulation parameters
 
@@ -180,7 +180,7 @@ class CustomSimulation(BaseModel):
         self.setup_particle()
         if self.diag:
             self.setup_diag()
-        if self.warpx_amr_restart:
+        if self.restart:
             self.setup_checkpoint()
         self.dump()
         self._sim.write_input_file()
@@ -198,9 +198,14 @@ class CustomSimulation(BaseModel):
         if self.m_ion is None:
             self.m_ion = self.m_ion_norm * constants.m_e
 
+        if self.restart:
+            warpx_amr_restart = None #TODO: Add restart file
+        else:
+            warpx_amr_restart = None    
+
         self._sim = Simulation(
             warpx_serialize_initial_conditions=True,
-            warpx_amr_restart = self.warpx_amr_restart,
+            warpx_amr_restart = warpx_amr_restart,
             **self.warpx_kwargs,
         )
         return self
