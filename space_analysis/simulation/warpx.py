@@ -31,7 +31,7 @@ class CustomSimulation(BaseModel):
     """plasma density (m^-3)"""
 
     # Plasma species parameters
-    m_ion_norm: float = 400
+    m_ion_norm: float = 1836.152
     """Ion mass (electron masses)"""
     m_ion: float = None
     """Ion mass (kg)"""
@@ -43,8 +43,8 @@ class CustomSimulation(BaseModel):
     nx: int = None  #: number of cells in x (and y) direction
 
     # Numerical parameters
-    nppc: int = 64
-    """Seed number of particles per cell"""
+    nppc: int = 64 #: number of particles per cell
+    time_norm: float = 100.0 #: normalized simulation temporal length
     dt_norm: float = 1 / 256
     """Time step normalized to period like ion cyclotron period"""
 
@@ -63,7 +63,10 @@ class CustomSimulation(BaseModel):
         "h5"  #: OpenPMD backend for diagnostics
     )
     # NOTE: `yt` project currently does only support `h5` backend for openPMD
+    
+    warpx_amr_restart: str = None #: Enable AMR restart
     grid_kwargs: dict = dict()  #: Additional grid parameters
+    warpx_kwargs: dict = dict()  #: Additional simulation parameters
 
     _sim: Simulation = None
     _dist: picmi.AnalyticDistribution = None
@@ -126,6 +129,16 @@ class CustomSimulation(BaseModel):
     def setup_field_solver(self):
         return self
 
+
+    def setup_checkpoint(self):
+        """Setup checkpoint components."""
+        self.checkpt_steps = int(self.time_norm / self.dt_norm)
+        checkpt_diag = picmi.Checkpoint(
+            period=self.checkpt_steps,    
+        )
+        self._sim.add_diagnostic(checkpt_diag)
+        return self
+
     def setup_diag(self):
         """Setup diagnostic components."""
         self.diag_steps = int(self.diag_time_norm / self.dt_norm)
@@ -153,6 +166,7 @@ class CustomSimulation(BaseModel):
             name = "field_energy",
             diag_type = "FieldEnergy", period=self.diag_steps
         )
+
         
         self._sim.add_diagnostic(part_energy_diag)
         self._sim.add_diagnostic(field_energy_diag)
@@ -166,6 +180,8 @@ class CustomSimulation(BaseModel):
         self.setup_particle()
         if self.diag:
             self.setup_diag()
+        if self.warpx_amr_restart:
+            self.setup_checkpoint()
         self.dump()
         self._sim.write_input_file()
 
@@ -184,6 +200,8 @@ class CustomSimulation(BaseModel):
 
         self._sim = Simulation(
             warpx_serialize_initial_conditions=True,
+            warpx_amr_restart = self.warpx_amr_restart,
+            **self.warpx_kwargs,
         )
         return self
 
@@ -225,7 +243,7 @@ class HybridSimulation(CustomSimulation):
     """Ion inertial length (m)"""
 
     # Numerical parameters
-    time_norm: float = 100.0
+    # time_norm: float = 100.0
     """Simulation temporal length (ion cyclotron periods)"""
 
     Lz_norm: float = None
@@ -323,6 +341,14 @@ class HybridSimulation(CustomSimulation):
         const = 2 * (np.pi) ** 2
         cfl = const * self.dt_norm / (self.dz_norm) ** 2
         return cfl / self.substeps
+    
+    @property
+    def cfl_1(self):
+        """Courant-Friedrichs-Lewy condition"""
+        const = 2 * np.pi
+        cfl = const * self.dt_norm / self.dz_norm
+        return cfl 
+    
 
     def check_cfl(self):
         """Check the Courant-Friedrichs-Lewy condition"""
