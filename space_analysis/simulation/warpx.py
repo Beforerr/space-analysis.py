@@ -203,7 +203,7 @@ class CustomSimulation(BaseModel):
             diag_dir = pathlib.Path("diags")
             chkpoint_dirs = list(diag_dir.glob(pattern="chkpoint*"))
             chkpoint_dirs.sort()
-            warpx_amr_restart = chkpoint_dirs[-1]
+            warpx_amr_restart = str(chkpoint_dirs[-1]) if len(chkpoint_dirs) > 0 else None
         else:
             warpx_amr_restart = None    
 
