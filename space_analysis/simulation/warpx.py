@@ -199,7 +199,11 @@ class CustomSimulation(BaseModel):
             self.m_ion = self.m_ion_norm * constants.m_e
 
         if self.restart:
-            warpx_amr_restart = None #TODO: Add restart file
+            import pathlib
+            diag_dir = pathlib.Path("diags")
+            chkpoint_dirs = list(diag_dir.glob(pattern="chkpoint*"))
+            chkpoint_dirs.sort()
+            warpx_amr_restart = chkpoint_dirs[-1]
         else:
             warpx_amr_restart = None    
 
