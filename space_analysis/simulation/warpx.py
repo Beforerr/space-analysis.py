@@ -66,6 +66,7 @@ class CustomSimulation(BaseModel):
         "E",
         "B",
         "J",
+        "J_displacement", #: displacement current diagnostic is equivalent to electron current in the kinetic-fluid hybrid model
         "rho",
     ]  #: Fields to output in diagnostics (by default `WarpX` does not output `rho`)
     diag_part_list: list = None  #: Particle data to output in diagnostics ["position","momentum","weighting","fields"] (by default `WarpX` does not output `fields`)
