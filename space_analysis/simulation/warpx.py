@@ -24,7 +24,7 @@ class CustomSimulation(BaseModel):
 
     dim: int = None
     diag: bool = True
-    test: bool = True #: Test mode for quick simulation (with reduced ion mass)
+    test: bool = True  #: Test mode for quick simulation (with reduced ion mass)
 
     # Plasma parameters
     n0: float = None
@@ -43,8 +43,8 @@ class CustomSimulation(BaseModel):
     nx: int = None  #: number of cells in x (and y) direction
 
     # Numerical parameters
-    nppc: int = 64 #: number of particles per cell
-    time_norm: float = 100.0 #: normalized simulation temporal length
+    nppc: int = 64  #: number of particles per cell
+    time_norm: float = 100.0  #: normalized simulation temporal length
     dt_norm: float = 1 / 256
     """Time step normalized to period like ion cyclotron period"""
 
@@ -62,9 +62,16 @@ class CustomSimulation(BaseModel):
     diag_openpmd_backend: Literal["h5", "bp", "json"] = (
         "h5"  #: OpenPMD backend for diagnostics
     )
+    diag_field_list: list = [
+        "E",
+        "B",
+        "J",
+        "rho",
+    ]  #: Fields to output in diagnostics (by default `WarpX` does not output `rho`)
+    diag_part_list: list = None  #: Particle data to output in diagnostics ["position","momentum","weighting","fields"] (by default `WarpX` does not output `fields`)
     # NOTE: `yt` project currently does only support `h5` backend for openPMD
-    
-    restart: bool = False #: Enable AMR restart
+
+    restart: bool = False  #: Enable AMR restart
     grid_kwargs: dict = dict()  #: Additional grid parameters
     warpx_kwargs: dict = dict()  #: Additional simulation parameters
 
@@ -129,12 +136,11 @@ class CustomSimulation(BaseModel):
     def setup_field_solver(self):
         return self
 
-
     def setup_checkpoint(self):
         """Setup checkpoint components."""
         self.checkpt_steps = int(self.time_norm / self.dt_norm)
         checkpt_diag = picmi.Checkpoint(
-            period=self.checkpt_steps,    
+            period=self.checkpt_steps,
         )
         self._sim.add_diagnostic(checkpt_diag)
         return self
@@ -145,6 +151,7 @@ class CustomSimulation(BaseModel):
         if self.diag_field:
             field_diag = picmi.FieldDiagnostic(
                 grid=self._grid,
+                data_list=self.diag_field_list,
                 period=self.diag_steps,
                 warpx_format=self.diag_format,
                 warpx_openpmd_backend=self.diag_openpmd_backend,
@@ -152,25 +159,23 @@ class CustomSimulation(BaseModel):
             self._sim.add_diagnostic(field_diag)
         if self.diag_part:
             part_diag = picmi.ParticleDiagnostic(
+                data_list=self.diag_part_list,
                 period=self.diag_steps,
                 warpx_format=self.diag_format,
                 warpx_openpmd_backend=self.diag_openpmd_backend,
             )
             self._sim.add_diagnostic(part_diag)
-        
+
         part_energy_diag = picmi.ReducedDiagnostic(
-            name = "part_energy",
-            diag_type = "ParticleEnergy", period=self.diag_steps
+            name="part_energy", diag_type="ParticleEnergy", period=self.diag_steps
         )
         field_energy_diag = picmi.ReducedDiagnostic(
-            name = "field_energy",
-            diag_type = "FieldEnergy", period=self.diag_steps
+            name="field_energy", diag_type="FieldEnergy", period=self.diag_steps
         )
 
-        
         self._sim.add_diagnostic(part_energy_diag)
         self._sim.add_diagnostic(field_energy_diag)
-        
+
         return self
 
     def setup_run(self):
@@ -194,22 +199,25 @@ class CustomSimulation(BaseModel):
         if self.test:
             # self.m_ion_norm = 100
             pass
-             
+
         if self.m_ion is None:
             self.m_ion = self.m_ion_norm * constants.m_e
 
         if self.restart:
             import pathlib
+
             diag_dir = pathlib.Path("diags")
             chkpoint_dirs = list(diag_dir.glob(pattern="chkpoint*"))
             chkpoint_dirs.sort()
-            warpx_amr_restart = str(chkpoint_dirs[-1]) if len(chkpoint_dirs) > 0 else None
+            warpx_amr_restart = (
+                str(chkpoint_dirs[-1]) if len(chkpoint_dirs) > 0 else None
+            )
         else:
-            warpx_amr_restart = None    
+            warpx_amr_restart = None
 
         self._sim = Simulation(
             warpx_serialize_initial_conditions=True,
-            warpx_amr_restart = warpx_amr_restart,
+            warpx_amr_restart=warpx_amr_restart,
             **self.warpx_kwargs,
         )
         return self
@@ -261,10 +269,15 @@ class HybridSimulation(CustomSimulation):
     dz_norm: float = 1 / 4
     """Cell size (ion skin depths)"""
 
+    @property
+    def _w_ci(self):
+        # Ion cyclotron frequency (rad/s) from uniform background magnetic field
+        return constants.q_e * abs(self.B0) / self.m_ion
+
     def get_plasma_quantities(self):
         """Calculate various plasma parameters based on the simulation input."""
         # Cyclotron angular frequency (rad/s) and period (s)
-        self.w_ci = constants.q_e * abs(self.B0) / self.m_ion
+        self.w_ci = self._w_ci
         self.t_ci = 2.0 * np.pi / self.w_ci
 
         # Alfven speed (m/s): vA = B / sqrt(mu0 * n * (M + m)) = c * omega_ci / w_pi
