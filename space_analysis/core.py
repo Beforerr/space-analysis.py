@@ -7,6 +7,8 @@ __all__ = ['Variable', 'Variables']
 from pydantic import BaseModel
 import polars as pl
 from datetime import datetime
+from functools import cached_property
+from abc import abstractmethod
 
 # %% ../nbs/00_core.ipynb 4
 class Variable(BaseModel):
@@ -23,21 +25,14 @@ class Variable(BaseModel):
     product: str = None
     """product name should be unique"""
 
-    _cached_data = None
-    """cached data"""
-
-    def get_data(self):
-        if self._cached_data is None:
-            self.retrieve_data()
-        return self._cached_data
-
     def to_polars(self) -> pl.LazyFrame:
         pass
 
     def preview(self):
         return self.to_polars().head().collect()
 
-    @property
+    @abstractmethod
+    @cached_property
     def data(self):
         """Retrieve the data if not already done."""
         ...
