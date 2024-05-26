@@ -120,9 +120,13 @@ class Variables(Vs):
     def data(self) -> list[SpeasyVariable]:
         return [var.data for var in self.variables]
 
+    @property
+    def time_resolutions(self):
+        return [var.time_resolution for var in self.variables]
+    
     def to_polars(self):
         return spzvars2pldf(self.data)
-
+    
     def plot(self, gridspec_kw: dict = {"hspace": 0}):
         vars = self.variables
 
@@ -133,7 +137,3 @@ class Variables(Vs):
             var.plot(ax=ax)
 
         return fig, axes
-
-    @property
-    def time_resolutions(self):
-        return self.get_data()[0].time_resolutions()

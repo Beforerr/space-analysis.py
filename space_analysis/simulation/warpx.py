@@ -247,13 +247,16 @@ class HybridSimulation(CustomSimulation):
 
     # Hybrid solver parameters
     ## TODO: find a good value
-    n_floor_coef: float = 0.015625   
-    plasma_resistivity: float = 1e-6 #: Plasma resistivity
-    plasma_hyper_resistivity: float = 1e-6 #: Plasma hyper-resistivity (to suppress spurious whistler noise in low density regions)
+    n_floor_coef: float = 0.015625
+    plasma_resistivity: float = 1e-6  #: Plasma resistivity
+    plasma_hyper_resistivity: float = (
+        1e-6  #: Plasma hyper-resistivity (to suppress spurious whistler noise in low density regions)
+    )
     substeps: int = 10  #: the number of sub-steps to take during the B-field update.
 
     T_plasma: float = None
-    Te: float = None #: Electron temperature in (eV)
+    Te: float = None  #: Electron temperature in (eV)
+    Te_norm: float = 1  #: Electron temperature normalized to plasma temperature
 
     t_ci: float = None
     """Ion cyclotron period (s)"""
@@ -304,7 +307,7 @@ class HybridSimulation(CustomSimulation):
 
         # Temperature (eV) from thermal speed: v_ti = sqrt(kT / M)
         self.T_plasma = self.v_ti**2 * self.m_ion / constants.q_e  # eV
-        self.Te = self.T_plasma
+        self.Te = self.Te or self.Te_norm * self.T_plasma
 
         return self
 
@@ -364,14 +367,13 @@ class HybridSimulation(CustomSimulation):
         const = 2 * (np.pi) ** 2
         cfl = const * self.dt_norm / (self.dz_norm) ** 2
         return cfl / self.substeps
-    
+
     @property
     def cfl_1(self):
         """Courant-Friedrichs-Lewy condition"""
         const = 2 * np.pi
         cfl = const * self.dt_norm / self.dz_norm
-        return cfl 
-    
+        return cfl
 
     def check_cfl(self):
         """Check the Courant-Friedrichs-Lewy condition"""

@@ -40,5 +40,5 @@ dependencies:
     - speasy # Python client for Space Physics web services such as CDAWEB or AMDA.
     - planetarypy
     - pooch # A friend to fetch your Python data files
-    - . # current directory
+    # - . # current directory
     - pdpipe
