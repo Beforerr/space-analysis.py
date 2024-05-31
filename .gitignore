@@ -151,5 +151,6 @@ checklink/cookies.txt
 .quarto
 # pixi environments
 .pixi
+pixi.lock
 *.egg-info
 
