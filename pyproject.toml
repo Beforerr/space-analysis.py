@@ -1,10 +1,17 @@
 [project]
 name = "space-analysis.py"
 version = "0.1.0"
-description = "Add a short description here"
+description = "Python library for data analysis in space physics"
 authors = [{name = "Beforerr", email = "zzj956959688@gmail.com"}]
-requires-python = ">= 3.10"
-dependencies = []
+requires-python = ">= 3.10, < 3.12"
+dependencies = [
+    "pydantic",
+    "polars",
+    "plasmapy",
+    "astropy",
+    "loguru", "rich", "humanize",
+    "pycdfpp"
+]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -18,8 +25,22 @@ platforms = ["osx-arm64"]
 space_analysis = { path = ".", editable = true }
 nbdev = "*"
 setuptools = "*"
+jupyter-cache = "*"
+itables = "*"
+
+pyspedas = "*"
+speasy = "*"
+pooch = "*"
+pipe = "*"
+ray = "*"
 
 [tool.pixi.dependencies]
+python = "3.11"
 ipykernel = "*"
+scipy = "*"
+cdasws = "*"
+pytables = "*" # used in `pyspedas`
+pdr = "*" # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
+warpx = "*"
 
 [tool.pixi.tasks]

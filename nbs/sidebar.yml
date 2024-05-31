@@ -3,17 +3,15 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
-      - nbdev.yml
-      - sidebar.yml
-      - styles.css
       - section: data_structure
         contents:
+          - data_structure/00_config.ipynb
+          - data_structure/00_meta.ipynb
           - data_structure/01_tplot.ipynb
       - section: examples
         contents:
           - examples/01_cdas.ipynb
           - examples/01_cdas_dash.qmd
-          - examples/obs_groups_and_instrs.yaml
       - section: io
         contents:
           - io/30_cdf.ipynb
@@ -36,15 +34,20 @@ website:
       - section: plasma
         contents:
           - plasma/00_formulary.ipynb
+          - plasma/01_mhd_waves.ipynb
           - plasma/helioweb.ipynb
       - section: plot
         contents:
           - plot/01_matplotlib.ipynb
+          - plot/01_plt_config.ipynb
+      - section: simulation
+        contents:
+          - simulation/warpx.ipynb
       - section: utils
         contents:
           - utils/00_basic.ipynb
           - utils/00_develop.ipynb
+          - utils/00_math.ipynb
           - utils/19_speasy.ipynb
           - utils/20_pds.ipynb
           - utils/21_cdas.ipynb
-          - utils/parameters_pds.yml

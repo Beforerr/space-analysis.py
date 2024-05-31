@@ -130,6 +130,8 @@ class GraphicalConfig(BaseModel):
 
 
 # %% ../../nbs/data_structure/01_tplot.ipynb 4
+from .config import PanelConfig, Config
+
 def update_panel(ax: Axes, config: PanelConfig):
     pass
 
