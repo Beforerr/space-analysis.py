@@ -3,6 +3,7 @@ name = "space-analysis.py"
 dynamic = ["version"]
 description = "Python library for data analysis in space physics"
 authors = [{name = "Beforerr", email = "zzj956959688@gmail.com"}]
+readme = "README.md"
 requires-python = ">= 3.10, < 3.12"
 dependencies = [
     "pydantic",
@@ -17,6 +18,14 @@ dependencies = [
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[project.optional-dependencies]
+complete = ["space_analysis[io]"]
+io = ["pyspedas", "speasy"]
+
+[project.urls]
+Homepage = "https://beforerr.github.io/space-analysis.py"
+Repository = "https://github.com/beforerr/space-analysis.py"
+
 [tool.pdm.version]
 source = "file"
 path = "space_analysis/__init__.py"
@@ -26,14 +35,11 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
-space_analysis = { path = ".", editable = true }
+space_analysis = { path = ".", editable = true, extras = ["io"] }
 nbdev = "*"
 setuptools = "*"
 jupyter-cache = "*"
 itables = "*"
-
-pyspedas = "*"
-speasy = "*"
 pooch = "*"
 pipe = "*"
 ray = "*"

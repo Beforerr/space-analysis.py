@@ -35,3 +35,5 @@ metadata-files: [nbdev.yml]
 
 execute: 
   cache: true
+
+wrap: preserve

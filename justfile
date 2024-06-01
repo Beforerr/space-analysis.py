@@ -1,14 +1,14 @@
-update: export
+import "files/quarto.just"
+
+default:
+  just --list
+
+update:
   git add .
   -git commit -am "update"
   git push
 
-export:
-  nbdev_export
-  
-preview: export
-  nbdev_preview
+publish: pypi-publish quarto-publish
 
-publish: export
-  nbdev_readme
-  nbdev_proc_nbs && cd _proc && quarto publish gh-pages --no-prompt
+pypi-publish: export
+  pdm publish
