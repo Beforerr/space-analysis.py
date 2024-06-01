@@ -40,13 +40,14 @@ nbdev = "*"
 setuptools = "*"
 jupyter-cache = "*"
 itables = "*"
+great_tables = "*"
 pooch = "*"
 pipe = "*"
 ray = "*"
 
 [tool.pixi.dependencies]
-python = "3.11"
-ipykernel = "*"
+python = "<3.12"
+jupyter = "*"
 scipy = "*"
 cdasws = "*"
 pytables = "*" # used in `pyspedas`
