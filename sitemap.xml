@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/index.html</loc>
+    <lastmod>2024-06-01T05:33:43.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas_dash.html</loc>
+    <lastmod>2024-03-29T05:13:42.660Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas.html</loc>
+    <lastmod>2024-06-01T05:25:17.447Z</lastmod>
+  </url>
 </urlset>

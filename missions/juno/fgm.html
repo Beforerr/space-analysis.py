@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>space-analysis.py – JUNO Magnetic field data pipeline</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="space-analysis.py - JUNO Magnetic field data pipeline">
+<meta property="og:description" content="Python utils for data analysis in space physics">
+<meta property="og:site_name" content="space-analysis.py">
+<meta name="twitter:title" content="space-analysis.py - JUNO Magnetic field data pipeline">
+<meta name="twitter:description" content="Python utils for data analysis in space physics">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">space-analysis.py</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-features" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Features</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-features">    
+        <li>
+    <a class="dropdown-item" href="../../examples/01_cdas_dash.html">
+ <span class="dropdown-text">CDAS Dashboards</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/Beforerr/space-analysis.py" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../missions/index.html">Missions</a></li><li class="breadcrumb-item"><a href="../../missions/juno/index.html">Juno</a></li><li class="breadcrumb-item"><a href="../../missions/juno/fgm.html">JUNO Magnetic field data pipeline</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../00_core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Structure</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../data_structure/00_config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00 Config</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../data_structure/00_meta.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00 Meta</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../data_structure/01_tplot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01 Tplot</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../examples/01_cdas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDAS Example Jupyter Notebook</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../examples/01_cdas_dash.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDAS Dashboard</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../missions/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Missions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../missions/wind/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Wind mission</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../missions/wind/mag.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Magnetic field</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../missions/wind/plasma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Plasma Data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../missions/2015_dscovr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deep Space Climate Observatory (DSCOVR)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../missions/2018_psp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parker Solar Probe (PSP)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../missions/juno/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Juno</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../missions/juno/fgm.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">JUNO Magnetic field data pipeline</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">IO</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../io/30_cdf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Common Data Format (CDF)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../io/31_lbl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">lbl file format</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plasma</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../plasma/00_formulary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Theoretical formulas for space plasma physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../plasma/01_mhd_waves.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01 Mhd Waves</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../plasma/helioweb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Helioweb</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plot</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../plot/01_matplotlib.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../plot/01_plt_config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01 Plt Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Simulation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../simulation/warpx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">WarpX</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+ <span class="menu-text">Utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/00_basic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/00_develop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00 Develop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/00_math.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic math utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/19_speasy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/20_pds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Planetary Data System (PDS)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../utils/21_cdas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CDAS</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#downloading-data" id="toc-downloading-data" class="nav-link active" data-scroll-target="#downloading-data">Downloading data</a>
+  <ul class="collapse">
+  <li><a href="#unpack" id="toc-unpack" class="nav-link" data-scroll-target="#unpack">Unpack</a></li>
+  <li><a href="#unpack_and_convert" id="toc-unpack_and_convert" class="nav-link" data-scroll-target="#unpack_and_convert">unpack_and_convert</a></li>
+  <li><a href="#remotefunction-object-at-0x1695b4f90" id="toc-remotefunction-object-at-0x1695b4f90" class="nav-link" data-scroll-target="#remotefunction-object-at-0x1695b4f90">RemoteFunction object at 0x1695b4f90&gt;</a></li>
+  <li><a href="#load_func" id="toc-load_func" class="nav-link" data-scroll-target="#load_func">load_func</a></li>
+  <li><a href="#download_data" id="toc-download_data" class="nav-link" data-scroll-target="#download_data">download_data</a></li>
+  </ul></li>
+  <li><a href="#dataset-overview" id="toc-dataset-overview" class="nav-link" data-scroll-target="#dataset-overview">Dataset Overview</a>
+  <ul class="collapse">
+  <li><a href="#index" id="toc-index" class="nav-link" data-scroll-target="#index">Index</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/missions/juno/fgm.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../missions/index.html">Missions</a></li><li class="breadcrumb-item"><a href="../../missions/juno/index.html">Juno</a></li><li class="breadcrumb-item"><a href="../../missions/juno/fgm.html">JUNO Magnetic field data pipeline</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">JUNO Magnetic field data pipeline</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>JUNO Magnetic field data can be downloaded from <a href="https://pds-ppi.igpp.ucla.edu/mission/JUNO/JNO/FGM">PDS</a> website.</p>
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div class="sourceCode" id="cb1"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>File Naming Convention                                                        </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>==============================================================================</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Convention:                                                                   </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   fgm_jno_LL_CCYYDDDxx_vVV.ext                                               </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Where:                                                                        </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   fgm - Fluxgate Magnetometer three character instrument abbreviation        </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   jno - Juno                                                                 </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    LL - CODMAC Data level, for example, l3 for level 3                       </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    CC - The century portion of a date, 20                                    </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    YY - The year of century portion of a date, 00-99                         </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>   DDD - The day of year, 001-366                                             </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    xx - Coordinate system of data (se = Solar equatorial, ser = Solar        </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>         equatorial resampled, pc = Planetocentric, ss = Sun-State,           </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>         pl = Payload)                                                        </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>     v - separator to denote Version number                                   </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    VV - version                                                              </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   ext - file extension (sts = Standard Time Series (ASCII) file, lbl = Label </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>         file)                                                                </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>Example:                                                                      </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   fgm_jno_l3_2014055se_v00.sts    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="downloading-data" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-data">Downloading data</h2>
+<hr>
+<section id="unpack" class="level3">
+<h3 class="anchored" data-anchor-id="unpack">Unpack</h3>
+<blockquote class="blockquote">
+<pre><code> Unpack (members=None, extract_dir=None)</code></pre>
+</blockquote>
+<p>*Abstract base class for extractions from compressed archives.</p>
+<p>Subclasses can be used with :meth:<code>pooch.Pooch.fetch</code> and
+:func:<code>pooch.retrieve</code> to unzip a downloaded data file into a folder in the
+local data store. :meth:<code>~pooch.Pooch.fetch</code> will return a list with the
+names of the extracted files instead of the archive.*</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>members</td>
+<td>NoneType</td>
+<td>None</td>
+<td>If None, will unpack all files in the archive. Otherwise, <em>members</em><br>must be a list of file names to unpack from the archive. Only these<br>files will be unpacked.</td>
+</tr>
+<tr class="even">
+<td>extract_dir</td>
+<td>NoneType</td>
+<td>None</td>
+<td>If None, files will be unpacked to the default location (a folder in<br>the same location as the downloaded zip file, with a suffix added).<br>Otherwise, files will be unpacked to <code>extract_dir</code>, which is<br>interpreted as a <em>relative path</em> (relative to the cache location<br>provided by :func:<code>pooch.retrieve</code> or :meth:<code>pooch.Pooch.fetch</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="unpack_and_convert" class="level3">
+<h3 class="anchored" data-anchor-id="unpack_and_convert">unpack_and_convert</h3>
+<blockquote class="blockquote">
+<pre><code> unpack_and_convert (fname, extract_dir,
+                     process_func=&lt;ray.remote_function.RemoteFunction
+                     object at 0x1695b4f90&gt;)</code></pre>
+</blockquote>
+<p><em>Post-processing hook to unzip a file and convert it to a different format in real-time. (Otherwise the files unzipped would take up too much space on the user’s computer.)</em></p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fname</td>
+<td>str</td>
+<td></td>
+<td>Full path of the zipped file in local storage</td>
+</tr>
+<tr class="even">
+<td>extract_dir</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>process_func</td>
+<td>RemoteFunction</td>
+<td>&lt;ray.remote_function.RemoteFunction object at 0x1695b4f90&gt;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="remotefunction-object-at-0x1695b4f90" class="level3">
+<h3 class="anchored" data-anchor-id="remotefunction-object-at-0x1695b4f90">RemoteFunction object at 0x1695b4f90&gt;</h3>
+<blockquote class="blockquote">
+<pre><code> RemoteFunction object at 0x1695b4f90&gt; (*args, **kwargs)</code></pre>
+</blockquote>
+<p>*A remote function.</p>
+<p>This is a decorated function. It can be used to spawn tasks.</p>
+<p>Attributes:
+_language: The target language.
+_function: The original function.
+_function_descriptor: The function descriptor. This is not defined
+until the remote function is first invoked because that is when the
+function is pickled, and the pickled function is used to compute
+the function descriptor.
+_function_name: The module and function name.
+_num_cpus: The default number of CPUs to use for invocations of this
+remote function.
+_num_gpus: The default number of GPUs to use for invocations of this
+remote function.
+_memory: The heap memory request in bytes for this task/actor,
+rounded down to the nearest integer.
+_resources: The default custom resource requirements for invocations of
+this remote function.
+_num_returns: The default number of return values for invocations
+of this remote function.
+_max_calls: The number of times a worker can execute this function
+before exiting.
+_max_retries: The number of times this task may be retried
+on worker failure.
+_retry_exceptions: Whether application-level errors should be retried.
+This can be a boolean or a list/tuple of exceptions that should be retried.
+_runtime_env: The runtime environment for this task.
+_decorator: An optional decorator that should be applied to the remote
+function invocation (as opposed to the function execution) before
+invoking the function. The decorator must return a function that
+takes in two arguments (“args” and “kwargs”). In most cases, it
+should call the function that was passed into the decorator and
+return the resulting ObjectRefs. For an example, see
+“test_decorated_function” in “python/ray/tests/test_basic.py”.
+_function_signature: The function signature.
+_last_export_cluster_and_job: A pair of the last exported cluster
+and job to help us to know whether this function was exported.
+This is an imperfect mechanism used to determine if we need to
+export the remote function again. It is imperfect in the sense that
+the actor class definition could be exported multiple times by
+different workers.
+_scheduling_strategy: Strategy about how to schedule
+this remote function.*</p>
+<hr>
+</section>
+<section id="load_func" class="level3">
+<h3 class="anchored" data-anchor-id="load_func">load_func</h3>
+<blockquote class="blockquote">
+<pre><code> load_func (file:str)</code></pre>
+</blockquote>
+<hr>
+</section>
+<section id="download_data" class="level3">
+<h3 class="anchored" data-anchor-id="download_data">download_data</h3>
+<blockquote class="blockquote">
+<pre><code> download_data (dataset='JNO-SS-3-FGM-CAL-V1.0',
+                phase:Literal['CRUISE','JUPITER']='CRUISE',
+                coord:Literal['SE','SS','PL']='SE',
+                datatype:Literal['1SEC','1MIN','FULL']='1SEC',
+                processor:Callable=None, fmt='arrow')</code></pre>
+</blockquote>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dataset</td>
+<td>str</td>
+<td>JNO-SS-3-FGM-CAL-V1.0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>phase</td>
+<td>Literal</td>
+<td>CRUISE</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>coord</td>
+<td>Literal</td>
+<td>SE</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>datatype</td>
+<td>Literal</td>
+<td>1SEC</td>
+<td>time resolution</td>
+</tr>
+<tr class="odd">
+<td>processor</td>
+<td>Callable</td>
+<td>None</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>fmt</td>
+<td>str</td>
+<td>arrow</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Returns</strong></td>
+<td><strong>list</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-10" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download_data(datatype="FULL")</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>download_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>['/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011237se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011238se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011239se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011240se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011241se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011242se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011243se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011244se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011245se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011246se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011247se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011248se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011249se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011250se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011251se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011252se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011253se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011254se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011255se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011256se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011257se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011258se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011259se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011260se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011261se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011262se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011263se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011264se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011265se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011266se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011267se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011268se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011269se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011270se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011271se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011272se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011273se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011274se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011275se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011276se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011277se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011278se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011279se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011280se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011281se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011282se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011283se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011284se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011285se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011286se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011287se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011288se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011289se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011290se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011291se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011292se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011293se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011294se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011295se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011296se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011297se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011298se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011299se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011300se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011301se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011302se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011303se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011304se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011305se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011306se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011307se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011308se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011309se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011310se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011311se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011312se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011313se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011314se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011315se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011316se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011317se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011318se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011319se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011320se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011321se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011322se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011323se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011324se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011325se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011326se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011327se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011328se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011329se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011330se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011331se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011332se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011333se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011334se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011335se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011336se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011337se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011338se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011339se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011340se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011341se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011342se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011343se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011344se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011345se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011346se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011347se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011348se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011349se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011350se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011351se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011352se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011353se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011354se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011355se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011356se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011357se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011358se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011359se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011360se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011361se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011362se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011363se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011364se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2011/fgm_jno_l3_2011365se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012001se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012002se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012003se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012004se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012005se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012006se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012007se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012008se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012009se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012010se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012011se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012012se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012013se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012014se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012015se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012016se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012017se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012018se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012019se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012020se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012021se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012022se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012023se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012024se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012025se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012026se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012027se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012028se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012029se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012030se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012031se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012032se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012033se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012034se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012035se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012036se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012037se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012038se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012039se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012040se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012041se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012042se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012043se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012044se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012045se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012046se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012047se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012048se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012049se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012050se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012051se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012052se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012053se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012054se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012055se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012056se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012057se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012058se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012059se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012060se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012061se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012062se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012063se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012064se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012065se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012066se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012067se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012068se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012069se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012070se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012071se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012072se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012073se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012074se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012075se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012076se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012077se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012078se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012079se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012080se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012081se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012082se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012083se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012084se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012085se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012086se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012087se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012088se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012089se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012090se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012091se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012092se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012093se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012094se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012095se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012096se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012097se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012098se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012099se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012100se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012101se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012102se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012103se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012104se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012105se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012106se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012107se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012108se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012109se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012110se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012116se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012117se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012118se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012119se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012120se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012121se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012122se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012123se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012124se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012125se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012126se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012127se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012128se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012129se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012130se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012131se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012132se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012133se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012134se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012135se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012137se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012138se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012139se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012140se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012141se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012142se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012143se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012144se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012145se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012146se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012147se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012148se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012149se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012150se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012151se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012152se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012153se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012154se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012155se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012156se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012157se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012158se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012159se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012160se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012161se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012162se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012163se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012164se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012165se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012166se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012168se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012169se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012170se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012171se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012172se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012173se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012174se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012175se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012176se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012177se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012178se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012179se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012180se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012181se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012182se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012183se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012184se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012191se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012192se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012193se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012194se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012195se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012196se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012197se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012198se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012199se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012200se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012201se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012202se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012203se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012204se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012205se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012206se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012207se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012208se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012209se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012210se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012211se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012212se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012213se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012214se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012215se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012216se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012217se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012218se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012219se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012220se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012221se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012222se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012223se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012224se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012225se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012226se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012227se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012228se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012229se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012230se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012231se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012232se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012233se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012234se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012235se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012236se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012237se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012262se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012263se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012264se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012265se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012266se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012267se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012268se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012269se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012270se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012271se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012272se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012273se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012274se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012275se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012276se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012277se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012278se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012283se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012284se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012285se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012286se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012287se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012288se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012289se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012290se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012291se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012292se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012293se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012294se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012295se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012296se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012297se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012298se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012299se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012300se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012301se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012302se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012303se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012304se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012305se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012306se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012307se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012308se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012309se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012310se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012311se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012312se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012313se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012314se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012315se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012316se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012317se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012318se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012319se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012320se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012321se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012322se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012323se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012324se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012325se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012326se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012327se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012328se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012329se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012330se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012331se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012332se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012333se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012334se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012335se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012336se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012337se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012338se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012339se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012340se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012341se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012342se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012343se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012344se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012345se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012346se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012347se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012354se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012355se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012356se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012357se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012358se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012359se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012360se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012361se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012362se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012363se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012364se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012365se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2012/fgm_jno_l3_2012366se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013001se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013002se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013003se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013004se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013005se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013006se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013007se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013008se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013009se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013010se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013011se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013012se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013013se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013014se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013015se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013016se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013017se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013018se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013019se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013020se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013021se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013022se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013023se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013024se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013025se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013026se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013027se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013028se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013029se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013030se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013031se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013032se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013033se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013034se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013035se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013036se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013037se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013038se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013039se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013040se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013041se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013042se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013043se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013044se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013045se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013046se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013047se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013048se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013049se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013050se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013051se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013052se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013053se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013054se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013055se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013056se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013057se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013058se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013059se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013060se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013061se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013062se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013063se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013064se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013065se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013066se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013067se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013068se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013069se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013070se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013071se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013072se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013073se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013074se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013075se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013076se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013077se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013078se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013079se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013080se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013081se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013082se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013083se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013084se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013085se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013086se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013087se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013088se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013089se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013090se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013091se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013092se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013093se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013094se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013095se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013096se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013097se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013098se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013099se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013100se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013101se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013102se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013103se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013104se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013105se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013106se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013107se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013108se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013109se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013110se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013111se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013112se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013113se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013114se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013115se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013116se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013117se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013118se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013119se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013120se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013121se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013122se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013123se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013124se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013125se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013126se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013127se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013128se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013129se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013130se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013135se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013136se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013137se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013138se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013139se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013140se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013141se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013142se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013278se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013279se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013280se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013281se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013296se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013297se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013298se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013299se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013300se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013301se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013302se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013303se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013304se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013305se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013306se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013307se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013308se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013309se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013310se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013311se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013312se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013313se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013314se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013315se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013316se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013317se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013318se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013319se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013320se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013321se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013322se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013323se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013324se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013325se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013326se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013327se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013328se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013329se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013330se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013331se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013332se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013333se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013334se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013335se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013336se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013337se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013338se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013339se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013340se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013341se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013342se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013343se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013344se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013345se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013346se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013347se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013348se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013349se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013350se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013351se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013352se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013353se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013354se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013355se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013356se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013357se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013358se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013359se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013360se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013361se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013362se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013363se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013364se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2013/fgm_jno_l3_2013365se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014001se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014002se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014003se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014004se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014005se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014006se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014007se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014008se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014009se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014010se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014011se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014012se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014013se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014014se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014015se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014016se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014017se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014018se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014019se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014020se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014021se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014022se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014023se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014024se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014026se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014027se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014028se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014029se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014030se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014031se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014032se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014033se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014034se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014035se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014036se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014037se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014038se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014039se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014040se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014041se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014042se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014043se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014044se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014045se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014046se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014047se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014048se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014049se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014050se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014051se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014052se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014053se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014054se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014055se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014056se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014057se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014058se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014059se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014060se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014061se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014062se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014063se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014064se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014065se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014066se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014067se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014068se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014069se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014070se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014071se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014072se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014093se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014094se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014095se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014096se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014097se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014098se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014099se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014100se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014101se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014102se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014103se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014104se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014105se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014106se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014107se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014108se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014109se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014110se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014111se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014112se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014113se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014114se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014115se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014116se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014117se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014118se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014119se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014120se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014121se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014122se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014123se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014124se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014125se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014126se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014127se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014128se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014129se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014130se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014131se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014132se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014133se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014134se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014135se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014136se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014137se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014138se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014139se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014140se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014141se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014142se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014143se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014144se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014145se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014146se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014147se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014148se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014149se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014150se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014151se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014152se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014153se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014154se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014155se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014156se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014157se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014158se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014159se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014160se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014161se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014162se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014163se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014164se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014165se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014166se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014167se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014168se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014169se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014170se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014171se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014172se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014173se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014174se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014175se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014176se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014177se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014178se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014179se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014180se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014181se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014182se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014183se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014184se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014185se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014186se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014187se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014188se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014189se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014190se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014191se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014192se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014195se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014196se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014197se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014198se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014199se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014200se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014201se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014202se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014203se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014204se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014205se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014206se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014207se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014208se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014209se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014210se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014211se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014212se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014213se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014214se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014215se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014216se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014217se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014218se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014219se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014220se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014223se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014224se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014225se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014226se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014227se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014228se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014229se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014230se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014231se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014232se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014233se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014234se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014235se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014236se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014237se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014238se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014239se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014240se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014241se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014242se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014243se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014244se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014245se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014246se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014247se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014248se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014250se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014251se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014258se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014259se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014260se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014261se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014262se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014263se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014264se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014265se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014266se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014267se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014268se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014269se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014270se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014271se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014272se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014273se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014274se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014275se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014276se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014277se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014278se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014279se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014286se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014287se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014288se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014289se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014290se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014291se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014292se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014293se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014294se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014295se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014296se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014297se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014298se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014299se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014300se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014301se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014302se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014303se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014304se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014305se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014306se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014307se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014308se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014309se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014310se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014311se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014312se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014313se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014314se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014315se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014316se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014317se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014318se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014319se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014320se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014321se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014322se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014323se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014324se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014325se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014326se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014327se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014328se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014329se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014330se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014331se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014332se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014335se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014336se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014337se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014338se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014339se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014342se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014343se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014344se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014345se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014346se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014347se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014348se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014349se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014350se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014351se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014352se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014353se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014354se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014355se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014356se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014357se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014358se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014359se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014360se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014361se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014363se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2014/fgm_jno_l3_2014364se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015001se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015002se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015003se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015004se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015005se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015006se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015007se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015008se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015009se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015010se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015011se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015012se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015013se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015014se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015015se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015016se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015017se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015018se_r1s_v01.arrow',
+ '/Users/zijin/Library/Caches/pooch/f0f32e58858e88ba3231334a96f5d005-download.unzip/2015/fgm_jno_l3_2015019se_r1s_v01.arrow',
+ ...]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="dataset-overview" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-overview">Dataset Overview</h2>
+<section id="index" class="level3">
+<h3 class="anchored" data-anchor-id="index">Index</h3>
+<div id="cell-13" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pds_dir <span class="op">=</span> <span class="st">"https://pds-ppi.igpp.ucla.edu/data"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>possible_coords <span class="op">=</span> [<span class="st">"se"</span>, <span class="st">"ser"</span>, <span class="st">"pc"</span>, <span class="st">"ss"</span>, <span class="st">"pl"</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>possible_exts <span class="op">=</span> [<span class="st">"sts"</span>, <span class="st">"lbl"</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>possible_data_rates <span class="op">=</span> [<span class="st">"1s"</span>, <span class="st">"1min"</span>, <span class="st">"1h"</span>]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>juno_ss_config <span class="op">=</span> {</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DATA_SET_ID"</span>: <span class="st">"JNO-SS-3-FGM-CAL-V1.0"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"FILE_SPECIFICATION_NAME"</span>: <span class="st">"INDEX/INDEX.LBL"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>juno_j_config <span class="op">=</span> {</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DATA_SET_ID"</span>: <span class="st">"JNO-J-3-FGM-CAL-V1.0"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"FILE_SPECIFICATION_NAME"</span>: <span class="st">"INDEX/INDEX.LBL"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="process-index" class="level4">
+<h4 class="anchored" data-anchor-id="process-index">Process index</h4>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdpipe <span class="im">as</span> pdp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-16" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_jno_index(df: pandas.DataFrame):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    _index_time_format <span class="op">=</span> <span class="st">"%Y-%jT%H:%M:%S.</span><span class="sc">%f</span><span class="st">"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    df.columns <span class="op">=</span> df.columns.<span class="bu">str</span>.replace(<span class="st">" "</span>, <span class="st">""</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    jno_index_pipeline <span class="op">=</span> pdp.PdPipeline(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        [</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            pdp.ColDrop([<span class="st">"PRODUCT_ID"</span>, <span class="st">"CR_DATE"</span>, <span class="st">"PRODUCT_LABEL_MD5CHECKSUM"</span>]),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>            pdp.ApplyByCols(<span class="st">"SID"</span>, <span class="bu">str</span>.rstrip),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            pdp.ApplyByCols(<span class="st">"FILE_SPECIFICATION_NAME"</span>, <span class="bu">str</span>.rstrip),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            pdp.ColByFrameFunc(</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">"START_TIME"</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">lambda</span> df: pandas.to_datetime(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                    df[<span class="st">"START_TIME"</span>], <span class="bu">format</span><span class="op">=</span>_index_time_format</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>            pdp.ColByFrameFunc(</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">"STOP_TIME"</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                <span class="kw">lambda</span> df: pandas.to_datetime(</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                    df[<span class="st">"STOP_TIME"</span>], <span class="bu">format</span><span class="op">=</span>_index_time_format</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>            <span class="co"># pdp.ApplyByCols(['START_TIME', 'STOP_TIME'], pandas.to_datetime, format=_index_time_format), # </span><span class="al">NOTE</span><span class="co">: This is slow</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jno_index_pipeline(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/Beforerr\.github\.io\/space-analysis\.py");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/missions/juno/fgm.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
