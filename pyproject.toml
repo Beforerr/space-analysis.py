@@ -46,7 +46,6 @@ pipe = "*"
 ray = "*"
 
 [tool.pixi.dependencies]
-python = "<3.12"
 jupyter = "*"
 scipy = "*"
 cdasws = "*"

@@ -13,8 +13,6 @@ from datetime import datetime, date
 
 from typing import Annotated
 
-import matplotlib.pyplot as plt
-
 from ..plot.config import FigureExtraOptions
 
 # %% ../../nbs/data_structure/00_config.ipynb 1

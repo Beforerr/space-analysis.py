@@ -12,8 +12,8 @@ preview: export
 quarto-publish:
   #!/usr/bin/env sh
   if command -v nbdev_proc_nbs &> /dev/null; then
+    nbdev_prepare
     nbdev_proc_nbs && cd _proc
-    nbdev_readme
   fi
   if ! quarto publish gh-pages --no-render --no-prompt; then
     echo "quarto publish gh-pages failed"
@@ -22,6 +22,7 @@ quarto-publish:
 
 export:
   -nbdev_export
+  -nbdev_export --path nbs/__init__.ipynb
 
 render-man:
   quarto render --profile man
