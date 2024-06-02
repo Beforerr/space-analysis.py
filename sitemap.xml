@@ -1,15 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas.html</loc>
+    <lastmod>2024-06-02T17:37:52.005Z</lastmod>
+  </url>
+  <url>
     <loc>https://Beforerr.github.io/space-analysis.py/index.html</loc>
     <lastmod>2024-06-01T05:33:43.502Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/00_math.html</loc>
+    <lastmod>2024-06-02T17:37:51.961Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/21_cdas.html</loc>
+    <lastmod>2024-06-02T17:37:51.899Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/00_develop.html</loc>
+    <lastmod>2024-06-02T17:37:51.479Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/io/30_cdf.html</loc>
+    <lastmod>2024-06-02T17:37:51.425Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/juno/fgm.html</loc>
+    <lastmod>2024-06-02T17:37:51.424Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/2015_dscovr.html</loc>
+    <lastmod>2024-06-02T17:37:52.007Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/mag.html</loc>
+    <lastmod>2024-06-02T17:37:51.970Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/2018_psp.html</loc>
+    <lastmod>2024-06-02T19:27:46.194Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/plot/01_plt_config.html</loc>
+    <lastmod>2024-06-02T17:37:50.054Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/data_structure/01_tplot.html</loc>
+    <lastmod>2024-06-02T17:37:52.160Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/plasma/helioweb.html</loc>
+    <lastmod>2024-06-02T17:37:49.486Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/plasma/00_formulary.html</loc>
+    <lastmod>2024-06-02T17:37:52.517Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/00_core.html</loc>
+    <lastmod>2024-06-02T20:43:51.465Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/plasma/01_mhd_waves.html</loc>
+    <lastmod>2024-06-02T17:37:49.617Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/data_structure/00_config.html</loc>
+    <lastmod>2024-06-02T17:37:50.057Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/data_structure/00_meta.html</loc>
+    <lastmod>2024-06-02T19:55:16.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/plot/01_matplotlib.html</loc>
+    <lastmod>2024-06-02T17:37:49.967Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/index.html</loc>
+    <lastmod>2024-03-29T05:13:42.662Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/plasma.html</loc>
+    <lastmod>2024-06-02T17:37:51.971Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/index.html</loc>
+    <lastmod>2024-03-29T05:13:42.662Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/missions/juno/index.html</loc>
+    <lastmod>2024-06-02T17:37:51.379Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/io/31_lbl.html</loc>
+    <lastmod>2024-06-02T17:37:51.451Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/simulation/warpx.html</loc>
+    <lastmod>2024-06-02T17:37:51.514Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/19_speasy.html</loc>
+    <lastmod>2024-06-02T20:44:30.642Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/00_basic.html</loc>
+    <lastmod>2024-06-02T17:37:51.933Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Beforerr.github.io/space-analysis.py/utils/20_pds.html</loc>
+    <lastmod>2024-06-02T17:37:52.000Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas_dash.html</loc>
     <lastmod>2024-03-29T05:13:42.660Z</lastmod>
   </url>
   <url>
-    <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas.html</loc>
-    <lastmod>2024-06-01T05:25:17.447Z</lastmod>
+    <loc>https://Beforerr.github.io/space-analysis.py/00_meta.html</loc>
+    <lastmod>2024-06-02T19:43:20.159Z</lastmod>
   </url>
 </urlset>

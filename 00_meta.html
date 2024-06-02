@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>space-analysis.py – Plasma Data</title>
+<title>space-analysis.py – meta</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,25 +20,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,10 +102,10 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="space-analysis.py - Plasma Data">
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="space-analysis.py">
 <meta property="og:site_name" content="space-analysis.py">
-<meta name="twitter:title" content="space-analysis.py - Plasma Data">
+<meta name="twitter:title" content="space-analysis.py">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -82,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">space-analysis.py</span>
     </a>
   </div>
@@ -93,7 +127,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.ipynb"> 
+    <a class="nav-link" href="./index.ipynb"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -102,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-features">    
         <li>
-    <a class="dropdown-item" href="../../examples/01_cdas_dash.html">
+    <a class="dropdown-item" href="./examples/01_cdas_dash.html">
  <span class="dropdown-text">CDAS Dashboards</span></a>
   </li>  
     </ul>
@@ -119,7 +153,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../missions/index.html">Missions</a></li><li class="breadcrumb-item"><a href="../../missions/wind/index.html">Wind mission</a></li><li class="breadcrumb-item"><a href="../../missions/wind/plasma.html">Plasma Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00_meta.html">00 Meta</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -133,8 +167,14 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../00_core.html" class="sidebar-item-text sidebar-link">
+  <a href="./00_core.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00_meta.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">00 Meta</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -148,19 +188,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../data_structure/00_config.html" class="sidebar-item-text sidebar-link">
+  <a href="./data_structure/00_config.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">00 Config</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../data_structure/00_meta.html" class="sidebar-item-text sidebar-link">
+  <a href="./data_structure/00_meta.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">00 Meta</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../data_structure/01_tplot.html" class="sidebar-item-text sidebar-link">
+  <a href="./data_structure/01_tplot.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">01 Tplot</span></a>
   </div>
 </li>
@@ -177,13 +217,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../examples/01_cdas.html" class="sidebar-item-text sidebar-link">
+  <a href="./examples/01_cdas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">CDAS Example Jupyter Notebook</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../examples/01_cdas_dash.html" class="sidebar-item-text sidebar-link">
+  <a href="./examples/01_cdas_dash.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">CDAS Dashboard</span></a>
   </div>
 </li>
@@ -191,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../missions/index.html" class="sidebar-item-text sidebar-link">
+            <a href="./missions/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Missions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -200,22 +240,22 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../missions/wind/index.html" class="sidebar-item-text sidebar-link">
+            <a href="./missions/wind/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Wind mission</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../missions/wind/mag.html" class="sidebar-item-text sidebar-link">
+  <a href="./missions/wind/mag.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Magnetic field</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../missions/wind/plasma.html" class="sidebar-item-text sidebar-link active">
+  <a href="./missions/wind/plasma.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Plasma Data</span></a>
   </div>
 </li>
@@ -223,19 +263,19 @@ ul.task-list li input[type="checkbox"] {
   </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../missions/2015_dscovr.html" class="sidebar-item-text sidebar-link">
+  <a href="./missions/2015_dscovr.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Deep Space Climate Observatory (DSCOVR)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../missions/2018_psp.html" class="sidebar-item-text sidebar-link">
+  <a href="./missions/2018_psp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Parker Solar Probe (PSP)</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../missions/juno/index.html" class="sidebar-item-text sidebar-link">
+            <a href="./missions/juno/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Juno</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -244,7 +284,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../missions/juno/fgm.html" class="sidebar-item-text sidebar-link">
+  <a href="./missions/juno/fgm.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">JUNO Magnetic field data pipeline</span></a>
   </div>
 </li>
@@ -263,13 +303,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../io/30_cdf.html" class="sidebar-item-text sidebar-link">
+  <a href="./io/30_cdf.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Common Data Format (CDF)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../io/31_lbl.html" class="sidebar-item-text sidebar-link">
+  <a href="./io/31_lbl.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">lbl file format</span></a>
   </div>
 </li>
@@ -286,19 +326,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../plasma/00_formulary.html" class="sidebar-item-text sidebar-link">
+  <a href="./plasma/00_formulary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Theoretical formulas for space plasma physics</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../plasma/01_mhd_waves.html" class="sidebar-item-text sidebar-link">
+  <a href="./plasma/01_mhd_waves.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">01 Mhd Waves</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../plasma/helioweb.html" class="sidebar-item-text sidebar-link">
+  <a href="./plasma/helioweb.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Helioweb</span></a>
   </div>
 </li>
@@ -315,13 +355,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../plot/01_matplotlib.html" class="sidebar-item-text sidebar-link">
+  <a href="./plot/01_matplotlib.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic utils</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../plot/01_plt_config.html" class="sidebar-item-text sidebar-link">
+  <a href="./plot/01_plt_config.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">01 Plt Config</span></a>
   </div>
 </li>
@@ -338,7 +378,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../simulation/warpx.html" class="sidebar-item-text sidebar-link">
+  <a href="./simulation/warpx.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">WarpX</span></a>
   </div>
 </li>
@@ -355,37 +395,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/00_basic.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/00_basic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic utils</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/00_develop.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/00_develop.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">00 Develop</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/00_math.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/00_math.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic math utils</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/19_speasy.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/19_speasy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Test</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/20_pds.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/20_pds.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Planetary Data System (PDS)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../utils/21_cdas.html" class="sidebar-item-text sidebar-link">
+  <a href="./utils/21_cdas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">CDAS</span></a>
   </div>
 </li>
@@ -401,49 +441,44 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#download_data" id="toc-download_data" class="nav-link active" data-scroll-target="#download_data">download_data</a></li>
-  <li><a href="#load_data" id="toc-load_data" class="nav-link" data-scroll-target="#load_data">load_data</a></li>
+  <li><a href="#tempmeta" id="toc-tempmeta" class="nav-link active" data-scroll-target="#tempmeta">TempMeta</a></li>
+  <li><a href="#plasmameta" id="toc-plasmameta" class="nav-link" data-scroll-target="#plasmameta">PlasmaMeta</a></li>
+  <li><a href="#meta" id="toc-meta" class="nav-link" data-scroll-target="#meta">Meta</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/missions/wind/plasma.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/00_meta.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../missions/index.html">Missions</a></li><li class="breadcrumb-item"><a href="../../missions/wind/index.html">Wind mission</a></li><li class="breadcrumb-item"><a href="../../missions/wind/plasma.html">Plasma Data</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Plasma Data</h1>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
 <hr>
-<section id="download_data" class="level3">
-<h3 class="anchored" data-anchor-id="download_data">download_data</h3>
+<section id="tempmeta" class="level3">
+<h3 class="anchored" data-anchor-id="tempmeta">TempMeta</h3>
 <blockquote class="blockquote">
-<pre><code> download_data (**kwargs)</code></pre>
+<pre><code> TempMeta (dataset:str=None, parameters:list[str]=None)</code></pre>
 </blockquote>
 <hr>
 </section>
-<section id="load_data" class="level3">
-<h3 class="anchored" data-anchor-id="load_data">load_data</h3>
+<section id="plasmameta" class="level3">
+<h3 class="anchored" data-anchor-id="plasmameta">PlasmaMeta</h3>
 <blockquote class="blockquote">
-<pre><code> load_data (var_names:list[typing.Literal['Np','Pressure','V_GSE','V_GSE_p
-            ','THERMAL_SPD']]=['Np', 'V_GSE', 'THERMAL_SPD'],
-            datatype:Literal['k0','h0','h5']='k0', **kwargs)</code></pre>
+<pre><code> PlasmaMeta (dataset:str=None, parameters:list[str]=None)</code></pre>
 </blockquote>
+<hr>
+</section>
+<section id="meta" class="level3">
+<h3 class="anchored" data-anchor-id="meta">Meta</h3>
+<blockquote class="blockquote">
+<pre><code> Meta (dataset:str=None, parameters:list[str]=None)</code></pre>
+</blockquote>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InstrumentConfig:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    default_datatype: <span class="bu">str</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    default_var_names: <span class="bu">list</span>[<span class="bu">str</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
@@ -874,4 +909,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/missions/wind/plasma.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Beforerr/space-analysis.py/blob/main/00_meta.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Beforerr/space-analysis.py/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
