@@ -235,8 +235,7 @@ def log_sim_info(sim: Simulation):
 # %% ../../nbs/simulation/warpx.ipynb 7
 class HybridSimulation(CustomSimulation):
 
-    beta: float = 0.1
-    """Plasma beta"""  # used to calculate temperature
+    beta: float = 0.1 #: Plasma beta, used to calculate temperature
 
     B0: float = 100 * 1e-9
     """Initial magnetic field strength (T)"""
