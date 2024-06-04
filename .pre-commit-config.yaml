@@ -4,3 +4,10 @@ repos:
   hooks:
   - id: nbdev_clean
   - id: nbdev_export
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.4.7
+  hooks:
+    # Run the linter.
+    - id: ruff
+    # Run the formatter.
+    - id: ruff-format
