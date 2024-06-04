@@ -153,4 +153,4 @@ checklink/cookies.txt
 .pixi
 pixi.lock
 *.egg-info
-
+.jupyter_cache
