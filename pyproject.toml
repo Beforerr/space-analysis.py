@@ -28,8 +28,7 @@ Homepage = "https://beforerr.github.io/space-analysis.py"
 Repository = "https://github.com/beforerr/space-analysis.py"
 
 [tool.pdm.version]
-source = "file"
-path = "space_analysis/__init__.py"
+source = "scm"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
