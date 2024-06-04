@@ -3,6 +3,9 @@ import "files/quarto.just"
 default:
   just --list
 
+ensure_env:
+  pre-commit install
+
 update:
   git add .
   -git commit -am "update"

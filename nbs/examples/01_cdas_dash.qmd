@@ -13,11 +13,11 @@ import yaml
 from cdasws import CdasWs
 from itables import show
 import speasy as spz
+from beforerr.project import produce_or_load
 
 ```
 
 ```{python}
-OBS_GROUPS_AND_INSTRS_FNAME =  "obs_groups_and_instrs.yaml"
 DATASETS_FNAME = "datasets.yaml"
 
 cdas = CdasWs()
@@ -141,22 +141,15 @@ show(observatories_df)
 ## Gets descriptions of the observatory groups (and associated instruments) from the server
 
 ```{python}
-#| output: false
-def save_obs_groups_and_instrs(fname=OBS_GROUPS_AND_INSTRS_FNAME, **kwargs):
-    obs_groups_and_instrs = cdas.get_observatory_groups_and_instruments(**kwargs)
-
-    # save to a file
-    with open(fname, "w") as file:
-        yaml.dump(obs_groups_and_instrs, file)
-```
-
-```{python}
 #| title: CDAS Observatory groups and associated instruments
 
 #  see ` ObservatoryGroupInstrumentDescription` in <https://cdaweb.gsfc.nasa.gov/WebServices/REST/CDAS.xsd>.
 
-with open(OBS_GROUPS_AND_INSTRS_FNAME, "r") as file:
-    obs_groups_and_instrs: list[dict] = yaml.safe_load(file)
+obs_groups_and_instrs, file = produce_or_load(
+    cdas.get_observatory_groups_and_instruments,
+    filename="obs_groups_and_instrs",
+    suffix="json",
+)
 
 rows = []
 for obs_group in obs_groups_and_instrs:

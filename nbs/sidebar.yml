@@ -22,8 +22,7 @@ website:
           - missions/2015_dscovr.ipynb
           - missions/2018_psp.ipynb
           - section: juno
-            contents:
-              - missions/juno/fgm.ipynb
+            contents: []
             href: missions/juno/index.ipynb
           - section: wind
             contents:

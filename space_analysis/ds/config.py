@@ -5,10 +5,11 @@ __all__ = ['OutputConfig', 'PanelConfig', 'Config']
 
 # %% ../../nbs/data_structure/00_config.ipynb 0
 from pydantic import (
-    BaseModel,
     StringConstraints,
     model_validator,
 )
+from pydantic.dataclasses import dataclass, Field
+
 from datetime import datetime, date
 
 from typing import Annotated
@@ -16,7 +17,10 @@ from typing import Annotated
 from ..plot.config import FigureExtraOptions
 
 # %% ../../nbs/data_structure/00_config.ipynb 1
-class OutputConfig(BaseModel):
+@dataclass
+class OutputConfig:
+    """Output configuration"""
+
     path: str = None
     filename: str = None
 
@@ -28,39 +32,39 @@ class OutputConfig(BaseModel):
 
     figure_extra: FigureExtraOptions = FigureExtraOptions()
     """Extra figure options"""
-    
-class PanelConfig(BaseModel):
+
+
+@dataclass
+class PanelConfig:
+    """Panel configuration"""
 
     timerange: list[date | datetime] = None
-    
+
     ds: str = None
     id: str = None
     name: str = None
     units: str = None
-    labels: list[str] = list()
-    
+    labels: list[str] = Field(default_factory=list)
+
     satellite: Annotated[str, StringConstraints(to_lower=True)] = None
     instrument: Annotated[str, StringConstraints(to_lower=True)] = None
     datatype: str = None
     probe: str = None
-    
-    # process: ProcessConfig = ProcessConfig()
-    # tplot: TplotConfig = TplotConfig()
 
 # %% ../../nbs/data_structure/00_config.ipynb 2
-class Config(BaseModel):
+@dataclass
+class Config:
     panels: list[PanelConfig]
     timerange: list[datetime | date] = None
     output: OutputConfig = None
     backend: str = None
-    
-    @model_validator(mode='before')
+
+    @model_validator(mode="before")
     def set_default_timerange(cls, values):
-        timerange = values.get('timerange', None)
-        panels = values.get('panels', [])
-        
+        timerange = values.get("timerange", None)
+        panels = values.get("panels", [])
+
         if timerange:
             for panel in panels:
-                if not panel.get('timerange'):
-                    panel['timerange'] = timerange
+                panel["timerange"] = panel.get("timerange") or timerange
         return values
