@@ -4,11 +4,33 @@
 __all__ = ['Variable', 'Variables', 'Dataset', 'Instrument', 'Mission']
 
 # %% ../nbs/00_core.ipynb 1
-from pydantic import ConfigDict
+from pydantic import ConfigDict, field_validator
 from pydantic.dataclasses import dataclass
 from datetime import datetime
 
 # %% ../nbs/00_core.ipynb 3
+def list2dict(variables: list):
+    return {v.name: v for v in variables}
+
+
+def normalize(v):
+    """Utility function to convert a list to a dictionary"""
+    return list2dict(v) if isinstance(v, list) else v
+
+
+def normalize_t(type, v):
+    """Utility function to convert a list of `type` to a dictionary"""
+    return (
+        list2dict(v)
+        if isinstance(v, list) and all(isinstance(x, type) for x in v)
+        else v
+    )
+
+
+def add_v(self, name, v):
+    return getattr(self, name).update({v.name: v})
+
+# %% ../nbs/00_core.ipynb 5
 @dataclass(config=ConfigDict(extra="allow"))
 class Variable:
     name: str = None
@@ -22,19 +44,21 @@ class Variables:
     timerange: list[datetime] = None
     variables: dict[str, Variable] = None
 
-    def add_variable(self, variable: Variable):
-        self.variables[variable.name] = variable
+    def add_variable(self, v):
+        add_v(self, "variables", v)
 
-# %% ../nbs/00_core.ipynb 5
+# %% ../nbs/00_core.ipynb 7
 @dataclass
 class Dataset(Variables):
     name: str = None
 
-# %% ../nbs/00_core.ipynb 7
+# %% ../nbs/00_core.ipynb 9
 @dataclass
 class Instrument:
     name: str
-    datasets: dict[str, Dataset] = None
+    datasets: dict[str, Dataset] = field_validator("datasets", mode="before")(normalize)
+
+    names_list: list[str] = None
 
     def add_dataset(self, dataset: Dataset):
         self.datasets[dataset.name] = dataset
@@ -44,8 +68,12 @@ class Instrument:
 class Mission:
     name: str
     """Name of the mission"""
-    instruments: dict[str, Instrument] = None
+    instruments: dict[str, Instrument] = field_validator("instruments", mode="before")(
+        normalize
+    )
     datasets: dict[str, Dataset] = None
 
-    def add_instrument(self, instrument: Instrument):
-        self.instruments[instrument.name] = instrument
+    names_list: list[str] = None
+
+    def add_instrument(self, v):
+        add_v(self, "instruments", v)
