@@ -5,10 +5,5 @@ on:
 
 jobs:
   deploy:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: Beforerr/workflows/pixi_nbdev@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+    uses: Beforerr/workflows/pixi_nbdev/workflow.yml@main
+    secrets: inherit

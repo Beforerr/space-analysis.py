@@ -1,6 +1,6 @@
 project:
   type: website
-  preview: 
+  preview:
     port: 5557
 
 format:
@@ -18,22 +18,22 @@ website:
     search: true
     left:
       - text: Home
-        href: index.ipynb
+        href: index.qmd
       - text: Features
-        menu: 
+        menu:
           - href: examples/01_cdas_dash.qmd
             text: CDAS Dashboards
-        
+
     tools:
       - icon: github
         href: https://github.com/Beforerr/space-analysis.py
-    
+
   sidebar:
     contents: auto
 
 metadata-files: [nbdev.yml]
 
-execute: 
+execute:
   cache: true
 
 wrap: preserve
