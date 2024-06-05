@@ -1,3 +1,5 @@
+name: Publishing (GitHub Pages and PyPI)
+
 on:
   push:
     branches: ["main", "master"]
@@ -8,3 +10,5 @@ jobs:
     uses: Beforerr/workflows/.github/workflows/pixi_nbdev.yml@main
     secrets: inherit
     permissions: { contents: write }
+  pypi-publish:
+    uses: Beforerr/workflows/.github/workflows/pypi_publish.yml@main
