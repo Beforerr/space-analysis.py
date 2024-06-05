@@ -96,22 +96,11 @@
     ]
   },
   {
-    "objectID": "00_core.html",
-    "href": "00_core.html",
-    "title": "Core",
-    "section": "",
-    "text": "Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,__main__.Variable]=None)\n\n\n\n\n\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           timerange:list[datetime.datetime]=None)",
-    "crumbs": [
-      "Home",
-      "Core"
-    ]
-  },
-  {
     "objectID": "00_core.html#variable",
     "href": "00_core.html#variable",
     "title": "Core",
-    "section": "",
-    "text": "Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,__main__.Variable]=None)\n\n\n\n\n\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           timerange:list[datetime.datetime]=None)",
+    "section": "Variable",
+    "text": "Variable\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,__main__.Variable]=None)\n\n\n\n\nVariable\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           timerange:list[datetime.datetime]=None)",
     "crumbs": [
       "Home",
       "Core"
@@ -133,7 +122,7 @@
     "href": "00_core.html#instrument-and-mission",
     "title": "Core",
     "section": "Instrument and Mission",
-    "text": "Instrument and Mission\n\n\nMission\n\n Mission (name:str, instruments:dict[str,__main__.Instrument]=None,\n          datasets:dict[str,__main__.Dataset]=None)\n\n\n\n\nInstrument\n\n Instrument (name:str, datasets:dict[str,__main__.Dataset]=None)",
+    "text": "Instrument and Mission\n\n\nMission\n\n Mission (name:str, instruments:dict[str,__main__.Instrument]=&lt;function\n          normalize&gt;, datasets:dict[str,__main__.Dataset]=None,\n          names_list:list[str]=None)\n\n\n\n\nInstrument\n\n Instrument (name:str, datasets:dict[str,__main__.Dataset]=&lt;function\n             normalize&gt;, names_list:list[str]=None)",
     "crumbs": [
       "Home",
       "Core"
@@ -313,7 +302,7 @@
     "href": "missions/2015_dscovr.html#instruments",
     "title": "Deep Space Climate Observatory (DSCOVR)",
     "section": "Instruments",
-    "text": "Instruments\n\nMagnetometer\nFaraday cup\n\n\n\n\ndownload_data\n\n download_data (**kwargs)\n\n\n\n\nload_data\n\n load_data (instrument='mag', var_names=None, datatype=None, **kwargs)\n\n\n\n\nload_data\n\n load_data (instrument='mag', var_names=None, datatype=None, **kwargs)\n\n\n\n\nload_data\n\n load_data (instrument='mag', var_names=None, datatype=None, **kwargs)",
+    "text": "Instruments\n\nMagnetometer\nFaraday cup\n\n\n\nimport pyspedas\nimport polars as pl\nfrom functools import partial\nfrom typing import Literal, overload\nfrom space_analysis.io.cdf import cdf2pl\n\n\ndef download_data(**kwargs):\n    return pyspedas.dscovr.load(downloadonly=True, **kwargs)\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"mag\"],\n    var_names: list[MagDataVars],\n    datatype: Literal[\"h0\"],\n    **kwargs,\n): ...\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"faraday_cup\"],\n    var_names: list[PlasmaDataVars],\n    datatype: Literal[\"h1\"],\n    **kwargs,\n): ...\n\n\ndef load_data(\n    instrument=\"mag\", var_names=None, datatype=None, **kwargs\n) -&gt; pl.LazyFrame:\n    if instrument == \"mag\":\n        var_names = var_names or [\"B1F1\", \"B1RTN\"]\n        datatype = datatype or \"h0\"\n    elif instrument == \"faraday_cup\":\n        var_names = var_names or [\"Np\", \"V_GSE\", \"THERMAL_TEMP\"]\n        datatype = datatype or \"h1\"\n\n    files = download_data(instrument=instrument, datatype=datatype, **kwargs)\n\n    load_func = partial(cdf2pl, var_names=var_names)\n\n    return pl.concat(load_func(file) for file in files)",
     "crumbs": [
       "Home",
       "Missions",
