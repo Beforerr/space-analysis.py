@@ -7,3 +7,4 @@ jobs:
   deploy:
     uses: Beforerr/workflows/.github/workflows/pixi_nbdev.yml@main
     secrets: inherit
+    permissions: { contents: write }
