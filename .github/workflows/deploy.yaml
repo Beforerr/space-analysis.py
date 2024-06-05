@@ -12,4 +12,6 @@ jobs:
     permissions: { contents: write }
   pypi-publish:
     uses: Beforerr/workflows/.github/workflows/pypi_publish.yml@main
-    permissions: { id-token: write }
+    permissions:
+      id-token: write
+      contents: write
