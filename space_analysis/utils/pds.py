@@ -19,8 +19,8 @@ def pds_download(
     datatype,
     path,
     phase_url,
-    sat = None,  # satellite name, for missions with multiple satellites
-    pds_url = PDS_URL,
+    sat=None,  # satellite name, for missions with multiple satellites
+    pds_url=PDS_URL,
 ) -> list[str]:
     "Downloading file from PDS server"
     # phase_url = PARAMS[mission][instrument][dataset]["url_format"]

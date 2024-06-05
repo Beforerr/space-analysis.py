@@ -11,44 +11,44 @@ from typing import Literal
 
 # %% ../../nbs/io/30_cdf.ipynb 2
 def inspect_cdf(
-    file_path: str, 
-    var_type: Literal["data", "metadata", "support_data", "ignore_data"] = "data"
+    file_path: str,
+    var_type: Literal["data", "metadata", "support_data", "ignore_data"] = "data",
 ):
     cdf = pycdfpp.load(file_path)
-    
+
     vars = []
-    
+
     for key, value in cdf.items():
-        if value.attributes['VAR_TYPE'][0] == var_type:
+        if value.attributes["VAR_TYPE"][0] == var_type:
             vars.append(key)
 
     return vars
 
 # %% ../../nbs/io/30_cdf.ipynb 3
 def cdf2pl(
-    file_path: str, # The path to the CDF file.
-    var_names: str | list[str] # The name(s) of the variable(s) to retrieve from the CDF file.
-) -> pl.LazyFrame: # A lazy dataframe containing the requested data.
+    file_path: str,  # The path to the CDF file.
+    var_names: str
+    | list[str],  # The name(s) of the variable(s) to retrieve from the CDF file.
+) -> pl.LazyFrame:  # A lazy dataframe containing the requested data.
     """
     Convert a CDF file to Polars Dataframe.
     """
-    
+
     # Ensure var_names is always a list
     if isinstance(var_names, str):
         var_names = [var_names]
 
     cdf = pycdfpp.load(file_path)
-    epoch_var = cdf[var_names[0]].attributes['DEPEND_0'][0]
+    epoch_var = cdf[var_names[0]].attributes["DEPEND_0"][0]
     epoch_time = pycdfpp.to_datetime64(cdf[epoch_var])
-    
+
     columns = {"time": epoch_time}
-    
+
     for var_name in var_names:
-        
         var = cdf[var_name]
         var_values = var.values
         var_attrs = var.attributes
-        
+
         # Handle FILLVAL
         if "FILLVAL" in var_attrs:
             fillval = var_attrs["FILLVAL"].value[0]
@@ -58,9 +58,9 @@ def cdf2pl(
             columns[var_name] = var_values
         else:  # Multi-dimensional data
             # Dynamically create column names based on the shape of the field values
-            
+
             # labels = cdf[var_attrs["LABL_PTR_1"][0]].values
-            
+
             for i in range(var_values.shape[1]):
                 columns[f"{var_name}_{i}"] = var_values[:, i]
 

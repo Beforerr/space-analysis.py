@@ -28,11 +28,11 @@ DataTypes = Literal["k0", "h0", "h5"]
 
 
 def load_data(
-    var_names: list[DataVars] = ["Np", "V_GSE", "THERMAL_SPD"], 
+    var_names: list[DataVars] = ["Np", "V_GSE", "THERMAL_SPD"],
     datatype: DataTypes = "k0",
-    **kwargs
+    **kwargs,
 ):
-    files = download_data(datatype = datatype, **kwargs)
+    files = download_data(datatype=datatype, **kwargs)
 
     load_func = partial(cdf2pl, var_names=var_names)
 

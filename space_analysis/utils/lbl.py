@@ -7,8 +7,6 @@ __all__ = ['HTTP_PROTOCOLS', 'load_lbl']
 import pandas
 import pdr
 
-from typing import Any, Dict, Callable
-
 # %% ../../nbs/io/31_lbl.ipynb 3
 HTTP_PROTOCOLS = ("http", "https")
 

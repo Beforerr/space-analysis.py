@@ -4,4 +4,5 @@
 __all__ = []
 
 # %% ../../../nbs/missions/juno/index.ipynb 1
-from .fgm import download_data
+# | default_exp missions/juno/__init__
+# | export

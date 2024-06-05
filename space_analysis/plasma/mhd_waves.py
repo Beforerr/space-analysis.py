@@ -7,6 +7,7 @@ __all__ = ['VpVg_fs']
 import numpy as np
 from numpy import cos, sin, sqrt
 
+
 def VpVg_fs(cs, ca, theta=None):
     """Calculates the phase velocities and group velocities for fast and slow waves."""
     if theta is None:

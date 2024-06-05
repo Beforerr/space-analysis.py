@@ -9,17 +9,19 @@ from pydantic.dataclasses import dataclass
 from datetime import datetime
 
 # %% ../nbs/00_core.ipynb 3
-@dataclass(config=ConfigDict(extra='allow'))
+@dataclass(config=ConfigDict(extra="allow"))
 class Variable:
     name: str = None
     description: str = None
     unit: str = None
     timerange: list[datetime] = None
-    
+
+
 @dataclass
 class Variables:
     timerange: list[datetime] = None
     variables: dict[str, Variable] = None
+
     def add_variable(self, variable: Variable):
         self.variables[variable.name] = variable
 

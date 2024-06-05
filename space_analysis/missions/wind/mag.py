@@ -15,11 +15,8 @@ def download_data(**kwargs):
     return pyspedas.psp.fields(downloadonly=True, **kwargs)
 
 # %% ../../../nbs/missions/wind/mag.ipynb 3
-def load_data(
-    var_names="psp_fld_l2_mag_RTN",
-    **kwargs
-):
+def load_data(var_names="psp_fld_l2_mag_RTN", **kwargs):
     files = download_data(**kwargs)
     load_func = partial(cdf2pl, var_names=var_names)
-    
+
     return pl.concat(load_func(file) for file in files)

@@ -22,6 +22,8 @@ from speasy.core.inventory import DatasetIndex, ParameterIndex
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import Axes
 
+from humanize import naturalsize
+
 # %% ../../nbs/utils/19_speasy.ipynb 3
 def spzvar2pldf(var: SpeasyVariable):
     # see SpeasyVariable.to_dataframe
@@ -66,9 +68,6 @@ def get_parameter_index(param: str, ds: str) -> ParameterIndex:
     return ds_info[param]
 
 # %% ../../nbs/utils/19_speasy.ipynb 6
-from humanize import naturalsize
-
-# %% ../../nbs/utils/19_speasy.ipynb 7
 @patch
 def preview(self: SpeasyVariable):
     print("===========================================")
@@ -85,7 +84,7 @@ def preview(self: SpeasyVariable):
     print(f"Values:       {self.values[:3]}")
     print("===========================================")
 
-# %% ../../nbs/utils/19_speasy.ipynb 9
+# %% ../../nbs/utils/19_speasy.ipynb 8
 class Variable(V):
     parameter: str = None
     product: str = None
@@ -94,11 +93,11 @@ class Variable(V):
     @cached_property
     def data(self) -> SpeasyVariable:
         return spz.get_data(self.product, self.timerange)
-    
+
     @property
     def time_resolution(self):
         return get_time_resolution(self.data)
-    
+
     def to_polars(self):
         return spzvar2pldf(self.data)
 
@@ -114,7 +113,7 @@ class Variable(V):
             yy = yaml.load(f, Loader=yaml.FullLoader)
             return cls(**yy)
 
-# %% ../../nbs/utils/19_speasy.ipynb 10
+# %% ../../nbs/utils/19_speasy.ipynb 9
 @patch
 def plot(self: Variable, fig=None, ax: Axes = None):
     if fig is None and ax is None:
@@ -127,6 +126,7 @@ def plot(self: Variable, fig=None, ax: Axes = None):
 
     return fig, ax
 
+
 @patch
 def dump(self: Variable, path: str):
     """Dump the configuration to a file."""
@@ -138,7 +138,7 @@ def dump(self: Variable, path: str):
         )
         yaml.dump(yy, f)
 
-# %% ../../nbs/utils/19_speasy.ipynb 11
+# %% ../../nbs/utils/19_speasy.ipynb 10
 @dataclass(config=ConfigDict(arbitrary_types_allowed=True))
 class Variables(Vs):
     parameters: list[str] = None
@@ -177,10 +177,10 @@ class Variables(Vs):
     @property
     def time_resolutions(self):
         return [var.time_resolution for var in self.variables]
-    
+
     def to_polars(self):
         return spzvars2pldf(self.data)
-    
+
     def plot(self, gridspec_kw: dict = {"hspace": 0}):
         vars = self.variables
 
@@ -191,9 +191,9 @@ class Variables(Vs):
             var.plot(ax=ax)
 
         return fig, axes
-    
-class SVariables:
 
+
+class SVariables:
     products: list[str] = None
     parameters: list[str] = None
 

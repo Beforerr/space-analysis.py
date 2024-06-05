@@ -9,9 +9,7 @@ from typing import Literal
 # %% ../../nbs/missions/2018_psp.ipynb 2
 Instruments = Literal["fields", "spc", "spi"]
 
-MagDataVars = Literal[
-    "psp_fld_l2_mag_RTN",
-]
+MagDataVars = Literal["psp_fld_l2_mag_RTN",]
 
 SPIDataVars = Literal[
     "QUALITY_FLAG",
@@ -20,7 +18,7 @@ SPIDataVars = Literal[
     "VEL_SC",
     "VEL_RTN_SUN",
     "T_TENSOR_INST",
-    "TEMP", # Temperature (eV)
+    "TEMP",  # Temperature (eV)
     "EFLUX_VS_ENERGY",
     "EFLUX_VS_THETA",
     "EFLUX_VS_PHI",
@@ -28,7 +26,7 @@ SPIDataVars = Literal[
     "VENUS_DIST",
     "SC_VEL_RTN_SUN",
     "QUAT_SC_TO_RTN",
-    "MAGF_SC", # Magnetic Field in Spacecraft Coordinates
+    "MAGF_SC",  # Magnetic Field in Spacecraft Coordinates
     "MAGF_INST",
 ]
 

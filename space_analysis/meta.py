@@ -8,7 +8,7 @@ from pydantic.dataclasses import dataclass
 from pydantic import ConfigDict
 
 # %% ../nbs/data_structure/00_meta.ipynb 1
-@dataclass(config=ConfigDict(extra='allow'))
+@dataclass(config=ConfigDict(extra="allow"))
 class Meta:
     dataset: str = None
     parameters: list[str] = None
@@ -18,7 +18,7 @@ class PlasmaMeta(Meta):
     # density_param: str = None
     # velocity_param: str = None
     # temperature_param: str = None
-    
+
     density_col: str = None
     velocity_cols: list[str] = None
     speed_col: str = None

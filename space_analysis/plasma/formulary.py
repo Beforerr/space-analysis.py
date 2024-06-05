@@ -5,6 +5,7 @@ __all__ = ['df_beta', 'df_Alfven_speed', 'ldf_Alfven_speed', 'thermal_spd2temp',
 
 # %% ../../nbs/plasma/00_formulary.ipynb 1
 import astropy.units as u
+from astropy.constants import m_p
 from plasmapy.formulary import beta, Alfven_speed
 from plasmapy.particles import ParticleLike
 import polars as pl
@@ -36,7 +37,7 @@ def df_Alfven_speed(
     n: str = "n",  # particle density of the plasma
     ion: ParticleLike = "p+",
     col_name="Alfven_speed",
-    sign = True,
+    sign=True,
     B_unit: u.Unit = u.nT,
     n_unit: u.Unit = u.cm**-3,
     speed_unit: u.Unit = u.km / u.s,
@@ -44,21 +45,19 @@ def df_Alfven_speed(
     _B = df[B].to_numpy() * B_unit
     _n = df[n].to_numpy() * n_unit
 
-    _Alfven_speed = Alfven_speed(B=_B, density=_n, ion=ion).to(speed_unit) # Always positive because of the plasmapy
-    
+    _Alfven_speed = Alfven_speed(B=_B, density=_n, ion=ion).to(
+        speed_unit
+    )  # Always positive because of the plasmapy
+
     _Alfven_speed = np.sign(_B) * _Alfven_speed if sign else _Alfven_speed
 
     return df.with_columns(pl.Series(_Alfven_speed).alias(col_name))
 
-def ldf_Alfven_speed(
-    ldf: pl.LazyFrame,
-    **kwargs
-):
+
+def ldf_Alfven_speed(ldf: pl.LazyFrame, **kwargs):
     return ldf.collect().pipe(df_Alfven_speed, **kwargs).lazy()
 
 # %% ../../nbs/plasma/00_formulary.ipynb 4
-from astropy.constants import m_p
-
 def thermal_spd2temp(speed, speed_unit=u.km / u.s):
     return (m_p * (speed * speed_unit) ** 2 / 2).to("eV").value
 
@@ -68,4 +67,3 @@ def df_thermal_spd2temp(df: pl.LazyFrame, speed_col, speed_unit=u.km / u.s):
     return df.with_columns(
         plasma_temperature=thermal_spd2temp(df[speed_col].to_numpy(), speed_unit)
     ).lazy()
-

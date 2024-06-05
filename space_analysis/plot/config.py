@@ -12,8 +12,8 @@ from matplotlib.pyplot import Figure, Axes
 
 # %% ../../nbs/plot/01_plt_config.ipynb 1
 class FigureExtraOptions(BaseModel):
-    """Options to apply to a matplotlib figure.
-    """
+    """Options to apply to a matplotlib figure."""
+
     hide_legends: bool = False
     hide_ylabels: bool = False
     sync_legend_colors: bool = False

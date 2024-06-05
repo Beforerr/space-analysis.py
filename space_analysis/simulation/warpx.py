@@ -4,8 +4,8 @@
 __all__ = ['CustomSimulation', 'log_sim_info', 'HybridSimulation', 'log_info']
 
 # %% ../../nbs/simulation/warpx.ipynb 1
-#| default_exp simulation/warpx
-#| export
+# | default_exp simulation/warpx
+# | export
 
 # %% ../../nbs/simulation/warpx.ipynb 2
 import numpy as np
@@ -19,6 +19,7 @@ from pywarpx import picmi
 # %% ../../nbs/simulation/warpx.ipynb 3
 constants = picmi.constants
 
+
 def dump(self: BaseModel, file="sim_parameters.json"):
     d = dict(self.model_dump())
     with open(file, "w") as f:
@@ -26,7 +27,6 @@ def dump(self: BaseModel, file="sim_parameters.json"):
 
 # %% ../../nbs/simulation/warpx.ipynb 4
 class CustomSimulation(BaseModel):
-
     dim: int = None
     diag: bool = True
     test: bool = True  #: Test mode for quick simulation (with reduced ion mass)
@@ -71,7 +71,7 @@ class CustomSimulation(BaseModel):
         "E",
         "B",
         "J",
-        "J_displacement", #: displacement current diagnostic is equivalent to electron current in the kinetic-fluid hybrid model
+        "J_displacement",  #: displacement current diagnostic is equivalent to electron current in the kinetic-fluid hybrid model
         "rho",
     ]  #: Fields to output in diagnostics (by default `WarpX` does not output `rho`)
     diag_part_list: list = None  #: Particle data to output in diagnostics ["position","momentum","weighting","fields"] (by default `WarpX` does not output `fields`)
@@ -234,8 +234,7 @@ def log_sim_info(sim: Simulation):
 
 # %% ../../nbs/simulation/warpx.ipynb 7
 class HybridSimulation(CustomSimulation):
-
-    beta: float = 0.1 #: Plasma beta, used to calculate temperature
+    beta: float = 0.1  #: Plasma beta, used to calculate temperature
 
     B0: float = 100 * 1e-9
     """Initial magnetic field strength (T)"""
@@ -248,9 +247,7 @@ class HybridSimulation(CustomSimulation):
     ## TODO: find a good value
     n_floor_coef: float = 0.015625
     plasma_resistivity: float = 1e-6  #: Plasma resistivity
-    plasma_hyper_resistivity: float = (
-        1e-6  #: Plasma hyper-resistivity (to suppress spurious whistler noise in low density regions)
-    )
+    plasma_hyper_resistivity: float = 1e-6  #: Plasma hyper-resistivity (to suppress spurious whistler noise in low density regions)
     substeps: int = 10  #: the number of sub-steps to take during the B-field update.
 
     T_plasma: float = None
@@ -387,13 +384,13 @@ class HybridSimulation(CustomSimulation):
 def log_info(sim: HybridSimulation):
     """print out plasma parameters and numerical parameters."""
     log_sim_info(sim._sim)
-    
+
     print(
         f"Numerical parameters (Hybrid):\n"
         f"\ttotal simulation time = {sim.time_norm:.1f} (t_ci)\n"
         f"\ttime step = {sim.dt_norm} (t_ci)\n"
         f"\tCFL (with substeps) condition = {sim.cfl_b:.2f}\n"
-    )    
+    )
 
     print(
         f"Initializing simulation with input parameters:\n"

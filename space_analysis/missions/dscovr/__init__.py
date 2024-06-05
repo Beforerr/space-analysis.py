@@ -37,7 +37,7 @@ def load_data(
     instrument: Literal["mag"],
     var_names: list[MagDataVars],
     datatype: Literal["h0"],
-    **kwargs
+    **kwargs,
 ): ...
 
 
@@ -46,12 +46,13 @@ def load_data(
     instrument: Literal["faraday_cup"],
     var_names: list[PlasmaDataVars],
     datatype: Literal["h1"],
-    **kwargs
+    **kwargs,
 ): ...
 
 
-def load_data(instrument="mag", var_names=None, datatype=None, **kwargs) -> pl.LazyFrame:
-
+def load_data(
+    instrument="mag", var_names=None, datatype=None, **kwargs
+) -> pl.LazyFrame:
     if instrument == "mag":
         var_names = var_names or ["B1F1", "B1RTN"]
         datatype = datatype or "h0"

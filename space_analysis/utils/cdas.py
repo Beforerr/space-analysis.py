@@ -8,18 +8,16 @@ from cdasws import CdasWs
 from loguru import logger
 from cdasws.datarepresentation import DataRepresentation
 import xarray as xr
-import pandas as pd
 import polars as pl
 from ..core import Variables as V
 
-from pydantic import BaseModel, model_validator
+from pydantic import model_validator
 
 # %% ../../nbs/utils/21_cdas.ipynb 3
 cdas = CdasWs()
 
 # %% ../../nbs/utils/21_cdas.ipynb 4
 def get_dataset_variables(dataset: str):
-
     variables_dict = cdas.get_variables(dataset)
     for variable in variables_dict:
         logger.info(variable["Name"], variable["LongDescription"])
@@ -28,7 +26,6 @@ def get_dataset_variables(dataset: str):
 
 
 def get_data(dataset, timerange, variables: list = None) -> xr.Dataset:
-
     variables = variables or get_dataset_variables(dataset)
 
     _, data = cdas.get_data(
@@ -43,7 +40,6 @@ def get_data(dataset, timerange, variables: list = None) -> xr.Dataset:
 
 # %% ../../nbs/utils/21_cdas.ipynb 5
 class Variables(V):
-
     data: xr.Dataset = None
 
     # initize products from provider and dataset if not provided
@@ -59,15 +55,14 @@ class Variables(V):
     def retrieve_data(self):
         self.data = get_data(self.dataset, self.timerange, self.parameters)
         return self
-    
+
     def get_data(self):
         if self.data is None:
             self.retrieve_data()
         return self.data
 
     def to_polars(self):
-        return  pl.DataFrame(self.to_pandas().reset_index())
-    
+        return pl.DataFrame(self.to_pandas().reset_index())
+
     def to_pandas(self):
         return self.get_data().to_pandas()
-    
