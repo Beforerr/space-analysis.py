@@ -13,10 +13,10 @@ from ..core import Variables as V
 
 from pydantic import model_validator
 
-# %% ../../nbs/utils/21_cdas.ipynb 3
+# %% ../../nbs/utils/21_cdas.ipynb 2
 cdas = CdasWs()
 
-# %% ../../nbs/utils/21_cdas.ipynb 4
+# %% ../../nbs/utils/21_cdas.ipynb 3
 def get_dataset_variables(dataset: str):
     variables_dict = cdas.get_variables(dataset)
     for variable in variables_dict:
@@ -38,7 +38,7 @@ def get_data(dataset, timerange, variables: list = None) -> xr.Dataset:
 
     return data
 
-# %% ../../nbs/utils/21_cdas.ipynb 5
+# %% ../../nbs/utils/21_cdas.ipynb 4
 class Variables(V):
     data: xr.Dataset = None
 
