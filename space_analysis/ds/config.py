@@ -24,13 +24,13 @@ class OutputConfig:
     path: str = None
     filename: str = None
 
-    formats: list[str] = list()
+    formats: list[str] = Field(default_factory=list)
     display: bool = False
 
-    figure: dict = dict()
+    figure: dict = Field(default_factory=dict)
     """Figure options"""
 
-    figure_extra: FigureExtraOptions = FigureExtraOptions()
+    figure_extra: FigureExtraOptions = Field(default_factory=FigureExtraOptions)
     """Extra figure options"""
 
 
