@@ -10,4 +10,4 @@ jobs:
         with:
           activate-environment: true
       - name: Test with nbdev
-        uses: Beforerr/workflows/pixi_nbdev
+        uses: Beforerr/workflows/pixi_nbdev@main
