@@ -5,5 +5,5 @@ on:
 
 jobs:
   deploy:
-    uses: Beforerr/workflows/pixi_nbdev/workflow.yml@main
+    uses: Beforerr/workflows/.github/workflows/pixi_nbdev.yml@main
     secrets: inherit

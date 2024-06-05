@@ -3,4 +3,4 @@ on: [workflow_dispatch, pull_request, push]
 
 jobs:
   test:
-    uses: Beforerr/workflows/nbdev_test/workflow.yml@main
+    uses: Beforerr/workflows/.github/workflows/nbdev_test.yml@main
