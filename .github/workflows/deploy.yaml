@@ -1,14 +1,12 @@
-name: Deploy to GitHub Pages
-
-permissions:
-  contents: write
-  pages: write
-
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   workflow_dispatch:
+
 jobs:
   deploy:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/quarto-ghp@master]
+    steps:
+      - uses: Beforerr/workflows/pixi_nbdev

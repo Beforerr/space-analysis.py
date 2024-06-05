@@ -2,17 +2,21 @@
 name = "space-analysis.py"
 dynamic = ["version"]
 description = "Python library for data analysis in space physics"
-authors = [{name = "Beforerr", email = "zzj956959688@gmail.com"}]
+authors = [{ name = "Beforerr", email = "zzj956959688@gmail.com" }]
 readme = "README.md"
 requires-python = ">= 3.10, < 3.12"
 dependencies = [
     "beforerr",
     "pydantic",
     "polars",
-    "plasmapy","astropy","sunpy",
+    "plasmapy",
+    "astropy",
+    "sunpy",
     # "planetarypy",
-    "loguru", "rich", "humanize",
-    "pycdfpp"
+    "loguru",
+    "rich",
+    "humanize",
+    "pycdfpp",
 ]
 
 [build-system]
@@ -32,7 +36,7 @@ source = "scm"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64"]
 
 [tool.pixi.pypi-dependencies]
 space_analysis = { path = ".", editable = true, extras = ["io"] }
@@ -50,7 +54,7 @@ jupyter = "*"
 scipy = "*"
 cdasws = "*"
 pytables = "*" # used in `pyspedas`
-pdr = "*" # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
+pdr = "*"      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
 warpx = "*"
 
 [tool.pixi.tasks]
