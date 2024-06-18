@@ -25,7 +25,13 @@ build-backend = "pdm.backend"
 
 [project.optional-dependencies]
 complete = ["space_analysis[io]"]
-io = ["pyspedas", "speasy"]
+io = [
+    "pyspedas",
+    "speasy",
+    "cdasws",
+    "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
+]
+sim = ["warpx"]
 
 [project.urls]
 Homepage = "https://beforerr.github.io/space-analysis.py"
@@ -52,9 +58,7 @@ ray = "*"
 [tool.pixi.dependencies]
 jupyter = "*"
 scipy = "*"
-cdasws = "*"
+netcdf4 = "*"
 pytables = "*" # used in `pyspedas`
-pdr = "*"      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
-warpx = "*"
 
 [tool.pixi.tasks]
