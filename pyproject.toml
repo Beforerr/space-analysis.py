@@ -24,7 +24,8 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [project.optional-dependencies]
-complete = ["space_analysis[io]"]
+complete = ["space_analysis[io, plot]"]
+plot = ["hvplot"]
 io = [
     "pyspedas",
     "speasy",
@@ -45,7 +46,7 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64", "linux-64"]
 
 [tool.pixi.pypi-dependencies]
-space_analysis = { path = ".", editable = true, extras = ["io"] }
+space_analysis = { path = ".", editable = true, extras = ["io", "plot"] }
 nbdev = "*"
 setuptools = "*"
 jupyter-cache = "*"
