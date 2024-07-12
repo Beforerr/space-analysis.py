@@ -51,7 +51,9 @@ class Variables:
 @dataclass(config=ConfigDict(extra="allow"))
 class Dataset(Variables):
     name: str = None
-    parameters: list[str] = None # list of parameter names (core variables, subset of variables)
+    parameters: list[str] = (
+        None  # list of parameter names (core variables, subset of variables)
+    )
 
 # %% ../nbs/00_core.ipynb 9
 @dataclass

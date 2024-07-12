@@ -3,12 +3,12 @@
 # %% auto 0
 __all__ = ['wi_mfi_h2_ds', 'wi_mfi_h4_rtn_ds', 'wi_pm_3dp_ds', 'wi_k0_swe', 'wi_plsp_3dp_ds', 'wi_elm2_3dp_ds', 'wind_meta']
 
-# %% ../../../nbs/missions/wind/index.ipynb 0
+# %% ../../../nbs/missions/wind/index.ipynb 1
 from ...core import Dataset
 from ...meta import MissionMeta, MagDataset, TempDataset, PlasmaDataset
 from datetime import timedelta
 
-# %% ../../../nbs/missions/wind/index.ipynb 2
+# %% ../../../nbs/missions/wind/index.ipynb 3
 wi_mfi_h2_ds = MagDataset(
     name="WI_H2_MFI",
     parameters=["BGSE"],
@@ -41,15 +41,17 @@ wi_elm2_3dp_ds = TempDataset(
     perp_cols=["electron_MagT3_Perp1", "electron_MagT3_Perp2"],
 )
 
-# %% ../../../nbs/missions/wind/index.ipynb 3
+# %% ../../../nbs/missions/wind/index.ipynb 4
 def wind_meta(
+    name="Wind",
     mag_ds: MagDataset = wi_mfi_h2_ds,
     plasma_ds: Dataset = wi_pm_3dp_ds,
     ion_temp_ds: TempDataset = wi_plsp_3dp_ds,
     e_temp_ds: TempDataset = wi_elm2_3dp_ds,
+    class_factory=MissionMeta,
 ):
-    return MissionMeta(
-        name="Wind",
+    return class_factory(
+        name=name,
         mag_ds=mag_ds,
         plasma_ds=plasma_ds,
         ion_temp_ds=ion_temp_ds,
