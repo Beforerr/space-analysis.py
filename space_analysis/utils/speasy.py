@@ -164,8 +164,10 @@ def dump(self: Variable, path: str):
         yaml.dump(yy, f)
 
 # %% ../../nbs/utils/19_speasy.ipynb 12
-@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
 class Variables(Vs):
+    
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     parameters: list[str] = None
     variables: list[Variable] = None
     dataset: str = None

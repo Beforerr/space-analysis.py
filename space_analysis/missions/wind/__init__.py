@@ -10,7 +10,7 @@ from datetime import timedelta
 
 # %% ../../../nbs/missions/wind/index.ipynb 3
 wi_mfi_h2_ds = MagDataset(
-    name="WI_H2_MFI",
+    dataset="WI_H2_MFI",
     parameters=["BGSE"],
     ts=timedelta(seconds=1 / 11),
 )
