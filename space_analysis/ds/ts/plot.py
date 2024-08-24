@@ -8,10 +8,11 @@ __all__ = ['DEFAULT_XFORMATTER', 'format_time_axis', 'hide_xaxis_labels', 'polis
 from xarray import DataArray
 import holoviews as hv
 import matplotlib.dates as mdates
+import hvplot.xarray  # noqa
 
 # %% ../../../nbs/data_structure/timeseries/plot.ipynb 1
 DEFAULT_XFORMATTER = mdates.ConciseDateFormatter(
-    mdates.AutoDateLocator(minticks=3, maxticks=7)
+    mdates.AutoDateLocator(minticks=3, maxticks=5)
 )
 
 

@@ -217,6 +217,9 @@ def process(tvar: str | list[str], config: ProcessConfig):
 
 # %% ../../../nbs/data_structure/tplot/01_tplot.ipynb 7
 def load_data(config: PanelConfig, load_func=None):
+    if isinstance(config, list):
+        return [load_data(c) for c in config]
+
     timerange = [time.isoformat() for time in config.timerange]
     var = config.id
 
