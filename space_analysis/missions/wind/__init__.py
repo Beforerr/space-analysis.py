@@ -8,7 +8,7 @@ from ...core import Dataset
 from ...meta import MissionMeta, MagDataset, TempDataset, PlasmaDataset
 from datetime import timedelta
 
-# %% ../../../nbs/missions/wind/index.ipynb 3
+# %% ../../../nbs/missions/wind/index.ipynb 4
 wi_mfi_h2_ds = MagDataset(
     dataset="WI_H2_MFI",
     parameters=["BGSE"],
@@ -41,7 +41,7 @@ wi_elm2_3dp_ds = TempDataset(
     perp_cols=["electron_MagT3_Perp1", "electron_MagT3_Perp2"],
 )
 
-# %% ../../../nbs/missions/wind/index.ipynb 4
+# %% ../../../nbs/missions/wind/index.ipynb 5
 def wind_meta(
     name="Wind",
     mag_ds: MagDataset = wi_mfi_h2_ds,

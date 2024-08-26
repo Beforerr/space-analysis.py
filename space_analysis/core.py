@@ -36,7 +36,7 @@ def add_v(self, name, v):
 # %% ../nbs/00_core.ipynb 6
 class Variable(BaseModel):
     model_config = model_config
-    
+
     name: str = None
     description: str = None
     unit: str = None
@@ -52,11 +52,10 @@ class Variables(BaseModel):
 
 # %% ../nbs/00_core.ipynb 8
 class Dataset(Variables):
-    
     model_config = model_config
-    
+
     name: str = None
-    dataset: str = None # ID of the dataset (like the `ProductKey` used in the SPASE)
+    dataset: str = None  # ID of the dataset (like the `ProductKey` used in the SPASE)
     parameters: list[str] = (
         None  # list of parameter names (core variables, subset of variables)
     )

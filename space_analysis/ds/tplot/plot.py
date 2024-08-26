@@ -14,9 +14,11 @@ from ..config import PanelConfig, Config
 import pyspedas
 from cdasws import CdasWs
 
+import pytplot
 from pytplot import tplot, options
 import matplotlib.pyplot as plt
 from loguru import logger
+from . import export2csv
 
 from matplotlib.pyplot import Figure, Axes
 
@@ -153,7 +155,6 @@ def load_data(config: PanelConfig, load_func=None):
         load_args["probe"] = config.probe
 
     return load_func(**load_args)
-
 
 # %% ../../../nbs/data_structure/tplot/02_plot.ipynb 6
 def update_tvar(tvar, config: PanelConfig):

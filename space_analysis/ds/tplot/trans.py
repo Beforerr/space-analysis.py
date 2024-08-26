@@ -63,7 +63,6 @@ def magnitude_join(tvar: str):
     )
     return tvar2plot
 
-
 # %% ../../../nbs/data_structure/tplot/03_trans.ipynb 2
 class TransformOp(BaseModel):
     """Transformation operation"""
