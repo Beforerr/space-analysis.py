@@ -39,7 +39,8 @@ def pldf2ts(
     data = df[cols].to_numpy()
     time = df[time_col]
     cols = cols or df.columns
-    cols.remove(time_col)
+    if time_col in cols:
+        cols.remove(time_col)
     return create_data_array(data, time, cols, **kwargs)
 
 # %% ../../../nbs/data_structure/timeseries/io.ipynb 4

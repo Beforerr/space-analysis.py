@@ -10,8 +10,7 @@ from cdasws.datarepresentation import DataRepresentation
 import xarray as xr
 import polars as pl
 from ..core import Variables as V
-
-from pydantic import model_validator
+from pydantic import ConfigDict, model_validator
 
 # %% ../../nbs/utils/21_cdas.ipynb 2
 cdas = CdasWs()
@@ -40,6 +39,8 @@ def get_data(dataset, timerange, variables: list = None) -> xr.Dataset:
 
 # %% ../../nbs/utils/21_cdas.ipynb 4
 class Variables(V):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     data: xr.Dataset = None
 
     # initize products from provider and dataset if not provided

@@ -19,7 +19,8 @@ DEFAULT_XFORMATTER = mdates.ConciseDateFormatter(
 def format_time_axis(layout, xformatter=DEFAULT_XFORMATTER):
     for panel in layout:
         for e in panel:
-            e.opts(xformatter=xformatter)
+            if hv.Store().current_backend == "matplotlib":
+                e.opts(xformatter=xformatter)
 
 
 def hide_xaxis_labels(layout):

@@ -11,7 +11,6 @@ import polars as pl
 
 from fastcore.all import patch
 from pydantic import model_validator, ConfigDict
-from pydantic.dataclasses import dataclass
 from functools import cached_property
 from ..core import Variables as Vs
 from ..core import Variable as V
@@ -37,8 +36,9 @@ def to_dataarray(v: SpeasyVariable):
     """
     Notes: scalar timeseries of `ndim==2` is a design choice to be consistent with what Pandas does.
     """
+    v = v.replace_fillval_by_nan()
     time = xr.DataArray(v.time, dims="time")
-    attrs = dict(v.meta, units=v.unit)
+    attrs = dict(v.meta, units=v.unit, long_name=v.name)
     if is_scalar(v):
         values, coords = v.values.squeeze(), [time]
     else:
@@ -165,9 +165,8 @@ def dump(self: Variable, path: str):
 
 # %% ../../nbs/utils/19_speasy.ipynb 12
 class Variables(Vs):
-    
     model_config = ConfigDict(arbitrary_types_allowed=True)
-    
+
     parameters: list[str] = None
     variables: list[Variable] = None
     dataset: str = None

@@ -4,7 +4,7 @@ dynamic = ["version"]
 description = "Python library for data analysis in space physics"
 authors = [{ name = "Beforerr", email = "zzj956959688@gmail.com" }]
 readme = "README.md"
-requires-python = ">= 3.10, < 3.12"
+requires-python = ">= 3.10"
 dependencies = [
     "beforerr",
     "pydantic",
@@ -31,7 +31,7 @@ io = [
     "cdasws",
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
 ]
-sim = ["warpx"]
+# sim = ["warpx"]
 
 [project.urls]
 Homepage = "https://beforerr.github.io/space-analysis.py"
@@ -47,21 +47,19 @@ platforms = ["osx-arm64", "linux-64"]
 [tool.pixi.environments]
 default = ["io", "plot"]
 
+[tool.pixi.dependencies]
+ipykernel = "*"
+jupyter_bokeh = "*"
+panel = ">1.0"
+scipy = "*"
+netcdf4 = "*"
+pytables = "*"  # used in `pyspedas`
+
 [tool.pixi.pypi-dependencies]
 space_analysis = { path = ".", editable = true }
 nbdev = "*"
-setuptools = "*"
 jupyter-cache = "*"
 itables = "*"
 great_tables = "*"
 pooch = "*"
 pipe = "*"
-ray = "*"
-
-[tool.pixi.dependencies]
-jupyter = "*"
-scipy = "*"
-netcdf4 = "*"
-pytables = "*" # used in `pyspedas`
-
-[tool.pixi.tasks]
