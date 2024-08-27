@@ -6,7 +6,7 @@ __all__ = ['solo_l2_mag_rtn_burst', 'solo_l2_mag_rtn_normal', 'solo_l2_swa_pas_g
 # %% ../../../nbs/missions/solo/index.ipynb 1
 from ...meta import MagDataset, PlasmaDataset
 
-# %% ../../../nbs/missions/solo/index.ipynb 5
+# %% ../../../nbs/missions/solo/index.ipynb 4
 solo_l2_mag_rtn_burst = MagDataset(
     dataset="SOLO_L2_MAG-RTN-BURST", parameters=["B_RTN"]
 )

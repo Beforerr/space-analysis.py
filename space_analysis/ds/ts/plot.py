@@ -88,7 +88,7 @@ def standardize_to_matrix(lst):
 def _tsplot(data: DataArray):
     """time series plot for xarray dataarray"""
     data = format_da_attrs_tplot(data)
-    by = "v_dim" if "v_dim" in data.dims else None
+    by = next(x for x in data.dims if x != "time") if len(data.dims) > 1 else None
     labels = data.attrs.get("long_name")
     return data.hvplot(x="time", by=by, label=labels)
 
