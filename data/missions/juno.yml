@@ -1,0 +1,14 @@
+name: Juno
+launch_date: 2011-08-05
+instruments:
+  - name: MAG
+    type: magnetometer
+    time_resolutions: 1 Hz
+  - name: Jovian Auroral Distributions Experiment
+    abbr: JADE
+  - name: Jovian Energetic particle Detector Instrument
+    abbr: JEDI
+programme: New Frontiers program
+website:
+  - "[NASA](https://science.nasa.gov/mission/juno)"
+radial_coverage: 1 - 5.5 AU

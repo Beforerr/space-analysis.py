@@ -8,15 +8,20 @@ from ...meta import MagDataset, PlasmaDataset
 
 # %% ../../../nbs/missions/solo/index.ipynb 4
 solo_l2_mag_rtn_burst = MagDataset(
-    dataset="SOLO_L2_MAG-RTN-BURST", parameters=["B_RTN"]
+    dataset="SOLO_L2_MAG-RTN-BURST",
+    parameters=["B_RTN"],
 )
 
 solo_l2_mag_rtn_normal = MagDataset(
-    dataset="SOLO_L2_MAG-RTN-NORMAL", parameters=["B_RTN"]
+    dataset="SOLO_L2_MAG-RTN-NORMAL",
+    description="Dual-sensor, triaxial fluxgate magnetometer",
+    parameters=["B_RTN"],
+    ts=0.125,
 )
 
 solo_l2_swa_pas_grnd_mom = PlasmaDataset(
     dataset="SOLO_L2_SWA-PAS-GRND-MOM",
     description="Moments computed from the Proton part of ion distribution function measured by PAS",
     parameters=["N", "V_RTN", "T"],
+    ts=4,
 )

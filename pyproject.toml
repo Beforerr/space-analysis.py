@@ -8,11 +8,10 @@ requires-python = ">= 3.10"
 dependencies = [
     "beforerr",
     "pydantic",
+    "plum-dispatch",
     "polars",
     "plasmapy",
     "astropy",
-    "sunpy",
-    # "planetarypy",
     "loguru",
     "rich",
     "humanize",
@@ -61,5 +60,6 @@ nbdev = "*"
 jupyter-cache = "*"
 itables = "*"
 great_tables = "*"
+importlib_resources = "*" # used in `great_tables`
 pooch = "*"
 pipe = "*"

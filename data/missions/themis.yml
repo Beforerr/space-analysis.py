@@ -1,0 +1,11 @@
+name: ARTEMIS
+launch_date: 2007-02-17
+instruments:
+  - name: Fluxgate magnetometer
+    abbr: FGM
+    type: magnetometer
+    time_resolutions: 5 Hz
+  - name: Electrostatic Analyzer
+    abbr: ESA
+    type: plasma
+    time_resolutions: 0.25 Hz

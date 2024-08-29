@@ -1,0 +1,15 @@
+name: Solar Orbiter
+abbr: SolO
+launch_date: 2020-02-10
+instruments:
+  - name: Solar Wind Analyser (SWA)
+    abbr: SWA
+    type: suite
+    instruments:
+      - name: Proton and Alpha particle Sensor
+        abbr: PAS
+      - name: Electron Analyser System
+        abbr: EAS
+website:
+  - "[ESA](https://sci.esa.int/web/solar-orbiter)"
+radial_coverage: 0.28 - 0.9 AU

@@ -14,6 +14,7 @@ from pydantic import model_validator, ConfigDict
 from functools import cached_property
 from ..core import Variables as Vs
 from ..core import Variable as V
+from plum import dispatch
 
 from speasy.core.dataprovider import DataProvider
 from speasy import SpeasyVariable
@@ -67,8 +68,19 @@ def spzvars2pldf(vars: list[SpeasyVariable]):
     return pl.concat([spzvar2pldf(var) for var in vars], how="align")
 
 # %% ../../nbs/utils/19_speasy.ipynb 6
+@dispatch
 def get_time_resolution(data: SpeasyVariable):
     return pl.Series(data.time).diff().describe()
+
+
+@dispatch
+def get_time_resolution(product: str, *args, **kwargs):  # noqa: F811
+    return get_time_resolution(spz.get_data(product, *args, **kwargs))
+
+
+@dispatch
+def get_time_resolution(products: list[str], *args, **kwargs):  # noqa: F811
+    return [get_time_resolution(product, *args, **kwargs) for product in products]
 
 # %% ../../nbs/utils/19_speasy.ipynb 7
 def get_provider(v: str) -> DataProvider:

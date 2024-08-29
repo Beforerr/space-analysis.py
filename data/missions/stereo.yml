@@ -1,0 +1,14 @@
+name: STEREO
+launch_date: 2006-10-26
+instruments:
+  - name: In-situ Measurements of Particles and CME Transients
+    abbr: IMPACT
+    type: suite
+    instruments:
+      - name: MAG
+        type: magnetometer
+        time_resolutions: 8 Hz
+  - name: Plasma and Suprathermal Ion Composition
+    abbr: PLASTIC
+    type: plasma
+    time_resolutions: 1 min

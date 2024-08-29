@@ -1,0 +1,23 @@
+name: Parker Solar Probe
+abbr: PSP
+launch_date: 2018-08-12
+website:
+  - "[NASA](https://science.nasa.gov/mission/parker-solar-probe)"
+instruments:
+  - name: Solar Wind Electrons Alphas and Protons (SWEAP) Investigation
+    abbr: SWEAP
+    type: suite
+    instruments:
+      - name: Solar Probe Cup
+        abbr: SPC
+      - name: Solar Probe ANalyzer
+        abbr: SPAN
+        type: plasma
+        time_resolutions: 0.25-1 Hz
+  - name: FIELDS
+    type: suite
+    instruments:
+      - name: MAG
+        type: magnetometer
+        time_resolutions: ~200 Hz
+radial_coverage: 0.05 - 1 AU
