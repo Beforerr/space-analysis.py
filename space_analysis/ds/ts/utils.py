@@ -4,27 +4,30 @@
 __all__ = ['get_time_resolution']
 
 # %% ../../../nbs/data_structure/timeseries/10_utils.ipynb 0
-from xarray import DataArray
 import numpy as np
 from plum import dispatch
 
+from xarray import DataArray
+from numpy import ndarray
+
 # %% ../../../nbs/data_structure/timeseries/10_utils.ipynb 1
 @dispatch
-def get_time_resolution(data: list[DataArray], **kwargs):
-    return [get_time_resolution(d, **kwargs) for d in data]
+def get_time_resolution(time: ndarray, funcs=[np.min, np.median, np.max], unit="s"):  # noqa: F811
+    """
+    Get the time resolution of the time series data
+    """
+    dt = np.diff(time) / np.timedelta64(1, unit)
+    return {f.__name__: f(dt) for f in funcs}
 
 
 @dispatch
-def get_time_resolution(data: DataArray, funcs=[np.min, np.median, np.max], unit="s"):  # noqa: F811
+def get_time_resolution(data: DataArray, **kwargs):  # noqa: F811
     """
     Get the time resolution of the time series data.
-
-    Args:
-    data (DataArray): The time series data.
-
-    Returns:
-    float: The time resolution of the time series data.
     """
-    time = data.time.values
-    dt = np.diff(time) / np.timedelta64(1, unit)
-    return {f.__name__: f(dt) for f in funcs}
+    return get_time_resolution(data.time.values, **kwargs)
+
+
+@dispatch
+def get_time_resolution(data: list[DataArray], **kwargs):  # noqa: F811
+    return [get_time_resolution(d, **kwargs) for d in data]

@@ -39,7 +39,13 @@ class Variable(BaseModel):
     name: str = None
     description: str = None
     unit: str = None
+    ts: timedelta = (
+        None  # default time resolution, although it can vary in the real data
+    )
     timerange: list[datetime] = None
+
+    dataset: str = None  # the dataset that this variable belongs to
+    parameter: str = None  # the parameter that this variable represents
 
 
 class Variables(BaseModel):

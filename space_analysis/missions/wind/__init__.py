@@ -15,7 +15,11 @@ wi_mfi_h2_ds = MagDataset(
     ts=timedelta(seconds=1 / 11),
 )
 
-wi_mfi_h4_rtn_ds = MagDataset(dataset="WI_H4-RTN_MFI", parameters=["BRTN"])
+wi_mfi_h4_rtn_ds = MagDataset(
+    dataset="WI_H4-RTN_MFI",
+    parameters=["BRTN"],
+    links=["https://cdaweb.gsfc.nasa.gov/misc/NotesW.html#WI_H4-RTN_MFI"],
+)
 
 wi_pm_3dp_ds = PlasmaDataset(
     dataset="WI_PM_3DP",
