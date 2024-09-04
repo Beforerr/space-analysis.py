@@ -14,6 +14,7 @@ from ..ts.utils import get_time_resolution as get_time_resolution_ts
 @dispatch
 def get_time_resolution(data: SpeasyVariable):
     return get_time_resolution_ts(data.time)
+    # return pl.Series(data.time).diff().describe()
 
 
 @dispatch

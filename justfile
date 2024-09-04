@@ -3,7 +3,7 @@ import "files/quarto.just"
 default:
   just --list
 
-ensure_env:
+ensure-env:
   pre-commit install
 
 update:
