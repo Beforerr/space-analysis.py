@@ -1,9 +1,9 @@
 name: Publishing (GitHub Pages and PyPI)
 
 on:
-  push:
-    branches: ["main", "master"]
   workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   deploy:
@@ -12,7 +12,6 @@ jobs:
     permissions: { contents: write }
   pypi-publish:
     uses: Beforerr/workflows/.github/workflows/pypi_publish.yml@main
-    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       id-token: write
       contents: write
