@@ -14,3 +14,4 @@ jobs:
     uses: Beforerr/workflows/.github/workflows/pypi_publish.yml@main
     permissions:
       id-token: write
+      contents: read
