@@ -4,7 +4,7 @@ title: Missions
 
 This module includes helpful functions for working with mission (magnetic field and plasma) data. We currently support the following missions:
 
-- [Parker Solar Probe](psp/index.qmd)
+- [Parker Solar Probe](psp/index.ipynb)
 - [Juno](juno/index.ipynb)
 - [Wind](wind/index.ipynb)
 - [THEMIS/ARTEMIS](themis/index.ipynb)
