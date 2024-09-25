@@ -1,5 +1,814 @@
 [
   {
+    "objectID": "examples/10_mission_info.html",
+    "href": "examples/10_mission_info.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "parse_missions_yaml\n\n parse_missions_yaml (dir:pathlib.Path, suffixs=['.yaml', '.yml'])\n\nParse the mission yaml files in the given directory\n\n\n\nparse_mission_yaml\n\n parse_mission_yaml (file:pathlib.Path)\n\n\n\n\nmerge_dfs\n\n merge_dfs (left:polars.dataframe.frame.DataFrame, right, on='Mission',\n            how='full', coalesce=True)\n\n\n\n\nparse_missions\n\n parse_missions (data:list[space_analysis.core.Mission], info,\n                 ins_type=None)\n\n\n\n\nfind_instrument\n\n find_instrument (instruments:list[space_analysis.core.Instrument|space_an\n                  alysis.core.InstrumentSuite], ins_type)\n\n\nfrom beforerr.project import datadir\nfrom functools import reduce\nfrom great_tables import GT\n\n\ndir = datadir() / \"missions\"\nmissions = parse_missions_yaml(dir)\n\n\n# Parse and display the table\ndf_mag = parse_missions(missions, \"time_resolutions\", \"magnetometer\").rename(\n    {\"time_resolutions\": \"δt(B)\"}\n)\ndf_plasma = parse_missions(missions, \"time_resolutions\", \"plasma\").rename(\n    {\"time_resolutions\": \"δt(plasma)\"}\n)\ndf_r = parse_missions(missions, \"radial_coverage\")\ndf_time = parse_missions(missions, \"launch_date\")\ndf_link = parse_missions(missions, \"website\")\n\ndf_list = [df_mag, df_plasma, df_r, df_time, df_link]  # Replace with your DataFrames\n\ndf_merged = reduce(merge_dfs, df_list).with_columns(pl.col(\"website\").list.join(\", \"))\n\nGT(df_merged).fmt_markdown(\"website\").cols_label(\n    radial_coverage=\"Radial coverage\",\n    launch_date=\"Launch date\",\n)\n\n\n\nTable 1: Missions info\n\n\n\n\n\n\n\n\n\nMission\nδt(B)\nδt(plasma)\nRadial coverage\nLaunch date\nwebsite\n\n\n\n\nSTEREO\n8 Hz\n1 min\nNone\n2006-10-26\nNone\n\n\nWIND\n11 Hz\n1 Hz\nNone\n1994-11-01\nNASA\n\n\nParker Solar Probe\n~200 Hz\n0.25-1 Hz\n0.05 - 1 AU\n2018-08-12\nNASA\n\n\nARTEMIS\n5 Hz\n0.25 Hz\nNone\n2007-02-17\nNone\n\n\nJuno\n1 Hz\nNone\n1 - 5.5 AU\n2011-08-05\nNASA\n\n\nSolar Orbiter\nNone\nNone\n0.28 - 0.9 AU\n2020-02-10\nESA",
+    "crumbs": [
+      "Home",
+      "Examples",
+      "10 Mission Info"
+    ]
+  },
+  {
+    "objectID": "plot/01_plt_config.html",
+    "href": "plot/01_plt_config.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "FigureExtraOptions\n\n FigureExtraOptions (hide_legends:bool=False, hide_ylabels:bool=False,\n                     sync_legend_colors:bool=False,\n                     hide_legend_lines:bool=False)\n\nOptions to apply to a matplotlib figure.",
+    "crumbs": [
+      "Home",
+      "Plot",
+      "01 Plt Config"
+    ]
+  },
+  {
+    "objectID": "plasma/01_mhd_waves.html",
+    "href": "plasma/01_mhd_waves.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "See plasmapy.dispersion.analytical.mhd_waves_ — PlasmaPy documentation\n\n\n\nVpVg_fs\n\n VpVg_fs (cs, ca, theta=None)\n\nCalculates the phase velocities and group velocities for fast and slow waves.",
+    "crumbs": [
+      "Home",
+      "Plasma",
+      "01 Mhd Waves"
+    ]
+  },
+  {
+    "objectID": "plasma/00_formulary_tplot.html",
+    "href": "plasma/00_formulary_tplot.html",
+    "title": "Theoretical formulas for space plasma physics",
+    "section": "",
+    "text": "default units are SI units for space plasma physics\n\nB : magnetic field, nT\nn : number density, cm^-3\nT : temperature, eV\n\nReference\n\nplasmapy.formulary provides theoretical formulas for calculation of physical quantities helpful for plasma physics.\n\n\n\n\ntplot_Alfven_speed\n\n tplot_Alfven_speed (B:str, density:str, **kwargs)\n\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nB\nstr\nmagnetic field in the plasma, could be a component, as plasmapy will take abs of it\n\n\ndensity\nstr\nparticle density of the plasma\n\n\nkwargs\n\n\n\n\n\n\n\n\nts_Alfven_speed\n\n ts_Alfven_speed (B:xarray.core.dataarray.DataArray,\n                  density:xarray.core.dataarray.DataArray,\n                  name='Alfven_speed', time='time', **kwargs)\n\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nB\nDataArray\n\nmagnetic field in the plasma, could be a component, as plasmapy will take abs of it\n\n\ndensity\nDataArray\n\nparticle density of the plasma\n\n\nname\nstr\nAlfven_speed\n\n\n\ntime\nstr\ntime\n\n\n\nkwargs",
+    "crumbs": [
+      "Home",
+      "Plasma",
+      "Theoretical formulas for space plasma physics"
+    ]
+  },
+  {
+    "objectID": "utils/19_speasy.html",
+    "href": "utils/19_speasy.html",
+    "title": "Speasy utils",
+    "section": "",
+    "text": "speasy - an open source Python client for Space Physics web services such as CDAWEB or AMDA.",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Speasy utils"
+    ]
+  },
+  {
+    "objectID": "utils/19_speasy.html#functions",
+    "href": "utils/19_speasy.html#functions",
+    "title": "Speasy utils",
+    "section": "Functions",
+    "text": "Functions\n\n\nget_parameter_index\n\n get_parameter_index (param:str, ds:str)\n\n\n\n\nget_dataset_parameters\n\n get_dataset_parameters (v:str, provider:str='cda')\n\n\n\n\nget_dataset_index\n\n get_dataset_index (v:str, provider:str='cda')\n\n\n\n\nget_provider\n\n get_provider (v:str)\n\n\n\n\nSpeasyVariable.preview\n\n SpeasyVariable.preview ()",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Speasy utils"
+    ]
+  },
+  {
+    "objectID": "utils/19_speasy.html#data-classes",
+    "href": "utils/19_speasy.html#data-classes",
+    "title": "Speasy utils",
+    "section": "Data Classes",
+    "text": "Data Classes\nBased on SpeasyVariable class from speasy.\n\n\nVariable\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           ts:datetime.timedelta=None,\n           timerange:list[datetime.datetime]=None, dataset:str=None,\n           parameter:str=None, product:str=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nVariable.dump\n\n Variable.dump (path:str)\n\nDump the configuration to a file.\n\n\n\nVariable.plot\n\n Variable.plot (fig=None, ax:matplotlib.axes._axes.Axes=None)\n\n\n\n\nSVariables\n\n SVariables ()\n\nInitialize self. See help(type(self)) for accurate signature.\n\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:list[__main__.Variable]=None,\n            parameters:list[str]=None, dataset:str=None,\n            provider:str='cda', products:list[str|speasy.core.inventory.in\n            dexes.ParameterIndex]=None)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\nearth_start = \"2019-04-09\"\nearth_end = \"2019-04-12\"\ntimerange = [earth_start, earth_end]\n\nd = spz.get_data(\n    get_parameter_index(\"MOM.P.MAGF\", \"WI_PLSP_3DP\"),\n    timerange,\n)\n\n\n\nTest\n\ntimerange = [\"2019-04-07T01:00\", \"2019-04-07T12:00\"]\nvars = Variables(\n    dataset=\"PSP_FLD_L2_MAG_RTN\",\n    parameters=[\"psp_fld_l2_mag_RTN\"],\n    timerange=timerange,\n)\n\n\ndef data_provider_summary(data_provider: DataProvider = spz.cda):\n    # show the name of the data_provider, the number of datasets, parameters and catalogs\n\n    inventory = data_provider.flat_inventory\n    print(\"Data Provider:\", data_provider.provider_name)\n    print(\"Datasets:\", len(inventory.datasets))\n    print(\"Parameters:\", len(inventory.parameters))\n    print(\"Catalogs:\", len(inventory.catalogs))\n\n\n# data_provider_summary(spz.cda)\n# data_provider_summary(spz.amda)\n# data_provider_summary(spz.csa)",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Speasy utils"
+    ]
+  },
+  {
+    "objectID": "utils/00_develop.html",
+    "href": "utils/00_develop.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "from loguru import logger\nfrom humanize import naturalsize\nimport polars as pl\nimport pandas as pd\nimport xarray as xr\n\n\n\ndef get_memory_usage(data):\n    datatype = type(data)\n    match datatype:\n        case pl.DataFrame:\n            size = data.estimated_size()\n        case pd.DataFrame:\n            size = data.memory_usage().sum()\n        case xr.DataArray:\n            size = data.nbytes\n\n    logger.info(f\"{naturalsize(size)} ({datatype.__name__})\")\n    return size",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "00 Develop"
+    ]
+  },
+  {
+    "objectID": "utils/21_cdas.html",
+    "href": "utils/21_cdas.html",
+    "title": "CDAS",
+    "section": "",
+    "text": "Package for accessing the Coordinate Data Analysis System (CDAS) https://cdaweb.gsfc.nasa.gov web services.\nFor example, see notebook.\n\n\n\nget_data\n\n get_data (dataset, timerange, variables:list=None)\n\n\n\n\nget_dataset_variables\n\n get_dataset_variables (dataset:str)\n\n\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,space_analysis.core.Variable]=None,\n            data:xarray.core.dataset.Dataset=None)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "CDAS"
+    ]
+  },
+  {
+    "objectID": "00_core.html#variable",
+    "href": "00_core.html#variable",
+    "title": "Core",
+    "section": "Variable",
+    "text": "Variable\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,__main__.Variable]=None)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nVariable\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           ts:datetime.timedelta=None,\n           timerange:list[datetime.datetime]=None, dataset:str=None,\n           parameter:str=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*",
+    "crumbs": [
+      "Home",
+      "Core"
+    ]
+  },
+  {
+    "objectID": "00_core.html#dataset",
+    "href": "00_core.html#dataset",
+    "title": "Core",
+    "section": "Dataset",
+    "text": "Dataset\n\n\nDataset\n\n Dataset (timerange:list[datetime.datetime]=None,\n          variables:dict[str,__main__.Variable]=None, name:str=None,\n          dataset:str=None, parameters:list[str]=None,\n          ts:datetime.timedelta=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*",
+    "crumbs": [
+      "Home",
+      "Core"
+    ]
+  },
+  {
+    "objectID": "00_core.html#instrument-and-mission",
+    "href": "00_core.html#instrument-and-mission",
+    "title": "Core",
+    "section": "Instrument and Mission",
+    "text": "Instrument and Mission\n\n\nMission\n\n Mission (name:str,\n          instruments:list[__main__.Instrument|__main__.InstrumentSuite]=N\n          one, datasets:list[__main__.Dataset]=None,\n          names_list:list[str]=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nInstrumentSuite\n\n InstrumentSuite (name:str, names_list:list[str]=None, type:str='suite',\n                  instruments:list[__main__.Instrument]=None,\n                  **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nInstrument\n\n Instrument (name:str, datasets:list[__main__.Dataset]=None,\n             type:str=None, names_list:list[str]=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*",
+    "crumbs": [
+      "Home",
+      "Core"
+    ]
+  },
+  {
+    "objectID": "missions/juno/fgm.html",
+    "href": "missions/juno/fgm.html",
+    "title": "JUNO Magnetic field data pipeline",
+    "section": "",
+    "text": "JUNO Magnetic field data can be downloaded from PDS website.",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Juno",
+      "JUNO Magnetic field data pipeline"
+    ]
+  },
+  {
+    "objectID": "missions/juno/fgm.html#downloading-data",
+    "href": "missions/juno/fgm.html#downloading-data",
+    "title": "JUNO Magnetic field data pipeline",
+    "section": "Downloading data",
+    "text": "Downloading data\n\n\nUnpackConvert\n\n UnpackConvert (members=None, extract_dir=None)\n\n*Processor that unpacks a zip archive and returns a list of all files.\nUse with :meth:pooch.Pooch.fetch or :func:pooch.retrieve to unzip a\ndownloaded data file into a folder in the local data store. The\nmethod/function will return a list with the names of the unzipped files\ninstead of the zip archive.\nThe output folder is {fname}.unzip.*\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nmembers\nNoneType\nNone\nIf None, will unpack all files in the zip archive. Otherwise, membersmust be a list of file names to unpack from the archive. Only thesefiles will be unpacked.\n\n\nextract_dir\nNoneType\nNone\nIf None, files will be unpacked to the default location (a folder inthe same location as the downloaded zip file, with the suffix.unzip added). Otherwise, files will be unpacked toextract_dir, which is interpreted as a relative path (relative tothe cache location provided by :func:pooch.retrieve or:meth:pooch.Pooch.fetch).\n\n\n\n\n\n\nunpack_and_convert\n\n unpack_and_convert (fname, extract_dir, process_func=&lt;function\n                     unzip_convert_lbl&gt;)\n\nPost-processing hook to unzip a file and convert it to a different format in real-time. (Otherwise the files unzipped would take up too much space on the user’s computer.)\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nfname\nstr\n\nFull path of the zipped file in local storage\n\n\nextract_dir\n\n\n\n\n\nprocess_func\nfunction\nunzip_convert_lbl\n\n\n\n\n\n\n\nload_jno_lbl\n\n load_jno_lbl (file:str)\n\n\n\n\ndownload_data\n\n download_data (dataset='JNO-SS-3-FGM-CAL-V1.0',\n                phase:Literal['CRUISE','JUPITER']='CRUISE',\n                coord:Literal['SE','SS','PL']='SE',\n                datatype:Literal['1SEC','1MIN','FULL']='1SEC',\n                processor:Callable=None, url_fmt='https://pds-ppi.igpp.ucl\n                a.edu/ditdos/download?id=pds://PPI/{dataset}/DATA/{phase}/\n                {coord}/{datatype}', fmt='arrow')\n\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndataset\nstr\nJNO-SS-3-FGM-CAL-V1.0\n\n\n\nphase\nLiteral\nCRUISE\n\n\n\ncoord\nLiteral\nSE\n\n\n\ndatatype\nLiteral\n1SEC\ntime resolution\n\n\nprocessor\nCallable\nNone\n\n\n\nurl_fmt\nstr\nhttps://pds-ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI/{dataset}/DATA/{phase}/{coord}/{datatype}\n\n\n\nfmt\nstr\narrow\n\n\n\nReturns\nlist",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Juno",
+      "JUNO Magnetic field data pipeline"
+    ]
+  },
+  {
+    "objectID": "missions/juno/fgm.html#dataset-overview",
+    "href": "missions/juno/fgm.html#dataset-overview",
+    "title": "JUNO Magnetic field data pipeline",
+    "section": "Dataset Overview",
+    "text": "Dataset Overview\n\nIndex\n\npds_dir = \"https://pds-ppi.igpp.ucla.edu/data\"\n\npossible_coords = [\"se\", \"ser\", \"pc\", \"ss\", \"pl\"]\npossible_exts = [\"sts\", \"lbl\"]\npossible_data_rates = [\"1s\", \"1min\", \"1h\"]\n\njuno_ss_config = {\n    \"DATA_SET_ID\": \"JNO-SS-3-FGM-CAL-V1.0\",\n    \"FILE_SPECIFICATION_NAME\": \"INDEX/INDEX.LBL\",\n}\n\njuno_j_config = {\n    \"DATA_SET_ID\": \"JNO-J-3-FGM-CAL-V1.0\",\n    \"FILE_SPECIFICATION_NAME\": \"INDEX/INDEX.LBL\",\n}\n\n\nProcess index\n\nimport pandas\nimport pdpipe as pdp\n\n\ndef process_jno_index(df: pandas.DataFrame):\n    _index_time_format = \"%Y-%jT%H:%M:%S.%f\"\n\n    df.columns = df.columns.str.replace(\" \", \"\")\n    jno_index_pipeline = pdp.PdPipeline(\n        [\n            pdp.ColDrop([\"PRODUCT_ID\", \"CR_DATE\", \"PRODUCT_LABEL_MD5CHECKSUM\"]),\n            pdp.ApplyByCols(\"SID\", str.rstrip),\n            pdp.ApplyByCols(\"FILE_SPECIFICATION_NAME\", str.rstrip),\n            pdp.ColByFrameFunc(\n                \"START_TIME\",\n                lambda df: pandas.to_datetime(\n                    df[\"START_TIME\"], format=_index_time_format\n                ),\n            ),\n            pdp.ColByFrameFunc(\n                \"STOP_TIME\",\n                lambda df: pandas.to_datetime(\n                    df[\"STOP_TIME\"], format=_index_time_format\n                ),\n            ),\n            # pdp.ApplyByCols(['START_TIME', 'STOP_TIME'], pandas.to_datetime, format=_index_time_format), # NOTE: This is slow\n        ]\n    )\n\n    return jno_index_pipeline(df)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Juno",
+      "JUNO Magnetic field data pipeline"
+    ]
+  },
+  {
+    "objectID": "missions/wind/index.html",
+    "href": "missions/wind/index.html",
+    "title": "Wind mission",
+    "section": "",
+    "text": "References:\nSee following notebooks for details:",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission"
+    ]
+  },
+  {
+    "objectID": "missions/wind/index.html#instruments",
+    "href": "missions/wind/index.html#instruments",
+    "title": "Wind mission",
+    "section": "Instruments",
+    "text": "Instruments\nWind Instrument and Data Documentation\n\n@linThreedimensionalPlasmaEnergetic1995",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission"
+    ]
+  },
+  {
+    "objectID": "missions/wind/index.html#datasets",
+    "href": "missions/wind/index.html#datasets",
+    "title": "Wind mission",
+    "section": "Datasets",
+    "text": "Datasets\n\n\nwind_meta\n\n wind_meta (name='Wind',\n            mag_ds:space_analysis.meta.MagDataset=MagDataset(timerange=Non\n            e, variables=None, name=None, dataset='WI_H2_MFI',\n            parameters=['BGSE'],\n            ts=datetime.timedelta(microseconds=90909), B_cols=None), plasm\n            a_ds:space_analysis.core.Dataset=PlasmaDataset(timerange=None,\n            variables=None, name=None, dataset='WI_PM_3DP',\n            parameters=['P_DENS', 'P_VELS', 'P_TEMP'], ts=None,\n            temperature_col=None, para_col=None, perp_cols=None,\n            velocity_cols=None, speed_col=None, density_col=None,\n            description='Wind 3dp, PESA LOW 1 spin resolution ion (proton\n            and alpha) moments (computed on spacecraft)'), ion_temp_ds:spa\n            ce_analysis.meta.TempDataset=TempDataset(timerange=None,\n            variables=None, name=None, dataset='WI_PLSP_3DP',\n            parameters=['MOM.P.MAGT3'], ts=None, temperature_col=None,\n            para_col='proton_MagT3_Z', perp_cols=['proton_MagT3_X',\n            'proton_MagT3_Y']), e_temp_ds:space_analysis.meta.TempDataset=\n            TempDataset(timerange=None, variables=None, name=None,\n            dataset='WI_ELM2_3DP', parameters=['MAGT3'], ts=None,\n            temperature_col=None, para_col='electron_MagT3_Para',\n            perp_cols=['electron_MagT3_Perp1', 'electron_MagT3_Perp2']),\n            class_factory=&lt;class 'space_analysis.meta.MissionMeta'&gt;)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission"
+    ]
+  },
+  {
+    "objectID": "missions/wind/index.html#visualization",
+    "href": "missions/wind/index.html#visualization",
+    "title": "Wind mission",
+    "section": "Visualization",
+    "text": "Visualization\n\nfrom space_analysis.ds.spz.plot import spz_plot\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\ntr = [\"2021-01-01\", \"2021-01-01T00:01\"]\nproduct = [\n    \"cda/WI_H2_MFI/BGSE\",\n    \"cda/WI_PM_3DP/P_DENS\",\n    \"cda/WI_PM_3DP/P_VELS\",\n    \"cda/WI_PM_3DP/P_TEMP\",\n]\nspz_plot(product, tr)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission"
+    ]
+  },
+  {
+    "objectID": "missions/stereo/index.html",
+    "href": "missions/stereo/index.html",
+    "title": "STEREO mission",
+    "section": "",
+    "text": "Info YAML",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "STEREO mission"
+    ]
+  },
+  {
+    "objectID": "missions/stereo/index.html#datasets",
+    "href": "missions/stereo/index.html#datasets",
+    "title": "STEREO mission",
+    "section": "Datasets",
+    "text": "Datasets",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "STEREO mission"
+    ]
+  },
+  {
+    "objectID": "missions/stereo/index.html#check",
+    "href": "missions/stereo/index.html#check",
+    "title": "STEREO mission",
+    "section": "Check",
+    "text": "Check\n\ntr = [\"2021-05-01\", \"2021-05-01T00:10\"]\nproducts = [\n    \"cda/STA_L1_MAG_RTN/BFIELD\",\n    \"cda/STA_L2_PLA_1DMAX_1MIN/proton_number_density\",\n    \"cda/STA_L2_PLA_1DMAX_1MIN/proton_Vr_RTN\",\n    \"cda/STA_L2_PLA_1DMAX_1MIN/proton_Vt_RTN\",\n    \"cda/STA_L2_PLA_1DMAX_1MIN/proton_Vn_RTN\",\n    \"cda/STA_L2_PLA_1DMAX_1MIN/proton_temperature\",\n]\n\n\nimport speasy as spz\nfrom space_analysis.ds.spz.utils import get_time_resolution\n\n\ndata = spz.get_data(products, tr)\n\n\nget_time_resolution(products, tr)\n\n/Users/zijin/src/space-analysis.py/.pixi/envs/default/lib/python3.11/site-packages/speasy/core/data_containers.py:17: UserWarning: no explicit representation of timezones available for np.datetime64\n  return np.searchsorted(time, np.datetime64(key, 'ns'), side='left')\n/Users/zijin/src/space-analysis.py/.pixi/envs/default/lib/python3.11/site-packages/speasy/core/data_containers.py:17: UserWarning: no explicit representation of timezones available for np.datetime64\n  return np.searchsorted(time, np.datetime64(key, 'ns'), side='left')\n\n\n[{'min': np.float64(0.125),\n  'median': np.float64(0.125),\n  'max': np.float64(0.125)},\n {'min': np.float64(60.0),\n  'median': np.float64(60.0),\n  'max': np.float64(60.0)},\n {'min': np.float64(60.0),\n  'median': np.float64(60.0),\n  'max': np.float64(60.0)},\n {'min': np.float64(60.0),\n  'median': np.float64(60.0),\n  'max': np.float64(60.0)},\n {'min': np.float64(60.0),\n  'median': np.float64(60.0),\n  'max': np.float64(60.0)},\n {'min': np.float64(60.0),\n  'median': np.float64(60.0),\n  'max': np.float64(60.0)}]",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "STEREO mission"
+    ]
+  },
+  {
+    "objectID": "missions/themis/index.html",
+    "href": "missions/themis/index.html",
+    "title": "Themis mission",
+    "section": "",
+    "text": "TODO: make creating dataset with multiple spacecrafts more general",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Themis mission"
+    ]
+  },
+  {
+    "objectID": "missions/themis/index.html#datasets",
+    "href": "missions/themis/index.html#datasets",
+    "title": "Themis mission",
+    "section": "Datasets",
+    "text": "Datasets",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Themis mission"
+    ]
+  },
+  {
+    "objectID": "missions/psp/index.html",
+    "href": "missions/psp/index.html",
+    "title": "Parker Solar Probe (PSP)",
+    "section": "",
+    "text": "Info YAML",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Parker Solar Probe (PSP)"
+    ]
+  },
+  {
+    "objectID": "missions/psp/index.html#datasets",
+    "href": "missions/psp/index.html#datasets",
+    "title": "Parker Solar Probe (PSP)",
+    "section": "Datasets",
+    "text": "Datasets",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Parker Solar Probe (PSP)"
+    ]
+  },
+  {
+    "objectID": "missions/psp/index.html#visualization",
+    "href": "missions/psp/index.html#visualization",
+    "title": "Parker Solar Probe (PSP)",
+    "section": "Visualization",
+    "text": "Visualization\n\nfrom space_analysis.ds.spz.plot import spz_plot\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\ntr = [\"2021-05-01\", \"2021-05-01T00:01\"]\nproducts = [\n    \"cda/PSP_FLD_L2_MAG_RTN/psp_fld_l2_mag_RTN\",\n    \"cda/PSP_SWP_SPI_SF00_L3_MOM/DENS\",\n    \"cda/PSP_SWP_SPI_SF00_L3_MOM/VEL_RTN_SUN\",\n    \"cda/PSP_SWP_SPI_SF00_L3_MOM/TEMP\",\n]\n\n\nspz_plot(products, tr)\n\n/Users/zijin/src/space-analysis.py/.pixi/envs/default/lib/python3.11/site-packages/speasy/core/data_containers.py:17: UserWarning: no explicit representation of timezones available for np.datetime64\n  return np.searchsorted(time, np.datetime64(key, 'ns'), side='left')",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Parker Solar Probe (PSP)"
+    ]
+  },
+  {
+    "objectID": "simulation/warpx.html",
+    "href": "simulation/warpx.html",
+    "title": "WarpX",
+    "section": "",
+    "text": "CustomSimulation\n\n CustomSimulation (dim:int=None, diag:bool=True, test:bool=True,\n                   n0:float=None, m_ion_norm:float=1836.152,\n                   m_ion:float=None, v_ti:float=None, nz:int=None,\n                   nx:int=None, nppc:int=64, time_norm:float=100.0,\n                   dt_norm:float=0.00390625, diag_time_norm:float=1,\n                   diag_steps:int=None, diag_part:bool=False,\n                   diag_field:bool=True,\n                   diag_format:Literal['plotfile','openpmd']='plotfile',\n                   diag_openpmd_backend:Literal['h5','bp','json']='h5',\n                   diag_field_list:list=['E', 'B', 'J', 'J_displacement',\n                   'rho'], diag_part_list:list=None, restart:bool=False,\n                   grid_kwargs:dict={}, warpx_kwargs:dict={},\n                   **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nlog_sim_info\n\n log_sim_info (sim:pywarpx.picmi.Simulation)\n\nprint out plasma parameters and numerical parameters.\nThe Courant-Friedrichs–Lewy (CFL) condition for Whistler waves on the time step is typically \\(\\Omega_{ci} \\Delta t &lt; (\\Delta x / d_i)^2 / \\pi\\) (where \\(d_i= c/\\omega_{pi}\\) is the ion skin depth).\n\nI usually check that \\(\\Omega_{ci}d_i \\Delta t = v_A \\Delta t &lt; \\Delta x\\) as a CFL-like condition (where is the Alfven speed) and keep \\(\\Delta x &lt; d_i\\). In cases where super-Alfvenic ions exist it is also good to ensure that \\(v_{max}\\Delta t &lt; \\Delta x\\) as a “particle CFL-like” condition. See comment\n\n\n\n\nHybridSimulation\n\n HybridSimulation (dim:int=None, diag:bool=True, test:bool=True,\n                   n0:float=None, m_ion_norm:float=1836.152,\n                   m_ion:float=None, v_ti:float=None, nz:int=None,\n                   nx:int=None, nppc:int=64, time_norm:float=100.0,\n                   dt_norm:float=0.00390625, diag_time_norm:float=1,\n                   diag_steps:int=None, diag_part:bool=False,\n                   diag_field:bool=True,\n                   diag_format:Literal['plotfile','openpmd']='plotfile',\n                   diag_openpmd_backend:Literal['h5','bp','json']='h5',\n                   diag_field_list:list=['E', 'B', 'J', 'J_displacement',\n                   'rho'], diag_part_list:list=None, restart:bool=False,\n                   grid_kwargs:dict={}, warpx_kwargs:dict={},\n                   beta:float=0.1, B0:float=1.0000000000000001e-07,\n                   vA:float=None, vA_over_c:float=None,\n                   n_floor_coef:float=0.015625,\n                   plasma_resistivity:float=1e-06,\n                   plasma_hyper_resistivity:float=1e-06, substeps:int=10,\n                   T_plasma:float=None, Te:float=None, Te_norm:float=1,\n                   t_ci:float=None, d_i:float=None, Lz_norm:float=None,\n                   Lx_norm:float=0, dz_norm:float=0.25, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nlog_info\n\n log_info (sim:__main__.HybridSimulation)\n\nprint out plasma parameters and numerical parameters.",
+    "crumbs": [
+      "Home",
+      "Simulation",
+      "WarpX"
+    ]
+  },
+  {
+    "objectID": "data_structure/speasy/02_plot.html",
+    "href": "data_structure/speasy/02_plot.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "spz_plot\n\n spz_plot (product, time_range, **kwargs)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Speasy",
+      "02 Plot"
+    ]
+  },
+  {
+    "objectID": "data_structure/speasy/01_io.html",
+    "href": "data_structure/speasy/01_io.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "to_dataarrays (vs:list[speasy.products.variable.SpeasyVariable])\n\n\n\n\n\n\n to_dataarray (v:speasy.products.variable.SpeasyVariable)\n\nNotes: scalar timeseries of ndim==2 is a design choice to be consistent with what Pandas does.\n\n\n\n\n\n spzvars2pldf (vars:list[speasy.products.variable.SpeasyVariable])\n\n\n\n\n\n\n spzvar2pldf (var:speasy.products.variable.SpeasyVariable)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Speasy",
+      "Converting to other data structures"
+    ]
+  },
+  {
+    "objectID": "data_structure/speasy/01_io.html#converting-to-other-data-structures",
+    "href": "data_structure/speasy/01_io.html#converting-to-other-data-structures",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "to_dataarrays (vs:list[speasy.products.variable.SpeasyVariable])\n\n\n\n\n\n\n to_dataarray (v:speasy.products.variable.SpeasyVariable)\n\nNotes: scalar timeseries of ndim==2 is a design choice to be consistent with what Pandas does.\n\n\n\n\n\n spzvars2pldf (vars:list[speasy.products.variable.SpeasyVariable])\n\n\n\n\n\n\n spzvar2pldf (var:speasy.products.variable.SpeasyVariable)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Speasy",
+      "Converting to other data structures"
+    ]
+  },
+  {
+    "objectID": "data_structure/tplot/01_tplot.html",
+    "href": "data_structure/tplot/01_tplot.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "store_data\n\n store_data (da:xarray.core.dataarray.DataArray)\n\n\n\n\nget_data\n\n get_data (tvar:str|list[str], **args)\n\n\n\n\nexport2csv\n\n export2csv (tvars:list, path)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Tplot",
+      "01 Tplot"
+    ]
+  },
+  {
+    "objectID": "data_structure/tplot/03_trans.html",
+    "href": "data_structure/tplot/03_trans.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "magnitude_join\n\n magnitude_join (tvar:str)\n\n\n\n\nmva\n\n mva (tvar:str, prefix='B')\n\n\n\n\nmagnitude\n\n magnitude (tvar:str)\n\n\n\n\nTransformOp\n\n TransformOp (name:str, transform_func:Callable[[str],str]=None,\n              **extra_data:Any)\n\nTransformation operation",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Tplot",
+      "03 Trans"
+    ]
+  },
+  {
+    "objectID": "data_structure/00_meta.html",
+    "href": "data_structure/00_meta.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "PlasmaDataset\n\n PlasmaDataset (timerange:list[datetime.datetime]=None,\n                variables:dict[str,space_analysis.core.Variable]=None,\n                name:str=None, dataset:str=None,\n                parameters:list[str]=None, ts:datetime.timedelta=None,\n                temperature_col:str=None, para_col:str=None,\n                perp_cols:list[str]=None, velocity_cols:list[str]=None,\n                speed_col:str=None, density_col:str=None,\n                **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nTempDataset\n\n TempDataset (timerange:list[datetime.datetime]=None,\n              variables:dict[str,space_analysis.core.Variable]=None,\n              name:str=None, dataset:str=None, parameters:list[str]=None,\n              ts:datetime.timedelta=None, temperature_col:str=None,\n              para_col:str=None, perp_cols:list[str]=None,\n              **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nVelocityDataset\n\n VelocityDataset (timerange:list[datetime.datetime]=None,\n                  variables:dict[str,space_analysis.core.Variable]=None,\n                  name:str=None, dataset:str=None,\n                  parameters:list[str]=None, ts:datetime.timedelta=None,\n                  velocity_cols:list[str]=None, speed_col:str=None,\n                  **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nDensityDataset\n\n DensityDataset (timerange:list[datetime.datetime]=None,\n                 variables:dict[str,space_analysis.core.Variable]=None,\n                 name:str=None, dataset:str=None,\n                 parameters:list[str]=None, ts:datetime.timedelta=None,\n                 density_col:str=None, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nMagDataset\n\n MagDataset (timerange:list[datetime.datetime]=None,\n             variables:dict[str,space_analysis.core.Variable]=None,\n             name:str=None, dataset:str=None, parameters:list[str]=None,\n             ts:datetime.timedelta=None, B_cols:list[str]=None,\n             **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nMissionMeta\n\n MissionMeta (name:str, instruments:list[space_analysis.core.Instrument|sp\n              ace_analysis.core.InstrumentSuite]=None,\n              datasets:list[space_analysis.core.Dataset]=None,\n              names_list:list[str]=None, mag_ds:__main__.MagDataset,\n              plasma_ds:__main__.PlasmaDataset,\n              ion_temp_ds:__main__.TempDataset,\n              e_temp_ds:__main__.TempDataset, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\nclass InstrumentConfig:\n    default_datatype: str\n    default_var_names: list[str]",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "00 Meta"
+    ]
+  },
+  {
+    "objectID": "data_structure/timeseries/timeseries.html",
+    "href": "data_structure/timeseries/timeseries.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "TsOption\n\n\n\nset_ts_option\n\n set_ts_option (da:xarray.core.dataarray.DataArray, type='B',\n                options_dict={'B': {'title': '$B$', 'units': 'nT',\n                'subtitle': '[nT LMN]', 'legend_names': ['$B_l$', '$B_m$',\n                '$B_n$', '$B_{total}$']}, 'V': {'title': '$V$',\n                'subtitle': '[km/s LMN]', 'units': 'km/s', 'legend_names':\n                ['$V_l$', '$V_m$', '$V_n$', '$V_{total}$']}, 'n':\n                {'title': '$n_i$', 'units': 'cm$^{-3}$'}})",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Timeseries",
+      "Timeseries"
+    ]
+  },
+  {
+    "objectID": "data_structure/timeseries/io.html",
+    "href": "data_structure/timeseries/io.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "df2ts\n\n df2ts (df, cols=None, **kwargs)\n\nConvert DataFrame to TimeSeries",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Timeseries",
+      "Io"
+    ]
+  },
+  {
+    "objectID": "io/31_lbl.html",
+    "href": "io/31_lbl.html",
+    "title": "lbl file format",
+    "section": "",
+    "text": "Read lbl file\n\n\n\nload_lbl\n\n load_lbl (filepath:str, type:str='table')\n\n*Load LBL data.\nArgs:\nfilepath: File path to load the data from.\ntype: Type of data to load. Options are ‘table’ and ‘index’.\nReturns:\nA pandas DataFrame containing the loaded data.*",
+    "crumbs": [
+      "Home",
+      "IO",
+      "lbl file format"
+    ]
+  },
+  {
+    "objectID": "io/30_cdf.html",
+    "href": "io/30_cdf.html",
+    "title": "Common Data Format (CDF)",
+    "section": "",
+    "text": "CDF Home Page\nCDFpp : A modern C++ header only cdf library with Python bindings\n\n\n\n\ninspect_cdf\n\n inspect_cdf (file_path:str,\n              var_type:Literal['data','metadata','support_data','ignore_da\n              ta']='data')\n\n\n\n\ncdf2pl\n\n cdf2pl (file_path:str, var_names:str|list[str])\n\nConvert a CDF file to Polars Dataframe.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nstr\nThe path to the CDF file.\n\n\nvar_names\nstr | list[str]\n\n\n\nReturns\nLazyFrame\nA lazy dataframe containing the requested data.\n\n\n\n\nfrom nbdev import nbdev_export\n\nnbdev_export()",
+    "crumbs": [
+      "Home",
+      "IO",
+      "Common Data Format (CDF)"
+    ]
+  },
+  {
+    "objectID": "data_structure/timeseries/plot.html",
+    "href": "data_structure/timeseries/plot.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "polish_plot\n\n polish_plot (plots:list[list[holoviews.core.element.Element]])\n\n\n\n\nhide_xaxis_labels\n\n hide_xaxis_labels (layout)\n\n\n\n\nformat_time_axis\n\n format_time_axis (layout,\n                   xformatter=&lt;matplotlib.dates.ConciseDateFormatter\n                   object at 0x7f80dab209b0&gt;)\n\n\n\n\nformat_da_attrs_tplot\n\n format_da_attrs_tplot (da:xarray.core.dataarray.DataArray)\n\nFormat attributes for tplot DataArray.\n/home/runner/work/space-analysis.py/space-analysis.py/.pixi/envs/default/lib/python3.12/site-packages/fastcore/docscrape.py:230: UserWarning: Unknown section Params\n  else: warn(msg)\n\n\n\nnested_get\n\n nested_get (d, keys, default=None)\n\nSafely get a value from a nested dictionary.\n\n\n\ntsplot\n\n tsplot (data)\n\n\n\n\nstandardize_to_matrix\n\n standardize_to_matrix (lst)\n\nConvert input to a list of lists\n\n\n\nbroadcast\n\n broadcast (iterable, func, *args, **kwargs)\n\n\ndef _tsslice(data: DataArray, start, end):\n    \"\"\"time series limit for xarray dataarray\"\"\"\n    return data.sel(time=slice(start, end))\n\n\ndef tsslice(data, *args, **kwargs):\n    return broadcast(data, _tsslice, *args, **kwargs)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Timeseries",
+      "Plot"
+    ]
+  },
+  {
+    "objectID": "data_structure/timeseries/10_utils.html",
+    "href": "data_structure/timeseries/10_utils.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "get_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f396e5ce330&gt;, &lt;function median at\n                      0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f396e5ce330&gt;, &lt;function median at 0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811\n\n\n\n\n\n\nget_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f396e5ce330&gt;, &lt;function median at\n                      0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f396e5ce330&gt;, &lt;function median at 0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811\n\n\n\n\n\n\nget_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f396e5ce330&gt;, &lt;function median at\n                      0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f396e5ce330&gt;, &lt;function median at 0x7f396c1411f0&gt;, &lt;function max at 0x7f396e5cdf70&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Timeseries",
+      "10 Utils"
+    ]
+  },
+  {
+    "objectID": "data_structure/00_config.html",
+    "href": "data_structure/00_config.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "DataConfigSatellite\n\n DataConfigSatellite\n                      (timerange:list[datetime.date|datetime.datetime]=Non\n                      e, ids:list[str]=None, satellite:str=None,\n                      instruments:list[str]=None, probe:str=None)\n\nData configuration for one satellite\n\n\n\nDataConfig\n\n DataConfig (timerange:list[datetime.date|datetime.datetime]=None,\n             ds:str=None, id:str=None, name:str=None, units:str=None,\n             labels:list[str]=&lt;factory&gt;, satellite:Annotated[str,StringCon\n             straints(strip_whitespace=None,to_upper=None,to_lower=True,st\n             rict=None,min_length=None,max_length=None,pattern=None)]=None\n             , instrument:Annotated[str,StringConstraints(strip_whitespace\n             =None,to_upper=None,to_lower=True,strict=None,min_length=None\n             ,max_length=None,pattern=None)]=None, datatype:str=None,\n             probe:str=None)\n\nData configuration\n\n\n\nPanelConfig\n\n PanelConfig (timerange:list[datetime.date|datetime.datetime]=None,\n              ds:str=None, id:str=None, name:str=None, units:str=None,\n              labels:list[str]=&lt;factory&gt;, satellite:Annotated[str,StringCo\n              nstraints(strip_whitespace=None,to_upper=None,to_lower=True,\n              strict=None,min_length=None,max_length=None,pattern=None)]=N\n              one, instrument:Annotated[str,StringConstraints(strip_whites\n              pace=None,to_upper=None,to_lower=True,strict=None,min_length\n              =None,max_length=None,pattern=None)]=None,\n              datatype:str=None, probe:str=None)\n\nPanel configuration\n\n\n\nOutputConfig\n\n OutputConfig (path:str=None, filename:str=None,\n               formats:list[str]=&lt;factory&gt;, display:bool=False,\n               figure:dict=&lt;factory&gt;, figure_extra:space_analysis.plot.con\n               fig.FigureExtraOptions=&lt;factory&gt;)\n\nOutput configuration\n\n\n\nConfig\n\n Config (panels:list[__main__.PanelConfig],\n         timerange:list[datetime.datetime|datetime.date]=None,\n         output:__main__.OutputConfig=None, backend:str=None)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "00 Config"
+    ]
+  },
+  {
+    "objectID": "data_structure/tplot/10_utils.html",
+    "href": "data_structure/tplot/10_utils.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "get_time_resolution\n\n get_time_resolution (tname, **kwargs)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Tplot",
+      "10 Utils"
+    ]
+  },
+  {
+    "objectID": "data_structure/tplot/02_plot.html",
+    "href": "data_structure/tplot/02_plot.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "GraphicalConfig\n\n GraphicalConfig (ylabel:str=None)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nTplotConfig\n\n TplotConfig (tvar:str=None, trans:list[str]=None)\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nProcessConfig\n\n ProcessConfig (tvar:str=None, trans:list=[])\n\n*Usage docs: https://docs.pydantic.dev/2.9/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of the class variables defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The synthesized __init__ [Signature][inspect.Signature] of the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The core schema of the model.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].\n__pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.\n__pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.\n\n__pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]\n    is set to `'allow'`.\n__pydantic_fields_set__: The names of fields explicitly set during instantiation.\n__pydantic_private__: Values of private attributes set on the model instance.*\n\n\n\nexport\n\n export (tvars2plot:list, config:space_analysis.ds.config.Config,\n         plot_kwargs:dict=None, **kwargs)\n\n\n\n\nplot\n\n plot (tvars2plot:list[str], config:space_analysis.ds.config.Config,\n       fig:matplotlib.figure.Figure=None,\n       axes:list[matplotlib.axes._axes.Axes]=None, **kwargs)\n\n\n\n\nupdate_panel\n\n update_panel (ax:matplotlib.axes._axes.Axes,\n               config:space_analysis.ds.config.PanelConfig)\n\n\n\n\nprocess\n\n process (tvar:str|list[str], config:__main__.ProcessConfig)\n\n\n\n\nload_data\n\n load_data (config:space_analysis.ds.config.PanelConfig, load_func=None)\n\n\n\n\nprocess_panel\n\n process_panel (config:space_analysis.ds.config.PanelConfig,\n                process_func=&lt;function process&gt;, load_func=&lt;function\n                load_data&gt;, update_func=&lt;function update_tvar&gt;)\n\n\n\n\nupdate_tvar\n\n update_tvar (tvar, config:space_analysis.ds.config.PanelConfig)",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Tplot",
+      "02 Plot"
+    ]
+  },
+  {
+    "objectID": "data_structure/speasy/10_utils.html",
+    "href": "data_structure/speasy/10_utils.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "get_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f754e3aaf70&gt;, &lt;function median at\n                      0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f754e3aaf70&gt;, &lt;function median at 0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811\n\n\n\n\n\n\nget_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f754e3aaf70&gt;, &lt;function median at\n                      0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f754e3aaf70&gt;, &lt;function median at 0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811\n\n\n\n\n\n\nget_time_resolution\n\n get_time_resolution (time:numpy.ndarray, funcs=[&lt;function min at\n                      0x7f754e3aaf70&gt;, &lt;function median at\n                      0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;],\n                      unit='s')\n\nGet the time resolution of the time series data\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ntime\nndarray\n\n\n\n\nfuncs\nlist\n[&lt;function min at 0x7f754e3aaf70&gt;, &lt;function median at 0x7f7533f0a0b0&gt;, &lt;function max at 0x7f754e3aabb0&gt;]\n\n\n\nunit\nstr\ns\nnoqa: F811",
+    "crumbs": [
+      "Home",
+      "Data Structure",
+      "Speasy",
+      "10 Utils"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "space-analysis.py",
+    "section": "",
+    "text": "Python utils for data analysis in space physics. Still in active development, use with caution.\nInspired from SpaceAnalysis.jl, created with nbdev."
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "space-analysis.py",
+    "section": "References",
+    "text": "References\n\nspeasy : Python client for Space Physics web services such as CDAWEB or AMDA\npyspedas : Python Space Physics Environment Data Analysis Software\nfastcore : Python supercharged for the fastai library"
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "space-analysis.py",
+    "section": "Install",
+    "text": "Install\npip install space_analysis"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "space-analysis.py",
+    "section": "How to use",
+    "text": "How to use"
+  },
+  {
+    "objectID": "missions/solo/index.html",
+    "href": "missions/solo/index.html",
+    "title": "Solar Orbiter (SOLO)",
+    "section": "",
+    "text": "Info YAML",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Solar Orbiter (SOLO)"
+    ]
+  },
+  {
+    "objectID": "missions/solo/index.html#instruments",
+    "href": "missions/solo/index.html#instruments",
+    "title": "Solar Orbiter (SOLO)",
+    "section": "Instruments",
+    "text": "Instruments\n\nSolar Wind Analyser (SWA)\n\nProton and Alpha particle Sensor (PAS, Owen et al. 2020)\nElectron Analyser System (EAS)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Solar Orbiter (SOLO)"
+    ]
+  },
+  {
+    "objectID": "missions/solo/index.html#datasets",
+    "href": "missions/solo/index.html#datasets",
+    "title": "Solar Orbiter (SOLO)",
+    "section": "Datasets",
+    "text": "Datasets",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Solar Orbiter (SOLO)"
+    ]
+  },
+  {
+    "objectID": "missions/solo/index.html#visualization",
+    "href": "missions/solo/index.html#visualization",
+    "title": "Solar Orbiter (SOLO)",
+    "section": "Visualization",
+    "text": "Visualization\n\ntr = [\"2021-05-01\", \"2021-05-01T00:01\"]\nproducts = [\n    \"cda/SOLO_L2_MAG-RTN-NORMAL/B_RTN\",\n    \"cda/SOLO_L2_SWA-PAS-GRND-MOM/N\",\n    \"cda/SOLO_L2_SWA-PAS-GRND-MOM/V_RTN\",\n    \"cda/SOLO_L2_SWA-PAS-GRND-MOM/T\",\n]\n\n\nfrom space_analysis.ds.spz.plot import spz_plot\n\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\n\nspz_plot(products, [\"2021-05-04T05:45:00\", \"2021-05-05T01:45:00\"])\n\n/Users/zijin/src/space-analysis.py/.pixi/envs/default/lib/python3.11/site-packages/speasy/core/data_containers.py:17: UserWarning: no explicit representation of timezones available for np.datetime64\n  return np.searchsorted(time, np.datetime64(key, 'ns'), side='left')",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Solar Orbiter (SOLO)"
+    ]
+  },
+  {
+    "objectID": "missions/solo/index.html#inspection",
+    "href": "missions/solo/index.html#inspection",
+    "title": "Solar Orbiter (SOLO)",
+    "section": "Inspection",
+    "text": "Inspection\n\nfrom space_analysis.utils.speasy import get_time_resolution\n\n\nget_time_resolution(products[0:2], tr)\n\n[shape: (8, 2)\n ┌────────────┬────────────────┐\n │ statistic  ┆ value          │\n │ ---        ┆ ---            │\n │ str        ┆ str            │\n ╞════════════╪════════════════╡\n │ count      ┆ 479            │\n │ null_count ┆ 1              │\n │ mean       ┆ 0:00:00.124997 │\n │ min        ┆ 0:00:00.123998 │\n │ 25%        ┆ 0:00:00.124994 │\n │ 50%        ┆ 0:00:00.125004 │\n │ 75%        ┆ 0:00:00.125004 │\n │ max        ┆ 0:00:00.125004 │\n └────────────┴────────────────┘,\n shape: (8, 2)\n ┌────────────┬────────────────┐\n │ statistic  ┆ value          │\n │ ---        ┆ ---            │\n │ str        ┆ str            │\n ╞════════════╪════════════════╡\n │ count      ┆ 14             │\n │ null_count ┆ 1              │\n │ mean       ┆ 0:00:04.000006 │\n │ min        ┆ 0:00:04.000006 │\n │ 25%        ┆ 0:00:04.000007 │\n │ 50%        ┆ 0:00:04.000007 │\n │ 75%        ┆ 0:00:04.000007 │\n │ max        ┆ 0:00:04.000007 │\n └────────────┴────────────────┘]",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Solar Orbiter (SOLO)"
+    ]
+  },
+  {
+    "objectID": "missions/index.html",
+    "href": "missions/index.html",
+    "title": "Missions",
+    "section": "",
+    "text": "This module includes helpful functions for working with mission (magnetic field and plasma) data. We currently support the following missions:\n\nParker Solar Probe\nJuno\nWind\nTHEMIS/ARTEMIS\nSTEREO\n\n\nReferences\n\nPySPEDAS: Python-based Space Physics Environment Data Analysis Software\nspeasy: A simple Python package to deal with main Space Physics WebServices (CDA,SSC,AMDA,..)\n[planetarypy]",
+    "crumbs": [
+      "Home",
+      "Missions"
+    ]
+  },
+  {
+    "objectID": "missions/2015_dscovr.html",
+    "href": "missions/2015_dscovr.html",
+    "title": "Deep Space Climate Observatory (DSCOVR)",
+    "section": "",
+    "text": "The routines in this module can be used to load data from the Deep Space Climate Observatory (DSCOVR) mission.",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Deep Space Climate Observatory (DSCOVR)"
+    ]
+  },
+  {
+    "objectID": "missions/2015_dscovr.html#instruments",
+    "href": "missions/2015_dscovr.html#instruments",
+    "title": "Deep Space Climate Observatory (DSCOVR)",
+    "section": "Instruments",
+    "text": "Instruments\n\nMagnetometer\nFaraday cup\n\n\n\nimport pyspedas\nimport polars as pl\nfrom functools import partial\nfrom typing import Literal, overload\nfrom space_analysis.io.cdf import cdf2pl\n\n\ndef download_data(**kwargs):\n    return pyspedas.dscovr.load(downloadonly=True, **kwargs)\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"mag\"],\n    var_names: list[MagDataVars],\n    datatype: Literal[\"h0\"],\n    **kwargs,\n): ...\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"faraday_cup\"],\n    var_names: list[PlasmaDataVars],\n    datatype: Literal[\"h1\"],\n    **kwargs,\n): ...\n\n\ndef load_data(\n    instrument=\"mag\", var_names=None, datatype=None, **kwargs\n) -&gt; pl.LazyFrame:\n    if instrument == \"mag\":\n        var_names = var_names or [\"B1F1\", \"B1RTN\"]\n        datatype = datatype or \"h0\"\n    elif instrument == \"faraday_cup\":\n        var_names = var_names or [\"Np\", \"V_GSE\", \"THERMAL_TEMP\"]\n        datatype = datatype or \"h1\"\n\n    files = download_data(instrument=instrument, datatype=datatype, **kwargs)\n\n    load_func = partial(cdf2pl, var_names=var_names)\n\n    return pl.concat(load_func(file) for file in files)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Deep Space Climate Observatory (DSCOVR)"
+    ]
+  },
+  {
+    "objectID": "missions/wind/plasma.html",
+    "href": "missions/wind/plasma.html",
+    "title": "Plasma Data",
+    "section": "",
+    "text": "download_data\n\n download_data (**kwargs)\n\n\n\n\nload_data\n\n load_data (var_names:list[typing.Literal['Np','Pressure','V_GSE','V_GSE_p\n            ','THERMAL_SPD']]=['Np', 'V_GSE', 'THERMAL_SPD'],\n            datatype:Literal['k0','h0','h5']='k0', **kwargs)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission",
+      "Plasma Data"
+    ]
+  },
+  {
+    "objectID": "missions/wind/mag.html",
+    "href": "missions/wind/mag.html",
+    "title": "Magnetic field",
+    "section": "",
+    "text": "download_data\n\n download_data (**kwargs)\n\n\n\n\nload_data\n\n load_data (var_names='psp_fld_l2_mag_RTN', **kwargs)",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Wind mission",
+      "Magnetic field"
+    ]
+  },
+  {
+    "objectID": "missions/juno/index.html",
+    "href": "missions/juno/index.html",
+    "title": "Juno",
+    "section": "",
+    "text": "------------------------------------------------------------------------------\nJuno Mission Phases                                                           \n------------------------------------------------------------------------------\nStart       Mission                                                           \nDate        Phase                                                             \n==============================================================================\n2011-08-05  Launch                                                            \n2011-08-08  Inner Cruise 1                                                    \n2011-10-10  Inner Cruise 2                                                    \n2013-05-28  Inner Cruise 3                                                    \n2013-11-05  Quiet Cruise                                                      \n2016-01-05  Jupiter Approach                                                  \n2016-06-30  Jupiter Orbital Insertion                                         \n2016-07-05  Capture Orbit                                                     \n2016-10-19  Period Reduction Maneuver                                         \n2016-10-20  Orbits 1-2                                                        \n2016-11-09  Science Orbits                                                    \n2017-10-11  Deorbit\n\n\n\nSE (Solar Equatorial)\n\nCode: se\nResampling options:\n\nNumber of seconds (1 or 60): se_rN[N]s\nResampled 1 hour: se_r1h\n\n\nPC (Planetocentric)\n\nCode: pc\nResampling options:\n\nNumber of seconds (1 or 60): pc_rN[N]s\n\n\nSS (Sun-State)\n\nCode: ss\nResampling options:\n\nNumber of seconds (1 or 60): ss_rN[N]s\n\n\nPL (Payload)\n\nCode: pl\nResampling options:\n\nNumber of seconds (1 or 60): pl_rN[N]s\n\n\n\nThere are three principal coordinate systems used to represent the data in this archive.\n\nThe SE coordinate system is a Spacecraft- Solar equatorial system and it will be used for cruise data only.\nThe sun-state (ss) and planetocentric (pc) will be used for Earth Fly By (EFB) and Jupiter orbital data.\nCartesian representations are used for all three coordinate systems. These coordinate systems are specified relative to a “target body” which may be any solar system object (but for this orbital operations will Jupiter). In what follows we will reference Jupiter as the target body, but, for example, if observations near a satellite (such as Io) are desired in Io-centric coordinates, the satellite Io may be specified as the target body.\n\nThe SE coordinate system is defined using the sun-spacecraft vector as the primary reference vector; sun’s rotation axis as the secondary reference vector (z). The x axis lies along the sun-spacecraft vector, the z axis is in the plane defined by the Sun’s rotation axis and the spacecraft-sun vector. The y axis completes the system.\nThe ss coordinate system is defined using the instantaneous Jupiter-Sun vector as the primary reference vector (x direction). The X-axis lies along this vector and is taken to be positive toward the Sun. The Jupiter orbital velocity vector is the second vector used to define the coordinate system; the y axis lies in the plane determined by the Jupiter-Sun vector and the velocity vector and is orthogonal to the x axis (very nearly the negative of the velocity vector). The vector cross product of x and y yields a vector z parallel to the northward (upward) normal of the orbit plane of Jupiter. This system is sometimes called a sun-state (ss) coordinate system since its principal vectors are the Sun vector and the Jupiter state vector.\nSpacecraft-Solar equatorial\nhttps://pds-ppi.igpp.ucla.edu/data/JNO-SS-3-FGM-CAL-V1.0/INDEX/INDEX.TAB",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Juno"
+    ]
+  },
+  {
+    "objectID": "missions/juno/index.html#background",
+    "href": "missions/juno/index.html#background",
+    "title": "Juno",
+    "section": "",
+    "text": "------------------------------------------------------------------------------\nJuno Mission Phases                                                           \n------------------------------------------------------------------------------\nStart       Mission                                                           \nDate        Phase                                                             \n==============================================================================\n2011-08-05  Launch                                                            \n2011-08-08  Inner Cruise 1                                                    \n2011-10-10  Inner Cruise 2                                                    \n2013-05-28  Inner Cruise 3                                                    \n2013-11-05  Quiet Cruise                                                      \n2016-01-05  Jupiter Approach                                                  \n2016-06-30  Jupiter Orbital Insertion                                         \n2016-07-05  Capture Orbit                                                     \n2016-10-19  Period Reduction Maneuver                                         \n2016-10-20  Orbits 1-2                                                        \n2016-11-09  Science Orbits                                                    \n2017-10-11  Deorbit\n\n\n\nSE (Solar Equatorial)\n\nCode: se\nResampling options:\n\nNumber of seconds (1 or 60): se_rN[N]s\nResampled 1 hour: se_r1h\n\n\nPC (Planetocentric)\n\nCode: pc\nResampling options:\n\nNumber of seconds (1 or 60): pc_rN[N]s\n\n\nSS (Sun-State)\n\nCode: ss\nResampling options:\n\nNumber of seconds (1 or 60): ss_rN[N]s\n\n\nPL (Payload)\n\nCode: pl\nResampling options:\n\nNumber of seconds (1 or 60): pl_rN[N]s\n\n\n\nThere are three principal coordinate systems used to represent the data in this archive.\n\nThe SE coordinate system is a Spacecraft- Solar equatorial system and it will be used for cruise data only.\nThe sun-state (ss) and planetocentric (pc) will be used for Earth Fly By (EFB) and Jupiter orbital data.\nCartesian representations are used for all three coordinate systems. These coordinate systems are specified relative to a “target body” which may be any solar system object (but for this orbital operations will Jupiter). In what follows we will reference Jupiter as the target body, but, for example, if observations near a satellite (such as Io) are desired in Io-centric coordinates, the satellite Io may be specified as the target body.\n\nThe SE coordinate system is defined using the sun-spacecraft vector as the primary reference vector; sun’s rotation axis as the secondary reference vector (z). The x axis lies along the sun-spacecraft vector, the z axis is in the plane defined by the Sun’s rotation axis and the spacecraft-sun vector. The y axis completes the system.\nThe ss coordinate system is defined using the instantaneous Jupiter-Sun vector as the primary reference vector (x direction). The X-axis lies along this vector and is taken to be positive toward the Sun. The Jupiter orbital velocity vector is the second vector used to define the coordinate system; the y axis lies in the plane determined by the Jupiter-Sun vector and the velocity vector and is orthogonal to the x axis (very nearly the negative of the velocity vector). The vector cross product of x and y yields a vector z parallel to the northward (upward) normal of the orbit plane of Jupiter. This system is sometimes called a sun-state (ss) coordinate system since its principal vectors are the Sun vector and the Jupiter state vector.\nSpacecraft-Solar equatorial\nhttps://pds-ppi.igpp.ucla.edu/data/JNO-SS-3-FGM-CAL-V1.0/INDEX/INDEX.TAB",
+    "crumbs": [
+      "Home",
+      "Missions",
+      "Juno"
+    ]
+  },
+  {
+    "objectID": "utils/00_math.html",
+    "href": "utils/00_math.html",
+    "title": "Basic math utils",
+    "section": "",
+    "text": "sind\n\n sind (x)\n\n\n\n\ncosd\n\n cosd (x)",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Basic math utils"
+    ]
+  },
+  {
+    "objectID": "utils/00_basic.html",
+    "href": "utils/00_basic.html",
+    "title": "Basic utils",
+    "section": "",
+    "text": "resample\n\n resample\n           (df:polars.lazyframe.frame.LazyFrame|polars.dataframe.frame.Dat\n           aFrame, every:datetime.timedelta,\n           period:datetime.timedelta=None, offset:datetime.timedelta=None,\n           shift:datetime.timedelta=None, time_column='time')\n\nResample the DataFrame",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Basic utils"
+    ]
+  },
+  {
+    "objectID": "utils/20_pds.html",
+    "href": "utils/20_pds.html",
+    "title": "Planetary Data System (PDS)",
+    "section": "",
+    "text": "Planetary Data System\n\nPDS Planetary Plasma Interactions Node\nPDS Geosciences Node\nPDS Imaging Node\nPDS Atmospheres Node\nPDS Small Bodies Node\nPDS Ring-Moon Systems Node\nPDS Cartography and Imaging Sciences Node\nPDS Planetary Rings Node\n\nPlanetaryPy and Michael Aye’s Library",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Planetary Data System (PDS)"
+    ]
+  },
+  {
+    "objectID": "utils/20_pds.html#references",
+    "href": "utils/20_pds.html#references",
+    "title": "Planetary Data System (PDS)",
+    "section": "",
+    "text": "Planetary Data System\n\nPDS Planetary Plasma Interactions Node\nPDS Geosciences Node\nPDS Imaging Node\nPDS Atmospheres Node\nPDS Small Bodies Node\nPDS Ring-Moon Systems Node\nPDS Cartography and Imaging Sciences Node\nPDS Planetary Rings Node\n\nPlanetaryPy and Michael Aye’s Library",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Planetary Data System (PDS)"
+    ]
+  },
+  {
+    "objectID": "utils/20_pds.html#pds-planetary-plasma-interactions-node",
+    "href": "utils/20_pds.html#pds-planetary-plasma-interactions-node",
+    "title": "Planetary Data System (PDS)",
+    "section": "PDS Planetary Plasma Interactions Node",
+    "text": "PDS Planetary Plasma Interactions Node\nSee configuration\n\n\npds_download\n\n pds_download (mission, instrument, dataset, coord, datatype, path,\n               phase_url, sat=None, pds_url='https://pds-\n               ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI')\n\nDownloading file from PDS server\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nmission\n\n\nplanetary missions\n\n\ninstrument\n\n\n\n\n\ndataset\n\n\nDataset may correspond to a phase of the mission\n\n\ncoord\n\n\n\n\n\ndatatype\n\n\n\n\n\npath\n\n\n\n\n\nphase_url\n\n\n\n\n\nsat\nNoneType\nNone\nsatellite name, for missions with multiple satellites\n\n\npds_url\nstr\nhttps://pds-ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI\n\n\n\nReturns\nlist",
+    "crumbs": [
+      "Home",
+      "Utils",
+      "Planetary Data System (PDS)"
+    ]
+  },
+  {
+    "objectID": "plasma/00_formulary_numpy.html",
+    "href": "plasma/00_formulary_numpy.html",
+    "title": "Theoretical formulas for space plasma physics",
+    "section": "",
+    "text": "default units are SI units for space plasma physics\n\nB : magnetic field, nT\nn : number density, cm^-3\nT : temperature, eV\n\nReference\n\nplasmapy.formulary provides theoretical formulas for calculation of physical quantities helpful for plasma physics.\n\n\n\n\nnp_Alfven_current\n\n np_Alfven_current (Alfven_speed:numpy.ndarray, density:numpy.ndarray,\n                    speed_unit:astropy.units.core.Unit=Unit(\"km / s\"),\n                    n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n                    current_unit:astropy.units.core.Unit=Unit(\"nA / m2\"))\n\n\n\n\nnp_Alfven_speed\n\n np_Alfven_speed (B:numpy.ndarray, density:numpy.ndarray, ion:Union[str,in\n                  t,numpy.integer,plasmapy.particles.particle_class.Partic\n                  le,plasmapy.particles.particle_class.CustomParticle,astr\n                  opy.units.quantity.Quantity]='p+', sign=True,\n                  B_unit:astropy.units.core.Unit=Unit(\"nT\"),\n                  n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n                  speed_unit:astropy.units.core.Unit=Unit(\"km / s\"))\n\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nB\nndarray\n\nmagnetic field in the plasma, could be a component, as plasmapy will take abs of it\n\n\ndensity\nndarray\n\nparticle density of the plasma\n\n\nion\nUnion\np+\n\n\n\nsign\nbool\nTrue\n\n\n\nB_unit\nUnit\nnT\n\n\n\nn_unit\nUnit\n1 / cm3\n\n\n\nspeed_unit\nUnit\nkm / s\n\n\n\n\n\n\n\nnp_inertial_length\n\n np_inertial_length (density:numpy.ndarray, ion:Union[str,int,numpy.intege\n                     r,plasmapy.particles.particle_class.Particle,plasmapy\n                     .particles.particle_class.CustomParticle,astropy.unit\n                     s.quantity.Quantity]='p+',\n                     n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n                     length_unit:astropy.units.core.Unit=Unit(\"km\"))\n\n\n\n\nnp_gradient_current\n\n np_gradient_current (B_gradient, speed, B_gradient_unit=Unit(\"nT / s\"),\n                      speed_unit=Unit(\"km / s\"), current_unit=Unit(\"nA /\n                      m2\"))",
+    "crumbs": [
+      "Home",
+      "Plasma",
+      "Theoretical formulas for space plasma physics"
+    ]
+  },
+  {
+    "objectID": "plasma/00_formulary_polars.html",
+    "href": "plasma/00_formulary_polars.html",
+    "title": "Theoretical formulas for space plasma physics",
+    "section": "",
+    "text": "default units are SI units for space plasma physics\n\nB : magnetic field, nT\nn : number density, cm^-3\nT : temperature, eV\n\nReference\n\nplasmapy.formulary provides theoretical formulas for calculation of physical quantities helpful for plasma physics.\n\n\n\n\ndf_beta\n\n df_beta (df:polars.dataframe.frame.DataFrame, T:str='T',\n          n:str='plasma_density', B:str='B', col_name:str='beta',\n          T_unit:astropy.units.core.Unit=Unit(\"eV\"),\n          n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n          B_unit:astropy.units.core.Unit=Unit(\"nT\"))\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\n\n\n\nT\nstr\nT\ntemperature of the plasma\n\n\nn\nstr\nplasma_density\nparticle density of the plasma\n\n\nB\nstr\nB\nmagnetic field in the plasma,\n\n\ncol_name\nstr\nbeta\n\n\n\nT_unit\nUnit\neV\n\n\n\nn_unit\nUnit\n1 / cm3\n\n\n\nB_unit\nUnit\nnT\n\n\n\nReturns\nDataFrame\n\n\n\n\n\n\n\n\ndf_Alfven_current\n\n df_Alfven_current (df:polars.dataframe.frame.DataFrame,\n                    Alfven_speed='Alfven_speed', density='plasma_density',\n                    col_name:str='j_Alfven', **kwargs)\n\n\n\n\nldf_Alfven_speed\n\n ldf_Alfven_speed (ldf:polars.lazyframe.frame.LazyFrame, **kwargs)\n\n\n\n\ndf_Alfven_speed\n\n df_Alfven_speed (df:polars.dataframe.frame.DataFrame, B:str='B',\n                  density:str='plasma_density',\n                  col_name:str='Alfven_speed', **kwargs)\n\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\n\n\n\nB\nstr\nB\nmagnetic field in the plasma, could be a component, as plasmapy will take abs of it\n\n\ndensity\nstr\nplasma_density\nparticle density of the plasma\n\n\ncol_name\nstr\nAlfven_speed\n\n\n\nkwargs\n\n\n\n\n\n\n\n\n\ndf_thermal_spd2temp\n\n df_thermal_spd2temp (df:polars.lazyframe.frame.LazyFrame, speed_col,\n                      speed_unit=Unit(\"km / s\"))\n\n\n\n\nthermal_spd2temp\n\n thermal_spd2temp (speed, speed_unit=Unit(\"km / s\"))\n\n\n\n\ndf_inertial_length\n\n df_inertial_length (df:polars.dataframe.frame.DataFrame,\n                     density='plasma_density',\n                     col_name:str='ion_inertial_length', **kwargs)\n\n\n\n\ndf_gradient_current\n\n df_gradient_current (df, B_gradient, speed, col_name, **kwargs)",
+    "crumbs": [
+      "Home",
+      "Plasma",
+      "Theoretical formulas for space plasma physics"
+    ]
+  },
+  {
+    "objectID": "plot/01_matplotlib.html",
+    "href": "plot/01_matplotlib.html",
+    "title": "Basic utils",
+    "section": "",
+    "text": "Change the default style of the plots\n\n\nsavefig\n\n savefig (name, dir='../figures', path=None, formats=['png', 'pdf'],\n          **kwargs)\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nname\n\n\nname of the file\n\n\ndir\nstr\n../figures\ndirectory to save the file\n\n\npath\nNoneType\nNone\npath to the file\n\n\nformats\nlist\n[‘png’, ‘pdf’]\n\n\n\nkwargs",
+    "crumbs": [
+      "Home",
+      "Plot",
+      "Basic utils"
+    ]
+  },
+  {
     "objectID": "examples/01_cdas.html",
     "href": "examples/01_cdas.html",
     "title": "CDAS Example Jupyter Notebook",
@@ -69,416 +878,6 @@
       "Home",
       "Examples",
       "CDAS Example Jupyter Notebook"
-    ]
-  },
-  {
-    "objectID": "simulation/warpx.html",
-    "href": "simulation/warpx.html",
-    "title": "WarpX",
-    "section": "",
-    "text": "CustomSimulation\n\n CustomSimulation (dim:int=None, diag:bool=True, test:bool=True,\n                   n0:float=None, m_ion_norm:float=1836.152,\n                   m_ion:float=None, v_ti:float=None, nz:int=None,\n                   nx:int=None, nppc:int=64, time_norm:float=100.0,\n                   dt_norm:float=0.00390625, diag_time_norm:float=1,\n                   diag_steps:int=None, diag_part:bool=False,\n                   diag_field:bool=True,\n                   diag_format:Literal['plotfile','openpmd']='plotfile',\n                   diag_openpmd_backend:Literal['h5','bp','json']='h5',\n                   diag_field_list:list=['E', 'B', 'J', 'J_displacement',\n                   'rho'], diag_part_list:list=None, restart:bool=False,\n                   grid_kwargs:dict={}, warpx_kwargs:dict={},\n                   **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.7/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of classvars defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The signature for instantiating the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a `RootModel`.\n__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.\n__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.\n\n__pydantic_extra__: An instance attribute with the values of extra fields from validation when\n    `model_config['extra'] == 'allow'`.\n__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.\n__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.*\n\n\n\nlog_sim_info\n\n log_sim_info (sim:pywarpx.picmi.Simulation)\n\nprint out plasma parameters and numerical parameters.\nThe Courant-Friedrichs–Lewy (CFL) condition for Whistler waves on the time step is typically \\(\\Omega_{ci} \\Delta t &lt; (\\Delta x / d_i)^2 / \\pi\\) (where \\(d_i= c/\\omega_{pi}\\) is the ion skin depth).\n\nI usually check that \\(\\Omega_{ci}d_i \\Delta t = v_A \\Delta t &lt; \\Delta x\\) as a CFL-like condition (where is the Alfven speed) and keep \\(\\Delta x &lt; d_i\\). In cases where super-Alfvenic ions exist it is also good to ensure that \\(v_{max}\\Delta t &lt; \\Delta x\\) as a “particle CFL-like” condition. See comment\n\n\n\n\nHybridSimulation\n\n HybridSimulation (dim:int=None, diag:bool=True, test:bool=True,\n                   n0:float=None, m_ion_norm:float=1836.152,\n                   m_ion:float=None, v_ti:float=None, nz:int=None,\n                   nx:int=None, nppc:int=64, time_norm:float=100.0,\n                   dt_norm:float=0.00390625, diag_time_norm:float=1,\n                   diag_steps:int=None, diag_part:bool=False,\n                   diag_field:bool=True,\n                   diag_format:Literal['plotfile','openpmd']='plotfile',\n                   diag_openpmd_backend:Literal['h5','bp','json']='h5',\n                   diag_field_list:list=['E', 'B', 'J', 'J_displacement',\n                   'rho'], diag_part_list:list=None, restart:bool=False,\n                   grid_kwargs:dict={}, warpx_kwargs:dict={},\n                   beta:float=0.1, B0:float=1.0000000000000001e-07,\n                   vA:float=None, vA_over_c:float=None,\n                   n_floor_coef:float=0.015625,\n                   plasma_resistivity:float=1e-06,\n                   plasma_hyper_resistivity:float=1e-06, substeps:int=10,\n                   T_plasma:float=None, Te:float=None, Te_norm:float=1,\n                   t_ci:float=None, d_i:float=None, Lz_norm:float=None,\n                   Lx_norm:float=0, dz_norm:float=0.25, **extra_data:Any)\n\n*Usage docs: https://docs.pydantic.dev/2.7/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of classvars defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The signature for instantiating the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a `RootModel`.\n__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.\n__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.\n\n__pydantic_extra__: An instance attribute with the values of extra fields from validation when\n    `model_config['extra'] == 'allow'`.\n__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.\n__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.*\n\n\n\nlog_info\n\n log_info (sim:__main__.HybridSimulation)\n\nprint out plasma parameters and numerical parameters.",
-    "crumbs": [
-      "Home",
-      "Simulation",
-      "WarpX"
-    ]
-  },
-  {
-    "objectID": "io/30_cdf.html",
-    "href": "io/30_cdf.html",
-    "title": "Common Data Format (CDF)",
-    "section": "",
-    "text": "CDF Home Page\nCDFpp : A modern C++ header only cdf library with Python bindings\n\n\n\n\ninspect_cdf\n\n inspect_cdf (file_path:str,\n              var_type:Literal['data','metadata','support_data','ignore_da\n              ta']='data')\n\n\n\n\ncdf2pl\n\n cdf2pl (file_path:str, var_names:str|list[str])\n\nConvert a CDF file to Polars Dataframe.\n\n\n\n\n\n\n\n\n\nType\nDetails\n\n\n\n\nfile_path\nstr\nThe path to the CDF file.\n\n\nvar_names\nstr | list[str]\n\n\n\nReturns\nLazyFrame\nA lazy dataframe containing the requested data.\n\n\n\n\nfrom nbdev import nbdev_export\n\nnbdev_export()",
-    "crumbs": [
-      "Home",
-      "IO",
-      "Common Data Format (CDF)"
-    ]
-  },
-  {
-    "objectID": "00_core.html#variable",
-    "href": "00_core.html#variable",
-    "title": "Core",
-    "section": "Variable",
-    "text": "Variable\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,__main__.Variable]=None)\n\n\n\n\nVariable\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           timerange:list[datetime.datetime]=None)",
-    "crumbs": [
-      "Home",
-      "Core"
-    ]
-  },
-  {
-    "objectID": "00_core.html#dataset",
-    "href": "00_core.html#dataset",
-    "title": "Core",
-    "section": "Dataset",
-    "text": "Dataset\n\n\nDataset\n\n Dataset (timerange:list[datetime.datetime]=None,\n          variables:dict[str,__main__.Variable]=None, name:str=None)",
-    "crumbs": [
-      "Home",
-      "Core"
-    ]
-  },
-  {
-    "objectID": "00_core.html#instrument-and-mission",
-    "href": "00_core.html#instrument-and-mission",
-    "title": "Core",
-    "section": "Instrument and Mission",
-    "text": "Instrument and Mission\n\n\nMission\n\n Mission (name:str, instruments:dict[str,__main__.Instrument]=&lt;function\n          normalize&gt;, datasets:dict[str,__main__.Dataset]=None,\n          names_list:list[str]=None)\n\n\n\n\nInstrument\n\n Instrument (name:str, datasets:dict[str,__main__.Dataset]=&lt;function\n             normalize&gt;, names_list:list[str]=None)",
-    "crumbs": [
-      "Home",
-      "Core"
-    ]
-  },
-  {
-    "objectID": "plot/01_plt_config.html",
-    "href": "plot/01_plt_config.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "FigureExtraOptions\n\n FigureExtraOptions (hide_legends:bool=False, hide_ylabels:bool=False,\n                     sync_legend_colors:bool=False,\n                     hide_legend_lines:bool=False)\n\nOptions to apply to a matplotlib figure.",
-    "crumbs": [
-      "Home",
-      "Plot",
-      "01 Plt Config"
-    ]
-  },
-  {
-    "objectID": "utils/00_basic.html",
-    "href": "utils/00_basic.html",
-    "title": "Basic utils",
-    "section": "",
-    "text": "resample\n\n resample\n           (df:polars.lazyframe.frame.LazyFrame|polars.dataframe.frame.Dat\n           aFrame, every:datetime.timedelta,\n           period:datetime.timedelta=None, offset:datetime.timedelta=None,\n           shift:datetime.timedelta=None, time_column='time')\n\nResample the DataFrame",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Basic utils"
-    ]
-  },
-  {
-    "objectID": "utils/20_pds.html",
-    "href": "utils/20_pds.html",
-    "title": "Planetary Data System (PDS)",
-    "section": "",
-    "text": "Planetary Data System\n\nPDS Planetary Plasma Interactions Node\nPDS Geosciences Node\nPDS Imaging Node\nPDS Atmospheres Node\nPDS Small Bodies Node\nPDS Ring-Moon Systems Node\nPDS Cartography and Imaging Sciences Node\nPDS Planetary Rings Node\n\nPlanetaryPy and Michael Aye’s Library",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Planetary Data System (PDS)"
-    ]
-  },
-  {
-    "objectID": "utils/20_pds.html#references",
-    "href": "utils/20_pds.html#references",
-    "title": "Planetary Data System (PDS)",
-    "section": "",
-    "text": "Planetary Data System\n\nPDS Planetary Plasma Interactions Node\nPDS Geosciences Node\nPDS Imaging Node\nPDS Atmospheres Node\nPDS Small Bodies Node\nPDS Ring-Moon Systems Node\nPDS Cartography and Imaging Sciences Node\nPDS Planetary Rings Node\n\nPlanetaryPy and Michael Aye’s Library",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Planetary Data System (PDS)"
-    ]
-  },
-  {
-    "objectID": "utils/20_pds.html#pds-planetary-plasma-interactions-node",
-    "href": "utils/20_pds.html#pds-planetary-plasma-interactions-node",
-    "title": "Planetary Data System (PDS)",
-    "section": "PDS Planetary Plasma Interactions Node",
-    "text": "PDS Planetary Plasma Interactions Node\nSee configuration\n\n\npds_download\n\n pds_download (mission, instrument, dataset, coord, datatype, path,\n               phase_url, sat=None, pds_url='https://pds-\n               ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI')\n\nDownloading file from PDS server\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nmission\n\n\nplanetary missions\n\n\ninstrument\n\n\n\n\n\ndataset\n\n\nDataset may correspond to a phase of the mission\n\n\ncoord\n\n\n\n\n\ndatatype\n\n\n\n\n\npath\n\n\n\n\n\nphase_url\n\n\n\n\n\nsat\nNoneType\nNone\nsatellite name, for missions with multiple satellites\n\n\npds_url\nstr\nhttps://pds-ppi.igpp.ucla.edu/ditdos/download?id=pds://PPI\n\n\n\nReturns\nlist",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Planetary Data System (PDS)"
-    ]
-  },
-  {
-    "objectID": "utils/21_cdas.html",
-    "href": "utils/21_cdas.html",
-    "title": "CDAS",
-    "section": "",
-    "text": "Package for accessing the Coordinate Data Analysis System (CDAS) https://cdaweb.gsfc.nasa.gov web services.\nFor example, see notebook.\n\n\n\nget_data\n\n get_data (dataset, timerange, variables:list=None)\n\n\n\n\nget_dataset_variables\n\n get_dataset_variables (dataset:str)\n\n\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:dict[str,space_analysis.core.Variable]=None)",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "CDAS"
-    ]
-  },
-  {
-    "objectID": "data_structure/00_meta.html",
-    "href": "data_structure/00_meta.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "TempMeta\n\n TempMeta (dataset:str=None, parameters:list[str]=None)\n\n\n\n\nPlasmaMeta\n\n PlasmaMeta (dataset:str=None, parameters:list[str]=None)\n\n\n\n\nMeta\n\n Meta (dataset:str=None, parameters:list[str]=None)\n\n\nclass InstrumentConfig:\n    default_datatype: str\n    default_var_names: list[str]",
-    "crumbs": [
-      "Home",
-      "Data Structure",
-      "00 Meta"
-    ]
-  },
-  {
-    "objectID": "data_structure/01_tplot.html",
-    "href": "data_structure/01_tplot.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "export2csv\n\n export2csv (tvars:list, path)\n\n\n\n\nProcessConfig\n\n ProcessConfig (tvar:str=None, trans:list[__main__.TransformOp]=[])\n\n*Usage docs: https://docs.pydantic.dev/2.7/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of classvars defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The signature for instantiating the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a `RootModel`.\n__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.\n__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.\n\n__pydantic_extra__: An instance attribute with the values of extra fields from validation when\n    `model_config['extra'] == 'allow'`.\n__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.\n__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.*\n\n\n\nTransformOp\n\n TransformOp (name:str, transform_func:Callable[[str],str]=None,\n              **extra_data:Any)\n\nTransformation operation\n\n\n\nmagnitude_join\n\n magnitude_join (tvar:str)\n\n\n\n\nmva\n\n mva (tvar:str, prefix='B')\n\n\n\n\nmagnitude\n\n magnitude (tvar:str)\n\n\n\n\nGraphicalConfig\n\n GraphicalConfig (ylabel:str=None)\n\n*Usage docs: https://docs.pydantic.dev/2.7/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of classvars defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The signature for instantiating the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a `RootModel`.\n__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.\n__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.\n\n__pydantic_extra__: An instance attribute with the values of extra fields from validation when\n    `model_config['extra'] == 'allow'`.\n__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.\n__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.*\n\n\n\nTplotConfig\n\n TplotConfig (tvar:str=None, trans:list[str]=None)\n\n*Usage docs: https://docs.pydantic.dev/2.7/concepts/models/\nA base class for creating Pydantic models.\nAttributes:\nclass_vars: The names of classvars defined on the model.\nprivate_attributes: Metadata about the private attributes of the model.\nsignature: The signature for instantiating the model.\n__pydantic_complete__: Whether model building is completed, or if there are still undefined fields.\n__pydantic_core_schema__: The pydantic-core schema used to build the SchemaValidator and SchemaSerializer.\n__pydantic_custom_init__: Whether the model has a custom `__init__` function.\n__pydantic_decorators__: Metadata containing the decorators defined on the model.\n    This replaces `Model.__validators__` and `Model.__root_validators__` from Pydantic V1.\n__pydantic_generic_metadata__: Metadata for generic models; contains data used for a similar purpose to\n    __args__, __origin__, __parameters__ in typing-module generics. May eventually be replaced by these.\n__pydantic_parent_namespace__: Parent namespace of the model, used for automatic rebuilding of models.\n__pydantic_post_init__: The name of the post-init method for the model, if defined.\n__pydantic_root_model__: Whether the model is a `RootModel`.\n__pydantic_serializer__: The pydantic-core SchemaSerializer used to dump instances of the model.\n__pydantic_validator__: The pydantic-core SchemaValidator used to validate instances of the model.\n\n__pydantic_extra__: An instance attribute with the values of extra fields from validation when\n    `model_config['extra'] == 'allow'`.\n__pydantic_fields_set__: An instance attribute with the names of fields explicitly set.\n__pydantic_private__: Instance attribute with the values of private attributes set on the model instance.*\n\n\n\nexport\n\n export (tvars2plot:list, config:space_analysis.ds.config.Config,\n         plot_kwargs:dict=None, **kwargs)\n\n\n\n\nplot\n\n plot (tvars2plot:list[str], config:space_analysis.ds.config.Config,\n       fig:matplotlib.figure.Figure=None,\n       axes:list[matplotlib.axes._axes.Axes]=None, **kwargs)\n\n\n\n\nupdate_panel\n\n update_panel (ax:matplotlib.axes._axes.Axes,\n               config:space_analysis.ds.config.PanelConfig)\n\n\n\n\nprocess\n\n process (tvar:str|list[str], config:__main__.ProcessConfig)\n\n\n\n\nprocess_panel\n\n process_panel (config:space_analysis.ds.config.PanelConfig,\n                process_func=&lt;function process&gt;, load_func=&lt;function\n                load_data&gt;, update_func=&lt;function update_tvar&gt;)\n\n\n\n\nupdate_tvar\n\n update_tvar (tvar, config:space_analysis.ds.config.PanelConfig)\n\n\n\n\nload_data\n\n load_data (config:space_analysis.ds.config.PanelConfig, load_func=None)",
-    "crumbs": [
-      "Home",
-      "Data Structure",
-      "01 Tplot"
-    ]
-  },
-  {
-    "objectID": "missions/wind/mag.html",
-    "href": "missions/wind/mag.html",
-    "title": "Magnetic field",
-    "section": "",
-    "text": "download_data\n\n download_data (**kwargs)\n\n\n\n\nload_data\n\n load_data (var_names='psp_fld_l2_mag_RTN', **kwargs)",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Wind mission",
-      "Magnetic field"
-    ]
-  },
-  {
-    "objectID": "missions/wind/index.html",
-    "href": "missions/wind/index.html",
-    "title": "Wind mission",
-    "section": "",
-    "text": "See following notebooks for details:\n\nMagnetic field data",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Wind mission"
-    ]
-  },
-  {
-    "objectID": "missions/2018_psp.html",
-    "href": "missions/2018_psp.html",
-    "title": "Parker Solar Probe (PSP)",
-    "section": "",
-    "text": "validate\n\n validate (instrument, datatype=None, var_names=None, **kwargs)\n\nvalidate the input arguments and return the correct ones\n\nimport polars as pl\nimport pyspedas\n\nfrom functools import partial\nfrom space_analysis.io.cdf import cdf2pl\nfrom typing import overload\n\n\ndef download_data(**kwargs):\n    return pyspedas.psp.load(downloadonly=True, **kwargs)\n\n\n@overload\ndef load(\n    instrument: Literal[\"fields\"],\n    var_names: list[MagDataVars],\n    datatype: Literal[\"mag_rtn\"],\n    level: Literal[\"l2\"],\n    **kwargs,\n): ...\n\n\n@overload\ndef load(\n    instrument: Literal[\"spi\"],\n    var_names: list[SPIDataVars],\n    datatype: Literal[\"sf00_l3_mom\"],\n    level: Literal[\"l3\"],\n    **kwargs,\n): ...\n\n\ndef load(instrument=\"fields\", var_names=None, datatype=None, **kwargs) -&gt; pl.LazyFrame:\n    var_names, datatype = validate(instrument, datatype, var_names, **kwargs)\n\n    files = download_data(instrument=instrument, datatype=datatype, **kwargs)\n\n    load_func = partial(cdf2pl, var_names=var_names)\n\n    return pl.concat(load_func(file) for file in files)",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Parker Solar Probe (PSP)"
-    ]
-  },
-  {
-    "objectID": "plasma/01_mhd_waves.html",
-    "href": "plasma/01_mhd_waves.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "See plasmapy.dispersion.analytical.mhd_waves_ — PlasmaPy documentation\n\n\n\nVpVg_fs\n\n VpVg_fs (cs, ca, theta=None)\n\nCalculates the phase velocities and group velocities for fast and slow waves.",
-    "crumbs": [
-      "Home",
-      "Plasma",
-      "01 Mhd Waves"
-    ]
-  },
-  {
-    "objectID": "plasma/00_formulary.html",
-    "href": "plasma/00_formulary.html",
-    "title": "Theoretical formulas for space plasma physics",
-    "section": "",
-    "text": "default units are SI units for space plasma physics\n\nB : magnetic field, nT\nn : number density, cm^-3\nT : temperature, eV\n\nReference\n\nplasmapy.formulary provides theoretical formulas for calculation of physical quantities helpful for plasma physics.\n\n\n\n\ndf_beta\n\n df_beta (df:polars.dataframe.frame.DataFrame, T:str='T', n:str='n',\n          B:str='B', col_name:str='beta',\n          T_unit:astropy.units.core.Unit=Unit(\"eV\"),\n          n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n          B_unit:astropy.units.core.Unit=Unit(\"nT\"))\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\n\n\n\nT\nstr\nT\ntemperature of the plasma\n\n\nn\nstr\nn\nparticle density of the plasma\n\n\nB\nstr\nB\nmagnetic field in the plasma,\n\n\ncol_name\nstr\nbeta\n\n\n\nT_unit\nUnit\neV\n\n\n\nn_unit\nUnit\n1 / cm3\n\n\n\nB_unit\nUnit\nnT\n\n\n\nReturns\nDataFrame\n\n\n\n\n\n\n\n\nldf_Alfven_speed\n\n ldf_Alfven_speed (ldf:polars.lazyframe.frame.LazyFrame, **kwargs)\n\n\n\n\ndf_Alfven_speed\n\n df_Alfven_speed (df:polars.dataframe.frame.DataFrame, B:str='B',\n                  n:str='n', ion:Union[str,int,numpy.integer,plasmapy.part\n                  icles.particle_class.Particle,plasmapy.particles.particl\n                  e_class.CustomParticle,astropy.units.quantity.Quantity]=\n                  'p+', col_name='Alfven_speed', sign=True,\n                  B_unit:astropy.units.core.Unit=Unit(\"nT\"),\n                  n_unit:astropy.units.core.Unit=Unit(\"1 / cm3\"),\n                  speed_unit:astropy.units.core.Unit=Unit(\"km / s\"))\n\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ndf\nDataFrame\n\n\n\n\nB\nstr\nB\nmagnetic field in the plasma, could be a component, as plasmapy will take abs of it\n\n\nn\nstr\nn\nparticle density of the plasma\n\n\nion\nUnion\np+\n\n\n\ncol_name\nstr\nAlfven_speed\n\n\n\nsign\nbool\nTrue\n\n\n\nB_unit\nUnit\nnT\n\n\n\nn_unit\nUnit\n1 / cm3\n\n\n\nspeed_unit\nUnit\nkm / s\n\n\n\n\n\n\n\ndf_thermal_spd2temp\n\n df_thermal_spd2temp (df:polars.lazyframe.frame.LazyFrame, speed_col,\n                      speed_unit=Unit(\"km / s\"))\n\n\n\n\nthermal_spd2temp\n\n thermal_spd2temp (speed, speed_unit=Unit(\"km / s\"))",
-    "crumbs": [
-      "Home",
-      "Plasma",
-      "Theoretical formulas for space plasma physics"
-    ]
-  },
-  {
-    "objectID": "missions/2015_dscovr.html",
-    "href": "missions/2015_dscovr.html",
-    "title": "Deep Space Climate Observatory (DSCOVR)",
-    "section": "",
-    "text": "The routines in this module can be used to load data from the Deep Space Climate Observatory (DSCOVR) mission.",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Deep Space Climate Observatory (DSCOVR)"
-    ]
-  },
-  {
-    "objectID": "missions/2015_dscovr.html#instruments",
-    "href": "missions/2015_dscovr.html#instruments",
-    "title": "Deep Space Climate Observatory (DSCOVR)",
-    "section": "Instruments",
-    "text": "Instruments\n\nMagnetometer\nFaraday cup\n\n\n\nimport pyspedas\nimport polars as pl\nfrom functools import partial\nfrom typing import Literal, overload\nfrom space_analysis.io.cdf import cdf2pl\n\n\ndef download_data(**kwargs):\n    return pyspedas.dscovr.load(downloadonly=True, **kwargs)\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"mag\"],\n    var_names: list[MagDataVars],\n    datatype: Literal[\"h0\"],\n    **kwargs,\n): ...\n\n\n@overload\ndef load_data(\n    instrument: Literal[\"faraday_cup\"],\n    var_names: list[PlasmaDataVars],\n    datatype: Literal[\"h1\"],\n    **kwargs,\n): ...\n\n\ndef load_data(\n    instrument=\"mag\", var_names=None, datatype=None, **kwargs\n) -&gt; pl.LazyFrame:\n    if instrument == \"mag\":\n        var_names = var_names or [\"B1F1\", \"B1RTN\"]\n        datatype = datatype or \"h0\"\n    elif instrument == \"faraday_cup\":\n        var_names = var_names or [\"Np\", \"V_GSE\", \"THERMAL_TEMP\"]\n        datatype = datatype or \"h1\"\n\n    files = download_data(instrument=instrument, datatype=datatype, **kwargs)\n\n    load_func = partial(cdf2pl, var_names=var_names)\n\n    return pl.concat(load_func(file) for file in files)",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Deep Space Climate Observatory (DSCOVR)"
-    ]
-  },
-  {
-    "objectID": "missions/index.html",
-    "href": "missions/index.html",
-    "title": "Missions",
-    "section": "",
-    "text": "This module includes helpful functions for working with mission (magnetic field and plasma) data. We currently support the following missions:\n\nParker Solar Probe\nJuno\nWind\nTHEMIS/ARTEMIS\nSTEREO\n\n\nReferences\n\nPySPEDAS: Python-based Space Physics Environment Data Analysis Software\nspeasy: A simple Python package to deal with main Space Physics WebServices (CDA,SSC,AMDA,..)\n[planetarypy]",
-    "crumbs": [
-      "Home",
-      "Missions"
-    ]
-  },
-  {
-    "objectID": "missions/wind/plasma.html",
-    "href": "missions/wind/plasma.html",
-    "title": "Plasma Data",
-    "section": "",
-    "text": "download_data\n\n download_data (**kwargs)\n\n\n\n\nload_data\n\n load_data (var_names:list[typing.Literal['Np','Pressure','V_GSE','V_GSE_p\n            ','THERMAL_SPD']]=['Np', 'V_GSE', 'THERMAL_SPD'],\n            datatype:Literal['k0','h0','h5']='k0', **kwargs)",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Wind mission",
-      "Plasma Data"
-    ]
-  },
-  {
-    "objectID": "missions/juno/index.html",
-    "href": "missions/juno/index.html",
-    "title": "Juno",
-    "section": "",
-    "text": "------------------------------------------------------------------------------\nJuno Mission Phases                                                           \n------------------------------------------------------------------------------\nStart       Mission                                                           \nDate        Phase                                                             \n==============================================================================\n2011-08-05  Launch                                                            \n2011-08-08  Inner Cruise 1                                                    \n2011-10-10  Inner Cruise 2                                                    \n2013-05-28  Inner Cruise 3                                                    \n2013-11-05  Quiet Cruise                                                      \n2016-01-05  Jupiter Approach                                                  \n2016-06-30  Jupiter Orbital Insertion                                         \n2016-07-05  Capture Orbit                                                     \n2016-10-19  Period Reduction Maneuver                                         \n2016-10-20  Orbits 1-2                                                        \n2016-11-09  Science Orbits                                                    \n2017-10-11  Deorbit\n\n\n\nSE (Solar Equatorial)\n\nCode: se\nResampling options:\n\nNumber of seconds (1 or 60): se_rN[N]s\nResampled 1 hour: se_r1h\n\n\nPC (Planetocentric)\n\nCode: pc\nResampling options:\n\nNumber of seconds (1 or 60): pc_rN[N]s\n\n\nSS (Sun-State)\n\nCode: ss\nResampling options:\n\nNumber of seconds (1 or 60): ss_rN[N]s\n\n\nPL (Payload)\n\nCode: pl\nResampling options:\n\nNumber of seconds (1 or 60): pl_rN[N]s\n\n\n\nThere are three principal coordinate systems used to represent the data in this archive.\n\nThe SE coordinate system is a Spacecraft- Solar equatorial system and it will be used for cruise data only.\nThe sun-state (ss) and planetocentric (pc) will be used for Earth Fly By (EFB) and Jupiter orbital data.\nCartesian representations are used for all three coordinate systems. These coordinate systems are specified relative to a “target body” which may be any solar system object (but for this orbital operations will Jupiter). In what follows we will reference Jupiter as the target body, but, for example, if observations near a satellite (such as Io) are desired in Io-centric coordinates, the satellite Io may be specified as the target body.\n\nThe SE coordinate system is defined using the sun-spacecraft vector as the primary reference vector; sun’s rotation axis as the secondary reference vector (z). The x axis lies along the sun-spacecraft vector, the z axis is in the plane defined by the Sun’s rotation axis and the spacecraft-sun vector. The y axis completes the system.\nThe ss coordinate system is defined using the instantaneous Jupiter-Sun vector as the primary reference vector (x direction). The X-axis lies along this vector and is taken to be positive toward the Sun. The Jupiter orbital velocity vector is the second vector used to define the coordinate system; the y axis lies in the plane determined by the Jupiter-Sun vector and the velocity vector and is orthogonal to the x axis (very nearly the negative of the velocity vector). The vector cross product of x and y yields a vector z parallel to the northward (upward) normal of the orbit plane of Jupiter. This system is sometimes called a sun-state (ss) coordinate system since its principal vectors are the Sun vector and the Jupiter state vector.\nSpacecraft-Solar equatorial\nhttps://pds-ppi.igpp.ucla.edu/data/JNO-SS-3-FGM-CAL-V1.0/INDEX/INDEX.TAB",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Juno"
-    ]
-  },
-  {
-    "objectID": "missions/juno/index.html#background",
-    "href": "missions/juno/index.html#background",
-    "title": "Juno",
-    "section": "",
-    "text": "------------------------------------------------------------------------------\nJuno Mission Phases                                                           \n------------------------------------------------------------------------------\nStart       Mission                                                           \nDate        Phase                                                             \n==============================================================================\n2011-08-05  Launch                                                            \n2011-08-08  Inner Cruise 1                                                    \n2011-10-10  Inner Cruise 2                                                    \n2013-05-28  Inner Cruise 3                                                    \n2013-11-05  Quiet Cruise                                                      \n2016-01-05  Jupiter Approach                                                  \n2016-06-30  Jupiter Orbital Insertion                                         \n2016-07-05  Capture Orbit                                                     \n2016-10-19  Period Reduction Maneuver                                         \n2016-10-20  Orbits 1-2                                                        \n2016-11-09  Science Orbits                                                    \n2017-10-11  Deorbit\n\n\n\nSE (Solar Equatorial)\n\nCode: se\nResampling options:\n\nNumber of seconds (1 or 60): se_rN[N]s\nResampled 1 hour: se_r1h\n\n\nPC (Planetocentric)\n\nCode: pc\nResampling options:\n\nNumber of seconds (1 or 60): pc_rN[N]s\n\n\nSS (Sun-State)\n\nCode: ss\nResampling options:\n\nNumber of seconds (1 or 60): ss_rN[N]s\n\n\nPL (Payload)\n\nCode: pl\nResampling options:\n\nNumber of seconds (1 or 60): pl_rN[N]s\n\n\n\nThere are three principal coordinate systems used to represent the data in this archive.\n\nThe SE coordinate system is a Spacecraft- Solar equatorial system and it will be used for cruise data only.\nThe sun-state (ss) and planetocentric (pc) will be used for Earth Fly By (EFB) and Jupiter orbital data.\nCartesian representations are used for all three coordinate systems. These coordinate systems are specified relative to a “target body” which may be any solar system object (but for this orbital operations will Jupiter). In what follows we will reference Jupiter as the target body, but, for example, if observations near a satellite (such as Io) are desired in Io-centric coordinates, the satellite Io may be specified as the target body.\n\nThe SE coordinate system is defined using the sun-spacecraft vector as the primary reference vector; sun’s rotation axis as the secondary reference vector (z). The x axis lies along the sun-spacecraft vector, the z axis is in the plane defined by the Sun’s rotation axis and the spacecraft-sun vector. The y axis completes the system.\nThe ss coordinate system is defined using the instantaneous Jupiter-Sun vector as the primary reference vector (x direction). The X-axis lies along this vector and is taken to be positive toward the Sun. The Jupiter orbital velocity vector is the second vector used to define the coordinate system; the y axis lies in the plane determined by the Jupiter-Sun vector and the velocity vector and is orthogonal to the x axis (very nearly the negative of the velocity vector). The vector cross product of x and y yields a vector z parallel to the northward (upward) normal of the orbit plane of Jupiter. This system is sometimes called a sun-state (ss) coordinate system since its principal vectors are the Sun vector and the Jupiter state vector.\nSpacecraft-Solar equatorial\nhttps://pds-ppi.igpp.ucla.edu/data/JNO-SS-3-FGM-CAL-V1.0/INDEX/INDEX.TAB",
-    "crumbs": [
-      "Home",
-      "Missions",
-      "Juno"
-    ]
-  },
-  {
-    "objectID": "data_structure/00_config.html",
-    "href": "data_structure/00_config.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "PanelConfig\n\n PanelConfig (timerange:list[datetime.date|datetime.datetime]=None,\n              ds:str=None, id:str=None, name:str=None, units:str=None,\n              labels:list[str]=&lt;factory&gt;, satellite:typing.Annotated[str,S\n              tringConstraints(strip_whitespace=None,to_upper=None,to_lowe\n              r=True,strict=None,min_length=None,max_length=None,pattern=N\n              one)]=None, instrument:typing.Annotated[str,StringConstraint\n              s(strip_whitespace=None,to_upper=None,to_lower=True,strict=N\n              one,min_length=None,max_length=None,pattern=None)]=None,\n              datatype:str=None, probe:str=None)\n\nPanel configuration\n\n\n\nOutputConfig\n\n OutputConfig (path:str=None, filename:str=None,\n               formats:list[str]=&lt;factory&gt;, display:bool=False,\n               figure:dict=&lt;factory&gt;, figure_extra:space_analysis.plot.con\n               fig.FigureExtraOptions=&lt;factory&gt;)\n\nOutput configuration\n\n\n\nConfig\n\n Config (panels:list[__main__.PanelConfig],\n         timerange:list[datetime.datetime|datetime.date]=None,\n         output:__main__.OutputConfig=None, backend:str=None)",
-    "crumbs": [
-      "Home",
-      "Data Structure",
-      "00 Config"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "Python utils for data analysis in space physics. Still in active development, use with caution.\nInspired from SpaceAnalysis.jl, created with nbdev."
-  },
-  {
-    "objectID": "index.html#references",
-    "href": "index.html#references",
-    "title": "space-analysis.py",
-    "section": "References",
-    "text": "References\n\nspeasy : Python client for Space Physics web services such as CDAWEB or AMDA\npyspedas : Python Space Physics Environment Data Analysis Software\nfastcore : Python supercharged for the fastai library"
-  },
-  {
-    "objectID": "index.html#install",
-    "href": "index.html#install",
-    "title": "space-analysis.py",
-    "section": "Install",
-    "text": "Install\npip install space_analysis"
-  },
-  {
-    "objectID": "index.html#how-to-use",
-    "href": "index.html#how-to-use",
-    "title": "space-analysis.py",
-    "section": "How to use",
-    "text": "How to use"
-  },
-  {
-    "objectID": "utils/00_math.html",
-    "href": "utils/00_math.html",
-    "title": "Basic math utils",
-    "section": "",
-    "text": "sind\n\n sind (x)\n\n\n\n\ncosd\n\n cosd (x)",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Basic math utils"
-    ]
-  },
-  {
-    "objectID": "utils/00_develop.html",
-    "href": "utils/00_develop.html",
-    "title": "space-analysis.py",
-    "section": "",
-    "text": "from loguru import logger\nfrom humanize import naturalsize\nimport polars as pl\nimport pandas as pd\nimport xarray as xr\n\n\n\ndef get_memory_usage(data):\n    datatype = type(data)\n    match datatype:\n        case pl.DataFrame:\n            size = data.estimated_size()\n        case pd.DataFrame:\n            size = data.memory_usage().sum()\n        case xr.DataArray:\n            size = data.nbytes\n\n    logger.info(f\"{naturalsize(size)} ({datatype.__name__})\")\n    return size",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "00 Develop"
-    ]
-  },
-  {
-    "objectID": "utils/19_speasy.html",
-    "href": "utils/19_speasy.html",
-    "title": "Speasy utils",
-    "section": "",
-    "text": "speasy - an open source Python client for Space Physics web services such as CDAWEB or AMDA.",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Speasy utils"
-    ]
-  },
-  {
-    "objectID": "utils/19_speasy.html#functions",
-    "href": "utils/19_speasy.html#functions",
-    "title": "Speasy utils",
-    "section": "Functions",
-    "text": "Functions\n\n\nspzvars2pldf\n\n spzvars2pldf (vars:list[speasy.products.variable.SpeasyVariable])\n\n\n\n\nspzvar2pldf\n\n spzvar2pldf (var:speasy.products.variable.SpeasyVariable)\n\n\n\n\nget_time_resolution\n\n get_time_resolution (data:speasy.products.variable.SpeasyVariable)\n\n\n\n\nget_parameter_index\n\n get_parameter_index (param:str, ds:str)\n\n\n\n\nget_dataset_parameters\n\n get_dataset_parameters (v:str, provider:str='cda')\n\n\n\n\nget_dataset_index\n\n get_dataset_index (v:str, provider:str='cda')\n\n\n\n\nget_provider\n\n get_provider (v:str)\n\n\n\n\nSpeasyVariable.preview\n\n SpeasyVariable.preview ()",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Speasy utils"
-    ]
-  },
-  {
-    "objectID": "utils/19_speasy.html#data-classes",
-    "href": "utils/19_speasy.html#data-classes",
-    "title": "Speasy utils",
-    "section": "Data Classes",
-    "text": "Data Classes\nBased on SpeasyVariable class from speasy.\n\n\nVariable\n\n Variable (name:str=None, description:str=None, unit:str=None,\n           timerange:list[datetime.datetime]=None)\n\n\n\n\nVariable.dump\n\n Variable.dump (path:str)\n\nDump the configuration to a file.\n\n\n\nVariable.plot\n\n Variable.plot (fig=None, ax:matplotlib.axes._axes.Axes=None)\n\n\n\n\nSVariables\n\n SVariables ()\n\nInitialize self. See help(type(self)) for accurate signature.\n\n\n\nVariables\n\n Variables (timerange:list[datetime.datetime]=None,\n            variables:list[__main__.Variable]=None,\n            parameters:list[str]=None, dataset:str=None,\n            provider:str='cda', products:list[str|speasy.core.inventory.in\n            dexes.ParameterIndex]=None)\n\n\nearth_start = \"2019-04-09\"\nearth_end = \"2019-04-12\"\ntimerange = [earth_start, earth_end]\n\nd = spz.get_data(\n    get_parameter_index(\"MOM.P.MAGF\", \"WI_PLSP_3DP\"),\n    timerange,\n)\n\n\n\nTest\n\ntimerange = [\"2019-04-07T01:00\", \"2019-04-07T12:00\"]\nvars = Variables(\n    dataset=\"PSP_FLD_L2_MAG_RTN\",\n    parameters=[\"psp_fld_l2_mag_RTN\"],\n    timerange=timerange,\n)\n\n\ndef data_provider_summary(data_provider: DataProvider = spz.cda):\n    # show the name of the data_provider, the number of datasets, parameters and catalogs\n\n    inventory = data_provider.flat_inventory\n    print(\"Data Provider:\", data_provider.provider_name)\n    print(\"Datasets:\", len(inventory.datasets))\n    print(\"Parameters:\", len(inventory.parameters))\n    print(\"Catalogs:\", len(inventory.catalogs))\n\n\n# data_provider_summary(spz.cda)\n# data_provider_summary(spz.amda)\n# data_provider_summary(spz.csa)\n\nData Provider: cda\nDatasets: 2608\nParameters: 58510\nCatalogs: 0\nData Provider: amda\nDatasets: 1074\nParameters: 5397\nCatalogs: 24\nData Provider: csa\nDatasets: 912\nParameters: 1993\nCatalogs: 0",
-    "crumbs": [
-      "Home",
-      "Utils",
-      "Speasy utils"
-    ]
-  },
-  {
-    "objectID": "plot/01_matplotlib.html",
-    "href": "plot/01_matplotlib.html",
-    "title": "Basic utils",
-    "section": "",
-    "text": "Change the default style of the plots\n\n\nsavefig\n\n savefig (name, dir='../figures', path=None, formats=['png', 'pdf'],\n          **kwargs)\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nname\n\n\nname of the file\n\n\ndir\nstr\n../figures\ndirectory to save the file\n\n\npath\nNoneType\nNone\npath to the file\n\n\nformats\nlist\n[‘png’, ‘pdf’]\n\n\n\nkwargs",
-    "crumbs": [
-      "Home",
-      "Plot",
-      "Basic utils"
-    ]
-  },
-  {
-    "objectID": "io/31_lbl.html",
-    "href": "io/31_lbl.html",
-    "title": "lbl file format",
-    "section": "",
-    "text": "Read lbl file\n\n\n\nload_lbl\n\n load_lbl (filepath:str, type:str='table')\n\n*Load LBL data.\nArgs:\nfilepath: File path to load the data from.\ntype: Type of data to load. Options are ‘table’ and ‘index’.\nReturns:\nA pandas DataFrame containing the loaded data.*",
-    "crumbs": [
-      "Home",
-      "IO",
-      "lbl file format"
     ]
   }
 ]
