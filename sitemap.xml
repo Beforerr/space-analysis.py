@@ -2,182 +2,182 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas_dash.html</loc>
-    <lastmod>2024-09-25T04:58:07.764Z</lastmod>
+    <lastmod>2024-09-25T05:28:42.126Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/examples/10_mission_info.html</loc>
-    <lastmod>2024-09-25T05:00:55.055Z</lastmod>
+    <lastmod>2024-09-25T05:31:06.399Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plot/01_plt_config.html</loc>
-    <lastmod>2024-09-25T05:00:54.505Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.886Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plasma/01_mhd_waves.html</loc>
-    <lastmod>2024-09-25T05:00:54.407Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.780Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plasma/00_formulary_tplot.html</loc>
-    <lastmod>2024-09-25T05:00:54.333Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.716Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/19_speasy.html</loc>
-    <lastmod>2024-09-25T05:00:52.763Z</lastmod>
+    <lastmod>2024-09-25T05:31:04.245Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/00_develop.html</loc>
-    <lastmod>2024-09-25T05:00:52.648Z</lastmod>
+    <lastmod>2024-09-25T05:31:04.133Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/21_cdas.html</loc>
-    <lastmod>2024-09-25T05:00:52.582Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.822Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/00_core.html</loc>
-    <lastmod>2024-09-25T04:58:36.626Z</lastmod>
+    <lastmod>2024-09-25T05:29:10.629Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/juno/fgm.html</loc>
-    <lastmod>2024-09-25T05:00:52.216Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.692Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/index.html</loc>
-    <lastmod>2024-09-25T05:00:55.180Z</lastmod>
+    <lastmod>2024-09-25T05:31:06.541Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/stereo/index.html</loc>
-    <lastmod>2024-09-25T05:00:51.713Z</lastmod>
+    <lastmod>2024-09-25T05:31:02.996Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/themis/index.html</loc>
-    <lastmod>2024-09-25T05:00:51.685Z</lastmod>
+    <lastmod>2024-09-25T05:31:02.964Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/psp/index.html</loc>
-    <lastmod>2024-09-25T05:00:54.992Z</lastmod>
+    <lastmod>2024-09-25T05:31:06.272Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/simulation/warpx.html</loc>
-    <lastmod>2024-09-25T04:58:43.231Z</lastmod>
+    <lastmod>2024-09-25T05:29:17.116Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/speasy/02_plot.html</loc>
-    <lastmod>2024-09-25T05:00:54.812Z</lastmod>
+    <lastmod>2024-09-25T05:31:06.145Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/speasy/01_io.html</loc>
-    <lastmod>2024-09-25T05:00:51.512Z</lastmod>
+    <lastmod>2024-09-25T05:31:02.906Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/tplot/01_tplot.html</loc>
-    <lastmod>2024-09-25T04:58:40.181Z</lastmod>
+    <lastmod>2024-09-25T05:29:13.987Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/tplot/03_trans.html</loc>
-    <lastmod>2024-09-25T04:58:41.508Z</lastmod>
+    <lastmod>2024-09-25T05:29:15.414Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/00_meta.html</loc>
-    <lastmod>2024-09-25T04:58:36.627Z</lastmod>
+    <lastmod>2024-09-25T05:29:10.630Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/timeseries/timeseries.html</loc>
-    <lastmod>2024-09-25T04:58:38.092Z</lastmod>
+    <lastmod>2024-09-25T05:29:12.126Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/timeseries/io.html</loc>
-    <lastmod>2024-09-25T04:58:38.155Z</lastmod>
+    <lastmod>2024-09-25T05:29:12.194Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/io/31_lbl.html</loc>
-    <lastmod>2024-09-25T04:58:37.940Z</lastmod>
+    <lastmod>2024-09-25T05:29:11.968Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/io/30_cdf.html</loc>
-    <lastmod>2024-09-25T04:58:36.712Z</lastmod>
+    <lastmod>2024-09-25T05:29:10.711Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/timeseries/plot.html</loc>
-    <lastmod>2024-09-25T04:58:43.055Z</lastmod>
+    <lastmod>2024-09-25T05:29:16.933Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/timeseries/10_utils.html</loc>
-    <lastmod>2024-09-25T04:58:38.453Z</lastmod>
+    <lastmod>2024-09-25T05:29:12.505Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/00_config.html</loc>
-    <lastmod>2024-09-25T04:58:38.493Z</lastmod>
+    <lastmod>2024-09-25T05:29:12.472Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/tplot/10_utils.html</loc>
-    <lastmod>2024-09-25T04:58:40.186Z</lastmod>
+    <lastmod>2024-09-25T05:29:14.064Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/tplot/02_plot.html</loc>
-    <lastmod>2024-09-25T04:58:41.682Z</lastmod>
+    <lastmod>2024-09-25T05:29:15.608Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/data_structure/speasy/10_utils.html</loc>
-    <lastmod>2024-09-25T05:00:51.446Z</lastmod>
+    <lastmod>2024-09-25T05:31:02.826Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/index.html</loc>
-    <lastmod>2024-09-25T04:58:07.765Z</lastmod>
+    <lastmod>2024-09-25T05:28:42.127Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/solo/index.html</loc>
-    <lastmod>2024-09-25T05:00:51.995Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.464Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/index.html</loc>
-    <lastmod>2024-09-25T04:58:07.765Z</lastmod>
+    <lastmod>2024-09-25T05:28:42.127Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/2015_dscovr.html</loc>
-    <lastmod>2024-09-25T04:58:44.368Z</lastmod>
+    <lastmod>2024-09-25T05:29:18.291Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/plasma.html</loc>
-    <lastmod>2024-09-25T05:00:51.904Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.224Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/wind/mag.html</loc>
-    <lastmod>2024-09-25T05:00:52.090Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.560Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/missions/juno/index.html</loc>
-    <lastmod>2024-09-25T05:00:52.246Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.722Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/00_math.html</loc>
-    <lastmod>2024-09-25T05:00:52.281Z</lastmod>
+    <lastmod>2024-09-25T05:31:03.759Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/00_basic.html</loc>
-    <lastmod>2024-09-25T05:00:52.620Z</lastmod>
+    <lastmod>2024-09-25T05:31:04.104Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/utils/20_pds.html</loc>
-    <lastmod>2024-09-25T05:00:52.688Z</lastmod>
+    <lastmod>2024-09-25T05:31:04.174Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plasma/00_formulary_numpy.html</loc>
-    <lastmod>2024-09-25T05:00:54.287Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.672Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plasma/helioweb.html</loc>
-    <lastmod>2024-09-25T05:00:54.363Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.743Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plasma/00_formulary_polars.html</loc>
-    <lastmod>2024-09-25T05:00:54.466Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.847Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/plot/01_matplotlib.html</loc>
-    <lastmod>2024-09-25T05:00:54.543Z</lastmod>
+    <lastmod>2024-09-25T05:31:05.923Z</lastmod>
   </url>
   <url>
     <loc>https://Beforerr.github.io/space-analysis.py/examples/01_cdas.html</loc>
-    <lastmod>2024-09-25T05:00:54.850Z</lastmod>
+    <lastmod>2024-09-25T05:31:06.180Z</lastmod>
   </url>
 </urlset>
