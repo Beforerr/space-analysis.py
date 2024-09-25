@@ -15,7 +15,6 @@ dependencies = [
     "loguru",
     "rich",
     "humanize",
-    "pycdfpp",
 ]
 
 [build-system]
@@ -27,8 +26,10 @@ plot = ["hvplot"]
 io = [
     "pyspedas",
     "speasy",
+    "pycdfpp",
     "cdasws",
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
+    "pooch"
 ]
 # sim = ["warpx"]
 
@@ -48,11 +49,8 @@ default = ["io", "plot"]
 
 [tool.pixi.dependencies]
 ipykernel = "*"
-jupyter_bokeh = "*"
-panel = ">1.0"
-scipy = "*"
-netcdf4 = "*"
-pytables = "*"  # used in `pyspedas`
+numba = "*" # https://github.com/PlasmaPy/PlasmaPy/pull/2841 PlasmaPy issue
+netcdf4 = "*" # used in `pyspedas`
 
 [tool.pixi.pypi-dependencies]
 space_analysis = { path = ".", editable = true }
@@ -60,6 +58,4 @@ nbdev = "*"
 jupyter-cache = "*"
 itables = "*"
 great_tables = "*"
-importlib_resources = "*" # used in `great_tables`
-pooch = "*"
 pipe = "*"
