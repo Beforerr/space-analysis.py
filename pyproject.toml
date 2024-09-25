@@ -31,7 +31,6 @@ io = [
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
     "pooch"
 ]
-# sim = ["warpx"]
 
 [project.urls]
 Homepage = "https://beforerr.github.io/space-analysis.py"
@@ -51,6 +50,7 @@ default = ["io", "plot"]
 ipykernel = "*"
 numba = "*" # https://github.com/PlasmaPy/PlasmaPy/pull/2841 PlasmaPy issue
 netcdf4 = "*" # used in `pyspedas`
+warpx = "*"
 
 [tool.pixi.pypi-dependencies]
 space_analysis = { path = ".", editable = true }
