@@ -11,7 +11,7 @@ from datetime import datetime, date
 
 from typing import Annotated
 
-from ..plot.config import FigureExtraOptions
+from beforerr.matplotlib import PlotOpts
 
 # %% ../../nbs/data_structure/00_config.ipynb 1
 @dataclass
@@ -66,12 +66,11 @@ class OutputConfig:
     figure: dict = Field(default_factory=dict)
     """Figure options"""
 
-    figure_extra: FigureExtraOptions = Field(default_factory=FigureExtraOptions)
+    figure_extra: PlotOpts = Field(default_factory=PlotOpts)
     """Extra figure options"""
 
 
-@dataclass
-class PanelConfig:
+class PanelConfig((BaseModel)):
     """Panel configuration"""
 
     timerange: list[date | datetime] = None
@@ -88,8 +87,7 @@ class PanelConfig:
     probe: str = None
 
 # %% ../../nbs/data_structure/00_config.ipynb 3
-@dataclass
-class Config:
+class Config(BaseModel):
     panels: list[PanelConfig]
     timerange: list[datetime | date] = None
     output: OutputConfig = None
