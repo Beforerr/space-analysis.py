@@ -13,8 +13,7 @@ from pydantic import (
 import pyspedas
 from pytplot import options, split_vec, join_vec
 from ..ts import B_TsOption
-from pyspedas.cotrans.minvar_matrix_make import minvar_matrix_make
-from pyspedas import tvector_rotate
+from pyspedas import minvar_matrix_make, tvector_rotate
 from pyspedas.analysis.tvectot import tvectot
 import sys
 
