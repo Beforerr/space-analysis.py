@@ -10,7 +10,7 @@ dependencies = [
     "pydantic",
     "plum-dispatch",
     "polars",
-    "plasmapy",
+    "plasmapy>=2024.10.0",
     "astropy",
     "loguru",
     "rich",
@@ -31,6 +31,7 @@ io = [
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
     "pooch"
 ]
+dev = ["ipykernel"]
 
 [project.urls]
 Homepage = "https://beforerr.github.io/space-analysis.py"
@@ -44,11 +45,10 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64", "linux-64"]
 
 [tool.pixi.environments]
-default = ["io", "plot"]
+default = ["dev", "io", "plot"]
 
 [tool.pixi.dependencies]
 ipykernel = "*"
-numba = "*" # https://github.com/PlasmaPy/PlasmaPy/pull/2841 PlasmaPy issue
 netcdf4 = "*" # used in `pyspedas`
 warpx = "*"
 
