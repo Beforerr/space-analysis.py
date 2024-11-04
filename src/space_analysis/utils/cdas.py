@@ -9,7 +9,7 @@ from loguru import logger
 from cdasws.datarepresentation import DataRepresentation
 import xarray as xr
 import polars as pl
-from ..core import Variables as V
+from ..core import Dataset as V
 from pydantic import ConfigDict, model_validator
 
 # %% ../../../nbs/utils/21_cdas.ipynb 2
@@ -46,12 +46,8 @@ class Variables(V):
     # initize products from provider and dataset if not provided
     @model_validator(mode="after")
     def check_products(self):
-        if self.products is None and self.dataset:
-            if self.parameters is None:
-                self.parameters = get_dataset_variables(self.dataset)
-            self.products = [
-                f"{self.provider}/{self.dataset}/{var}" for var in self.parameters
-            ]
+        if self.parameters is None:
+            self.parameters = get_dataset_variables(self.dataset)
 
     def retrieve_data(self):
         self.data = get_data(self.dataset, self.timerange, self.parameters)
