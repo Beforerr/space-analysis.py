@@ -5,7 +5,7 @@ __all__ = ['spz_plot']
 
 # %% ../../../../nbs/data_structure/speasy/02_plot.ipynb 0
 import speasy as spz
-from ...utils.speasy import to_dataarrays
+from .io import to_dataarrays
 from ..ts.plot import tsplot
 
 # %% ../../../../nbs/data_structure/speasy/02_plot.ipynb 1
