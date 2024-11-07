@@ -9,15 +9,16 @@ from plum import dispatch
 
 from xarray import DataArray
 from numpy import ndarray
+from datetime import timedelta
 
 # %% ../../../../nbs/data_structure/timeseries/10_utils.ipynb 1
 @dispatch
-def get_time_resolution(time: ndarray, funcs=[np.min, np.median, np.max], unit="s"):  # noqa: F811
+def get_time_resolution(time: ndarray, funcs=[np.min, np.median, np.max]):  # noqa: F811
     """
     Get the time resolution of the time series data
     """
-    dt = np.diff(time) / np.timedelta64(1, unit)
-    return {f.__name__: f(dt) for f in funcs}
+    dt = np.diff(time) / np.timedelta64(1, "s")
+    return {f.__name__: f(dt) * timedelta(seconds=1) for f in funcs}
 
 
 @dispatch
