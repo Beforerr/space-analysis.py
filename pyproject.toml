@@ -31,7 +31,8 @@ io = [
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
     "pooch"
 ]
-dev = ["ipykernel"]
+dev = ["ipykernel", "nbdev", "jupyter-cache"]
+doc = ["itables", "great_tables"]
 
 [project.urls]
 Homepage = "https://beforerr.github.io/space-analysis.py"
@@ -45,17 +46,12 @@ channels = ["conda-forge"]
 platforms = ["osx-arm64", "linux-64"]
 
 [tool.pixi.environments]
-default = ["dev", "io", "plot"]
+default = ["dev", "io", "plot", "doc"]
 
 [tool.pixi.dependencies]
-ipykernel = "*"
 netcdf4 = "*" # used in `pyspedas`
 warpx = "*"
 
 [tool.pixi.pypi-dependencies]
 space_analysis = { path = ".", editable = true }
-nbdev = "*"
-jupyter-cache = "*"
-itables = "*"
-great_tables = "*"
 pipe = "*"
