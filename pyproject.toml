@@ -10,7 +10,7 @@ dependencies = [
     "pydantic",
     "plum-dispatch",
     "polars",
-    "plasmapy>=2024.10.0",
+    "plasmapy",
     "astropy",
     "loguru",
     "rich",
