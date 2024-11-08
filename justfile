@@ -1,17 +1,18 @@
 import "files/quarto.just"
 
 default:
-  just --list
+    just --list
 
 ensure-env:
-  pre-commit install
+    pixi install
+    pre-commit install
 
 update:
-  git add .
-  -git commit -am "update"
-  git push
+    git add .
+    -git commit -am "update"
+    git push
 
-publish: pypi-publish quarto-publish
+publish: quarto-publish pypi-publish
 
 pypi-publish: export
-  pdm publish
+    pdm publish
