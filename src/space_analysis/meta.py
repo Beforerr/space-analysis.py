@@ -8,7 +8,7 @@ from .core import Mission, Dataset
 
 # %% ../../nbs/data_structure/00_meta.ipynb 1
 class MagDataset(Dataset):
-    B_cols: list[str] = None
+    B_cols: str | list[str] = None
 
 
 class DensityDataset(Dataset):
@@ -16,14 +16,14 @@ class DensityDataset(Dataset):
 
 
 class VelocityDataset(Dataset):
-    velocity_cols: list[str] = None
+    velocity_cols: str | list[str] = None
     speed_col: str = None
 
 
 class TempDataset(Dataset):
     temperature_col: str = None
     para_col: str = None
-    perp_cols: list[str] = None
+    perp_cols: str | list[str] = None
 
 
 class PlasmaDataset(DensityDataset, VelocityDataset, TempDataset):
