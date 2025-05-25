@@ -29,7 +29,7 @@ io = [
     "pycdfpp",
     "cdasws",
     "pdr",      # [P]lanetary [D]ata [R]eader - A single function to read all Planetary Data System (PDS) data into Python
-    "pooch"
+    "pooch",
 ]
 dev = ["ipykernel", "nbdev", "jupyter-cache"]
 doc = ["itables", "great_tables"]

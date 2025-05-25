@@ -1,8 +1,10 @@
 ---
-title: CDAS Dashboard
+title: CDAWeb Dashboard
 format: 
   dashboard: default
 ---
+
+[CDAWeb](https://cdaweb.gsfc.nasa.gov/) contains selected public non-solar heliophysics data from current and past heliophysics missions and projects
 
 ```{python}
 import xarray as xr
